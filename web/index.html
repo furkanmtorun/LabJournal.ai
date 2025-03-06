@@ -25,7 +25,7 @@
                     <div class="search-options">
                         <div class="search-wrapper">
                             <i class="material-icons">search</i>
-                            <input id="search" type="text" placeholder="Search entries..." required>
+                            <input id="search" type="text" placeholder="Search projects..." required>
                         </div>
 
                         <!-- Dropdown Trigger -->
@@ -44,7 +44,7 @@
 
                 <!-- Right section: New button and theme toggle -->
                 <div class="nav-right">
-                    <a class="btn waves-effect waves-light create-btn" id="create-btn">
+                    <a class="btn waves-effect waves-light create-btn" id="create-btn" href="new.html">
                         <i class="material-icons">add</i>
                         <span>New</span>
                     </a>
@@ -58,7 +58,7 @@
     </nav>
 
     <main class="container">
-        <h4 class="page-title">Data Entries</h4>
+        <h4 class="page-title">Projects</h4>
 
         <!-- Add this before the table-container div -->
         <div class="table-controls">
@@ -77,9 +77,9 @@
                 <button class="btn waves-effect" title="Refresh">
                     <i class="material-icons">refresh</i>
                 </button>
-                <button class="btn waves-effect" title="Settings">
+                <!-- <button class="btn waves-effect" title="Settings">
                     <i class="material-icons">settings</i>
-                </button>
+                </button> -->
             </div>
         </div>
 
@@ -117,6 +117,7 @@
         <!-- jQuery and Materialize JS via CDN -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="example_data.js"></script>
         <script src="js.js"></script>
 </body>
 

@@ -102,14 +102,10 @@ nav .brand-logo {
   color: var(--text-color);
   margin: 0;
   height: 38px;
-  /* Adjusted for better vertical alignment */
   line-height: 38px;
-  /* Added for better vertical alignment */
   background-color: transparent;
-  padding-top: 0;
-  /* Reset padding */
+  padding-top: 5px !important;
   padding-bottom: 0;
-  /* Reset padding */
 }
 
 .search-wrapper input::placeholder {
@@ -119,6 +115,26 @@ nav .brand-logo {
 .search-wrapper i {
   color: var(--text-light);
   margin-right: 10px;
+}
+
+.home-btn {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 40px;
+  transition: all 0.3s ease;
+  margin-right: 15px;
+}
+.home-btn:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.home-btn i {
+  margin-right: 8px;
 }
 
 .create-btn {
@@ -381,7 +397,6 @@ footer {
   }
 }
 
-/* Add these new styles */
 .table-controls {
   display: flex;
   align-items: center;
@@ -418,6 +433,83 @@ footer {
 
 .table-controls .btn i {
   font-size: 20px;
+}
+
+
+/* Form styles */
+.form-container {
+  background-color: var(--card-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  padding: 32px;
+  margin-top: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-title {
+  font-weight: 300;
+  margin-bottom: 24px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.input-field label {
+  color: var(--text-light);
+}
+
+.input-field input[type=text]:focus + label,
+.input-field input[type=date]:focus + label {
+  color: var(--accent-color);
+}
+
+.input-field input[type=text]:focus,
+.input-field input[type=date]:focus {
+  border-bottom: 1px solid var(--accent-color);
+  box-shadow: 0 1px 0 0 var(--accent-color);
+}
+
+.input-field input[type=text],
+.input-field input[type=date] {
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.input-field input[type=text]:disabled,
+.input-field input[type=date]:disabled {
+  color: var(--text-light);
+  border-bottom: 1px dotted var(--border-color);
+}
+
+.file-field .btn {
+  background-color: var(--primary-color);
+}
+
+.file-field .file-path-wrapper {
+  overflow: hidden;
+  padding-left: 10px;
+}
+
+.file-field input.file-path {
+  width: 100%;
+  color: var(--text-color);
+}
+
+.submit-btn {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  width: 100%;
+  margin-top: 20px;
+  height: 48px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.submit-btn:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
 
 @media only screen and (max-width: 600px) {
