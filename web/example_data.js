@@ -2,7 +2,7 @@
   // Sample data
   const entries = [{
     id: 1,
-    name: "Project Alpha",
+    name: "Experiment Alpha",
     category: "Development",
     date: "2023-05-15",
     status: "Active"

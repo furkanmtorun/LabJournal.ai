@@ -88,26 +88,14 @@ document.addEventListener('DOMContentLoaded', function () {
           <td>${entry.date}</td>
           <td><span class="chip ${statusColor}">${entry.status}</span></td>
           <td>
-            <button class="btn waves-effect details-btn" data-id="${entry.id}">
+            <a class="btn waves-effect details-btn" data-id="${entry.id}" href="view.html">
               Details
               <i class="material-icons right">arrow_forward</i>
-            </button>
+            </a>
           </td>
         `;
 
       tableBody.appendChild(row);
-    });
-
-    // Add event listeners to details buttons in table
-    document.querySelectorAll('.details-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const id = this.getAttribute('data-id');
-        const entry = entries.find(e => e.id == id);
-        M.toast({
-          html: `Details for: ${entry.name}`,
-          classes: 'rounded'
-        });
-      });
     });
   }
 
