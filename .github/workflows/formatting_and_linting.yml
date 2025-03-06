@@ -1,0 +1,26 @@
+name: Auto formatting and linting
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Web formatting check
+  Prettier_Format_For_Web:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js for formatting & linting
+      uses: actions/setup-node@v4
+      with:
+        node-version: '14'
+
+    - name: Check formatting with Prettier
+      run: |
+        npm install --save-dev --save-exact prettier
+        npx prettier --check "**/*.{html,css,js}"

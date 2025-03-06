@@ -6,10 +6,16 @@ Alternative names: ILikeLab.ai, LabHere.ai
 
 TBA!
 
-# User flow
+# User flow
+
 
 TBA!
 
 # Setup
 
-TBA!
+- For prettifying web app:
+
+    ```bash
+    npm install --save-dev --save-exact prettier
+    npx prettier --write "**/*.{html,css,js}"
+    ```
