@@ -281,38 +281,7 @@
   <!-- jQuery and Materialize JS via CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Dark/Light mode toggle
-      const modeToggle = document.getElementById('mode-toggle');
-      const body = document.body;
-      
-      // Check for saved mode preference or respect OS preference
-      const savedMode = localStorage.getItem('darkMode');
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if (savedMode === 'dark' || (savedMode === null && prefersDarkMode)) {
-        body.classList.add('dark-mode');
-        modeToggle.querySelector('i').textContent = 'brightness_7';
-      }
-      
-      // Toggle dark/light mode
-      modeToggle.addEventListener('click', function() {
-        body.classList.toggle('dark-mode');
-        const isDarkMode = body.classList.contains('dark-mode');
-        
-        // Update icon
-        this.querySelector('i').textContent = isDarkMode ? 'brightness_7' : 'brightness_6';
-        
-        // Save preference
-        localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
-      });
-      
-      // Initialize Materialize components
-      M.AutoInit();
-    });
-  </script>
+  <script src="js.js"></script>
 </body>
 </html>
 
