@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Management Dashboard</title>
+  <!-- Materialize CSS and Icons via CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+  :root {
+    --primary-color: #546e7a;
+    --primary-light: #819ca9;
+    --primary-dark: #29434e;
+    --accent-color: #5c6bc0;
+    --accent-hover: #3949ab;
+    --text-color: #424242;
+    --text-light: #757575;
+    --bg-color: #f5f5f5;
+    --card-color: #ffffff;
+    --border-color: #e0e0e0;
+    --hover-color: #f0f0f0;
+    --button-text: #ffffff;
+  }
+
+  .dark-mode {
+    --primary-color: #37474f;
+    --primary-light: #62727b;
+    --primary-dark: #102027;
+    --accent-color: #5c6bc0;
+    --accent-hover: #3949ab;
+    --text-color: #e0e0e0;
+    --text-light: #bdbdbd;
+    --bg-color: #263238;
+    --card-color: #37474f;
+    --border-color: #455a64;
+    --hover-color: #455a64;
+    --button-text: #ffffff;
+  }
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+  }
+  main {
+    flex: 1 0 auto;
+    padding: 20px 0;
+  }
+  nav {
+    background-color: var(--card-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  nav .brand-logo {
+    color: var(--text-color);
+    font-weight: 400;
+    position: relative;
+    transform: none;
+    left: 0;
+  }
+  .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 64px;
+  }
+  .nav-left {
+    flex: 0 0 auto;
+  }
+  .nav-middle {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .nav-right {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  .search-wrapper {
+    width: 300px;
+    background-color: var(--bg-color);
+    border-radius: 4px;
+    padding: 0 15px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+  }
+  .search-wrapper input {
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-color);
+    margin: 0;
+    height: 40px;
+    background-color: transparent;
+  }
+  .search-wrapper input::placeholder {
+    color: var(--text-light);
+  }
+  .search-wrapper i {
+    color: var(--text-light);
+    margin-right: 10px;
+  }
+  .create-btn {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 40px;
+    transition: all 0.3s ease;
+    margin-right: 15px;
+  }
+  .create-btn:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  .create-btn i {
+    margin-right: 8px;
+  }
+  .table-container {
+    border-radius: 8px;
+    background-color: var(--card-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    padding: 24px;
+    margin-top: 20px;
+  }
+  .page-title {
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: var(--text-color);
+  }
+  .details-btn {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 0 16px;
+    height: 36px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .details-btn:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+  }
+  .details-btn i {
+    margin-left: 4px;
+  }
+  table.highlight tbody tr:hover {
+    background-color: var(--hover-color);
+  }
+  table {
+    color: var(--text-color);
+  }
+  table th {
+    color: var(--text-light);
+  }
+  .chip {
+    font-weight: 500;
+    height: 26px;
+    line-height: 26px;
+  }
+  .mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--bg-color);
+    transition: all 0.3s ease;
+  }
+  .mode-toggle:hover {
+    background-color: var(--hover-color);
+  }
+  .mode-toggle i {
+    color: var(--text-color);
+  }
+  .dropdown-trigger {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    border-radius: 4px;
+    height: 40px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .dropdown-trigger i {
+    margin-left: 5px;
+  }
+  .dropdown-content {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+  }
+  .dropdown-content li > a {
+    color: var(--text-color);
+  }
+  .dropdown-content li > a:hover {
+    background-color: var(--hover-color);
+  }
+  .search-options {
+    display: flex;
+    align-items: center;
+  }
+  @media only screen and (max-width: 992px) {
+    .nav-middle {
+      justify-content: flex-start;
+    }
+    .search-wrapper {
+      width: 200px;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .nav-content {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 10px 20px;
+    }
+    .nav-left {
+      flex: 1 0 100%;
+      margin-bottom: 10px;
+    }
+    .nav-middle {
+      flex: 1 1 auto;
+      order: 3;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .nav-right {
+      flex: 0 0 auto;
+      order: 2;
+    }
+    .search-wrapper {
+      width: 100%;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .create-btn span {
+      display: none;
+    }
+    .create-btn i {
+      margin-right: 0;
+    }
+    .create-btn {
+      padding: 0 12px;
+    }
+    .dropdown-trigger span {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <!-- Fixed Navbar with Search Bar and Create Button -->
+  <nav>
+    <div class="nav-wrapper">
+      <div class="nav-content">
+        <!-- Left section: Title -->
+        <div class="nav-left">
+          <a href="#" class="brand-logo">Dashboard</a>
+        </div>
+        
+        <!-- Middle section: Search bar and dropdown -->
+        <div class="nav-middle">
+          <div class="search-options">
+            <div class="search-wrapper">
+              <i class="material-icons">search</i>
+              <input id="search" type="text" placeholder="Search entries..." required>
+            </div>
+            
+            <!-- Dropdown Trigger -->
+            <a class='dropdown-trigger' href='#' data-target='search-dropdown'>
+              <span>Quick Search</span>
+              <i class="material-icons">arrow_drop_down</i>
+            </a>
+            
+            <!-- Dropdown Structure -->
+            <ul id='search-dropdown' class='dropdown-content'>
+              <li><a href="#!" data-search-type="quick">Quick Search</a></li>
+              <li><a href="#!" data-search-type="detailed">Detailed Search</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Right section: New button and theme toggle -->
+        <div class="nav-right">
+          <a class="btn waves-effect waves-light create-btn" id="create-btn">
+            <i class="material-icons">add</i>
+            <span>New</span>
+          </a>
+          
+          <div class="mode-toggle" id="mode-toggle">
+            <i class="material-icons">brightness_6</i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h4 class="page-title">Data Entries</h4>
+    
+    <div class="table-container">
+      <table class="highlight responsive-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="entries-table">
+          <!-- Table content will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- jQuery and Materialize JS via CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize dropdown
+      const dropdownElems = document.querySelectorAll('.dropdown-trigger');
+      M.Dropdown.init(dropdownElems, {
+        coverTrigger: false,
+        constrainWidth: false
+      });
+      
+      // Dark/Light mode toggle
+      const modeToggle = document.getElementById('mode-toggle');
+      const body = document.body;
+      
+      // Check for saved mode preference or respect OS preference
+      const savedMode = localStorage.getItem('darkMode');
+      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedMode === 'dark' || (savedMode === null && prefersDarkMode)) {
+        body.classList.add('dark-mode');
+        modeToggle.querySelector('i').textContent = 'brightness_7';
+      }
+      
+      // Toggle dark/light mode
+      modeToggle.addEventListener('click', function() {
+        body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        
+        // Update icon
+        this.querySelector('i').textContent = isDarkMode ? 'brightness_7' : 'brightness_6';
+        
+        // Save preference
+        localStorage.setItem('darkMode', isDarkMode ? 'dark' : 'light');
+      });
+      
+      // Search type selection
+      const searchTypeLinks = document.querySelectorAll('[data-search-type]');
+      const dropdownTrigger = document.querySelector('.dropdown-trigger span');
+      let currentSearchType = 'quick';
+      
+      searchTypeLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          const searchType = this.getAttribute('data-search-type');
+          currentSearchType = searchType;
+          dropdownTrigger.textContent = searchType === 'quick' ? 'Quick Search' : 'Detailed Search';
+          
+          // You could modify the search behavior here based on the type
+          if (searchType === 'detailed') {
+            M.toast({html: 'Detailed search mode activated', classes: 'rounded'});
+          }
+        });
+      });
+      
+      // Sample data
+      const entries = [
+        { id: 1, name: "Project Alpha", category: "Development", date: "2023-05-15", status: "Active" },
+        { id: 2, name: "Marketing Campaign", category: "Marketing", date: "2023-06-22", status: "Pending" },
+        { id: 3, name: "Server Upgrade", category: "Infrastructure", date: "2023-04-10", status: "Completed" },
+        { id: 4, name: "Client Meeting", category: "Sales", date: "2023-07-05", status: "Scheduled" },
+        { id: 5, name: "Website Redesign", category: "Design", date: "2023-06-30", status: "In Progress" }
+      ];
+
+      // Populate table
+      function populateTable(data) {
+        const tableBody = document.getElementById('entries-table');
+        tableBody.innerHTML = '';
+        
+        data.forEach(entry => {
+          const row = document.createElement('tr');
+          
+          // Create status chip with appropriate color
+          let statusColor;
+          switch(entry.status.toLowerCase()) {
+            case 'active':
+              statusColor = 'light-green white-text';
+              break;
+            case 'completed':
+              statusColor = 'grey lighten-1 white-text';
+              break;
+            case 'pending':
+            case 'scheduled':
+              statusColor = 'amber lighten-2';
+              break;
+            case 'in progress':
+              statusColor = 'blue-grey lighten-3';
+              break;
+            default:
+              statusColor = 'grey lighten-3';
+          }
+
+          row.innerHTML = `
+            <td>${entry.id}</td>
+            <td>${entry.name}</td>
+            <td>${entry.category}</td>
+            <td>${entry.date}</td>
+            <td><span class="chip ${statusColor}">${entry.status}</span></td>
+            <td>
+              <button class="btn waves-effect details-btn" data-id="${entry.id}">
+                Details
+                <i class="material-icons right">arrow_forward</i>
+              </button>
+            </td>
+          `;
+          
+          tableBody.appendChild(row);
+        });
+        
+        // Add event listeners to details buttons
+        document.querySelectorAll('.details-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const entry = entries.find(e => e.id == id);
+            M.toast({html: `Details for: ${entry.name}`, classes: 'rounded'});
+          });
+        });
+      }
+
+      // Initial table population
+      populateTable(entries);
+      
+      // Search functionality
+      document.getElementById('search').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        let filteredEntries;
+        
+        if (currentSearchType === 'quick') {
+          // Quick search - search in name, category, status
+          filteredEntries = entries.filter(entry => 
+            entry.name.toLowerCase().includes(searchTerm) || 
+            entry.category.toLowerCase().includes(searchTerm) ||
+            entry.status.toLowerCase().includes(searchTerm)
+          );
+        } else {
+          // Detailed search - search in all fields
+          filteredEntries = entries.filter(entry => 
+            entry.id.toString().includes(searchTerm) ||
+            entry.name.toLowerCase().includes(searchTerm) || 
+            entry.category.toLowerCase().includes(searchTerm) ||
+            entry.date.includes(searchTerm) ||
+            entry.status.toLowerCase().includes(searchTerm)
+          );
+        }
+        
+        populateTable(filteredEntries);
+      });
+      
+      // Create button functionality
+      document.getElementById('create-btn').addEventListener('click', function() {
+        M.toast({html: 'Create new entry clicked!', classes: 'rounded'});
+      });
+      
+      // Initialize Materialize components
+      M.AutoInit();
+    });
+  </script>
+</body>
+</html>
+
