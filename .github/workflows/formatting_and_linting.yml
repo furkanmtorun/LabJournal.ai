@@ -23,4 +23,4 @@ jobs:
     - name: Check formatting with Prettier
       run: |
         npm install --save-dev --save-exact prettier
-        npx prettier --check "**/*.{html,css,js}"
+        npx prettier --check "**/*.{html,css,js,md}"

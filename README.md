@@ -6,16 +6,16 @@ Alternative names: ILikeLab.ai, LabHere.ai
 
 TBA!
 
-# User flow
-
-
-TBA!
-
 # Setup
 
-- For prettifying web app:
+## AWS & Terraform setup
 
-    ```bash
-    npm install --save-dev --save-exact prettier
-    npx prettier --write "**/*.{html,css,js}"
-    ```
+- Set your `.aws/credentials` file.
+- Follow [Terraform Deployment Readme](./terraform/deployment/README.md)
+
+## Web app
+
+  ```bash
+  npm install --save-dev --save-exact prettier
+  npx prettier --write "**/*.{html,css,js}"
+  ```
