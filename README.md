@@ -8,9 +8,9 @@ TBA!
 
 # Setup
 
-## AWS & Terraform setup
+## AWS & Terraform
 
-- Set your `.aws/credentials` file.
+- Install AWS CLI and set your `.aws/credentials` file.
 - Follow [Terraform Deployment Readme](./terraform/deployment/README.md)
 
 ## Web app

@@ -36,7 +36,30 @@ terraform/
 
 ```
 
-### Usage
+## Terraform backend prep.
+```bash
+aws --version
+export REGION="eu-central-1"
+```
+
+```bash
+# S3 Bucket for TF Backend States storage
+aws s3api create-bucket --bucket labjournalai-terraform-state --region $REGION
+aws s3api put-bucket-versioning --bucket labjournalai-terraform-state --versioning-configuration Status=Enabled
+aws s3api put-public-access-block --bucket labjournalai-terraform-state --public-access-block-configuration '{"BlockPublicAcls": true, "IgnorePublicAcls": true, "BlockPublicPolicy": true, "RestrictPublicBuckets": true}' --region $REGION
+```
+
+```bash
+# DynamoDB Table for State Locking
+aws dynamodb create-table \
+    --table-name labjournalai-terraform-locks-table \
+    --attribute-definitions AttributeName=LockID,AttributeType=S \
+    --key-schema AttributeName=LockID,KeyType=HASH \
+    --billing-mode PAY_PER_REQUEST \
+    --region $REGION
+```
+
+## Usage
 
 - Terraform workspace is going to take care of `providers.tf` to apply DRY principle.
 

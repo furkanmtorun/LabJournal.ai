@@ -4,3 +4,13 @@ node_modules/
 *.pyc
 .vscode
 .DS_Store
+*.tfstate
+*.tfstate.*
+# *.tfvars | Depends whether you include secrets or not 
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+terraform.tfvars
