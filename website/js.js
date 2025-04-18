@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".card-details-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
         const id = this.getAttribute("data-id");
-        const entry = entries.find((e) => e.id == id);
+        const entry = STATIC_ENTRY_DATA.find((e) => e.id == id);
         M.toast({
           html: `Details for: ${entry.name}`,
           classes: "rounded",
@@ -174,13 +174,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const searchTerm = this.value.toLowerCase();
       let filteredEntries =
         currentSearchType === "quick"
-          ? entries.filter(
+          ? STATIC_ENTRY_DATA.filter(
               (entry) =>
                 entry.name.toLowerCase().includes(searchTerm) ||
                 entry.category.toLowerCase().includes(searchTerm) ||
                 entry.status.toLowerCase().includes(searchTerm),
             )
-          : entries.filter(
+          : STATIC_ENTRY_DATA.filter(
               (entry) =>
                 entry.id.toString().includes(searchTerm) ||
                 entry.name.toLowerCase().includes(searchTerm) ||
@@ -225,9 +225,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Table controls (from index.html)
   const tableControls = document.querySelectorAll(".table-controls .btn");
-  if (tableControls.length > 0 && typeof entries !== "undefined") {
-    populateTable(entries);
-    populateCards(entries);
+  if (tableControls.length > 0 && typeof STATIC_ENTRY_DATA !== "undefined") {
+    populateTable(STATIC_ENTRY_DATA);
+    populateCards(STATIC_ENTRY_DATA);
 
     tableControls.forEach((btn) => {
       btn.addEventListener("click", function () {
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const sortDirection = this.title.includes("Ascending")
             ? "asc"
             : "desc";
-          const sortedEntries = [...entries].sort((a, b) =>
+          const sortedEntries = [...STATIC_ENTRY_DATA].sort((a, b) =>
             sortDirection === "asc"
               ? a.name.localeCompare(b.name)
               : b.name.localeCompare(a.name),

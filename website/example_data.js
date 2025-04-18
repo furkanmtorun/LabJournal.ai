@@ -1,5 +1,5 @@
 // Sample data
-const entries = [
+const STATIC_ENTRY_DATA = [
   {
     id: 1,
     name: "Experiment Alpha",
