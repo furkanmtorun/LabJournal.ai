@@ -1,2 +1,3 @@
-// variables.tf for S3 module
-// ...add your variable definitions here...
+variable "website_bucket_name" {
+    type = string
+}

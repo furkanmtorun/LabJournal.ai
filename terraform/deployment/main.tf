@@ -1,2 +1,5 @@
-// main.tf for deployment
-// ...add your Terraform configuration here...
+# Website
+module "website" {
+  source              = "../modules/web/s3"
+  website_bucket_name = var.website_bucket_name
+}
