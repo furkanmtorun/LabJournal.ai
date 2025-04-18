@@ -28,8 +28,7 @@ terraform/
 │   ├── main.tf            # imports and connects modules
 │   ├── variables.tf       # shared input variables
 │   ├── outputs.tf         # outputs for debugging or chaining
-│   ├── provider.tf        # region & profile config, version pinned
-│   ├── backend.tf         # shared backend with dynamic workspace key
+│   ├── provider.tf        # region & profile config, version pinned and shared backend with dynamic workspace key
 │   ├── prod.tfvars        # env-specific values
 │   ├── staging.tfvars     # env-specific values
 │   └── README.md          # how to use this
@@ -40,7 +39,7 @@ terraform/
 ```bash
 aws --version
 REGION="eu-central-1"
-BUCKET_NAME="labjournalai-terraform-state" 
+BUCKET_NAME="labjournalai_terraform_state"
 ```
 
 ```bash
@@ -48,16 +47,6 @@ BUCKET_NAME="labjournalai-terraform-state"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION
 aws s3api put-bucket-versioning --bucket $BUCKET_NAME$ --versioning-configuration Status=Enabled
 aws s3api put-public-access-block --bucket $BUCKET_NAME$ --public-access-block-configuration '{"BlockPublicAcls": true, "IgnorePublicAcls": true, "BlockPublicPolicy": true, "RestrictPublicBuckets": true}' --region $REGION
-```
-
-```bash
-# DynamoDB Table for State Locking
-aws dynamodb create-table \
-    --table-name labjournalai-terraform-locks-table \
-    --attribute-definitions AttributeName=LockID,AttributeType=S \
-    --key-schema AttributeName=LockID,KeyType=HASH \
-    --billing-mode PAY_PER_REQUEST \
-    --region $REGION
 ```
 
 ## Usage

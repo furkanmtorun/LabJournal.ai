@@ -1,2 +1,2 @@
-# staging.tfvars
-# Add environment-specific values for staging here
+# Staging environment-specific values
+aws_region = "eu-central-1"
