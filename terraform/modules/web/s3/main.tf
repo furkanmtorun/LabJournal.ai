@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "website" {
   }
 
   tags = {
-    Name        = "labjournalai-website"
+    Name        = var.website_bucket_name
     Environment = "${terraform.workspace}"
   }
 }
