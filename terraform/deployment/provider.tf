@@ -8,9 +8,9 @@ terraform {
 
   # Must be hard-coded
   backend "s3" {
-    bucket       = "labjournalai_terraform_state"
+    bucket       = "labjournalai-terraform-bucket"
     region       = "eu-central-1"
-    key          = "terraform.tfstate"
+    key          = "deployment.tfstate"
     use_lockfile = true
     encrypt      = true
   }

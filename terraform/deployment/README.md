@@ -39,14 +39,15 @@ terraform/
 ```bash
 aws --version
 REGION="eu-central-1"
-BUCKET_NAME="labjournalai_terraform_state"
+BUCKET_NAME="labjournalai-terraform-bucket"
+aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-configuration LocationConstraint=$REGION
 ```
 
 ```bash
 # S3 Bucket for TF Backend States storage
-aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION
-aws s3api put-bucket-versioning --bucket $BUCKET_NAME$ --versioning-configuration Status=Enabled
-aws s3api put-public-access-block --bucket $BUCKET_NAME$ --public-access-block-configuration '{"BlockPublicAcls": true, "IgnorePublicAcls": true, "BlockPublicPolicy": true, "RestrictPublicBuckets": true}' --region $REGION
+aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-configuration LocationConstraint=$REGION
+aws s3api put-bucket-versioning --bucket $BUCKET_NAME --versioning-configuration Status=Enabled
+aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration '{"BlockPublicAcls": true, "IgnorePublicAcls": true, "BlockPublicPolicy": true, "RestrictPublicBuckets": true}'
 ```
 
 ## Usage
