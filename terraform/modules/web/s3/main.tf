@@ -44,13 +44,12 @@ resource "aws_s3_bucket_versioning" "website_versioning" {
 
 # Files
 resource "aws_s3_object" "website_files" {
-  bucket   = aws_s3_bucket.website.id
-  for_each = fileset(path.module, "${local.website_files_path}**/*.{html,css,js,png,jpg,jpeg}")
-  # Here, replace to avoid having the file path prefix in S3, we just need bucket/file.html structure.
-  key          = replace(each.value, "/^${local.website_files_path}/", "")
-  source       = each.value
-  content_type = lookup(local.website_content_types, regex("\\.[^.]+$", each.value), "application/octet-stream")
-  etag         = filemd5(each.value)
+  for_each = fileset(local.website_files_path, "**/*.{html,css,js,png,jpg,jpeg}")
+
+  bucket       = aws_s3_bucket.website.bucket
+  key          = each.value
+  source       = "${local.website_files_path}/${each.value}"
+  content_type = lookup({"html" = "text/html", "css" = "text/css", "js" = "application/javascript", "png" = "image/png", "jpg" = "image/jpeg", "jpeg" = "image/jpeg"}, split(".", each.value)[length(split(".", each.value)) - 1], "application/octet-stream")
 }
 
 # Web configuration
