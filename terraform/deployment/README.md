@@ -2,7 +2,7 @@
 
 This directory contains the Terraform configuration files for deploying infrastructure. Below is an overview of the folder structure and the purpose of each file and module.
 
-## Folder Structure
+## 0. Folder Structure
 
 ```
 terraform/
@@ -13,9 +13,7 @@ terraform/
 │   │   │   ├── variables.tf
 │   │   │   └── outputs.tf
 │   │   └── cloudfront/
-│   │       ├── main.tf
-│   │       ├── variables.tf
-│   │       └── outputs.tf
+│   │       ├── ...
 │   ├── api/
 │   │   └── ...
 │   ├── app/
@@ -35,7 +33,7 @@ terraform/
 
 ```
 
-## Terraform backend prep.
+## 1. Terraform backend prep.
 ```bash
 aws --version
 REGION="eu-central-1"
@@ -43,27 +41,15 @@ BUCKET_NAME="labjournalai-terraform-bucket"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-configuration LocationConstraint=$REGION
 ```
 
-```bash
-# S3 Bucket for TF Backend States storage
-aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-configuration LocationConstraint=$REGION
-aws s3api put-bucket-versioning --bucket $BUCKET_NAME --versioning-configuration Status=Enabled
-aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration '{"BlockPublicAcls": true, "IgnorePublicAcls": true, "BlockPublicPolicy": true, "RestrictPublicBuckets": true}'
-```
-
-## Usage
+## 2. Deploy
 
 - Terraform workspace is going to take care of `providers.tf` to apply DRY principle.
 
 ```bash
 cd terraform/deployment
-
-terraform init  # only once to initialize backend
-terraform workspace new prod      # if not already created
-terraform workspace select prod
-terraform apply -var-file=prod.tfvars
-
-terraform workspace new staging   # if not already created
-terraform workspace select staging
-terraform apply -var-file=staging.tfvars
-
+ENV="prod" # "staging"
+terraform init
+terraform workspace new $ENV
+terraform workspace select $ENV
+terraform apply -var-file=$ENV.tfvars
 ```
