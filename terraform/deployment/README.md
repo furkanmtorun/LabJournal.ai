@@ -47,9 +47,11 @@ aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-c
 
 ```bash
 cd terraform/deployment
-ENV="prod" # "staging"
+export ENV="PROD" # "staging"
 terraform init
 terraform workspace new $ENV
+terraform workspace list
 terraform workspace select $ENV
+terraform workspace show
 terraform apply -var-file=$ENV.tfvars
 ```
