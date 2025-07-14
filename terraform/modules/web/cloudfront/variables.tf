@@ -1,2 +1,4 @@
-// variables.tf for CloudFront module
-// ...add your variable definitions here...
+variable "s3_bucket_domain_name" {
+  description = "Regional domain name of the S3 bucket for website"
+  type        = string
+}
