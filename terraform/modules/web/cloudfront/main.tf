@@ -89,7 +89,7 @@ resource "aws_cloudfront_distribution" "static_site" {
 
   logging_config {
     include_cookies = false
-    bucket          = var.s3_bucket_domain_name
+    bucket = var.website_bucket_name
     prefix          = "logs/"
   }
 
