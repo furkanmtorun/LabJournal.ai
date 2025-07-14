@@ -10,7 +10,6 @@ module "web_s3" {
 module "web_cloudfront" {
   source                = "../modules/web/cloudfront"
   s3_bucket_domain_name = module.web_s3.bucket_regional_domain_name
-  website_bucket_name   = module.web_s3.bucket_regional_domain_name # For CloudFront logs
 }
 
 ## 1.3 Web Policy (to avoid circular dependency)

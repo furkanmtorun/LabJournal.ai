@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "static_site" {
 
   default_cache_behavior {
     target_origin_id       = local.origin_id
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods         = ["GET", "HEAD"]
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
@@ -49,7 +49,7 @@ resource "aws_cloudfront_distribution" "static_site" {
 
   ordered_cache_behavior {
     path_pattern     = "*.html"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"]
+    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.origin_id
     compress         = true
@@ -86,11 +86,4 @@ resource "aws_cloudfront_distribution" "static_site" {
   tags = {
     Name = "static-webapp-cdn"
   }
-
-  logging_config {
-    include_cookies = false
-    bucket = var.website_bucket_name
-    prefix          = "logs/"
-  }
-
 }
