@@ -2,6 +2,15 @@ locals {
   origin_id = "labjournalai-s3-origin-id"
 }
 
+# CloudFront Function for URL rewriting
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "url-rewrite"
+  runtime = "cloudfront-js-1.0"
+  comment = "URL rewriting for URL routing"
+  publish = true
+  code    = file("${path.module}/url_rewrite.js")
+}
+
 # OAC to ensure only CloudFront can access S3 content
 resource "aws_cloudfront_origin_access_control" "s3_oac" {
   name                              = "s3-origin-access-control"
@@ -45,18 +54,13 @@ resource "aws_cloudfront_distribution" "static_site" {
 
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
-  }
 
-  ordered_cache_behavior {
-    path_pattern     = "*.html"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.origin_id
-    compress         = true
-    
-    cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
-    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
-    viewer_protocol_policy     = "redirect-to-https"
+    function_association {
+      # 'viewer-request' : The func is triggered every time a user sends request 
+      # before any caching happens and before CDN contacts to S3
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
   }
 
   custom_error_response {
@@ -79,7 +83,7 @@ resource "aws_cloudfront_distribution" "static_site" {
   restrictions {
     geo_restriction {
       restriction_type = "none"
-      locations = [] # Here we can block certain countries.
+      locations        = [] # Here we can block certain countries.
     }
   }
 
