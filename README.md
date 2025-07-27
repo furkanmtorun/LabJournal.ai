@@ -8,6 +8,10 @@ TBA!
 
 # Setup
 
+## TODO
+
+- Handle `FIX` places
+
 ## AWS & Terraform
 
 - Install AWS CLI and set your `.aws/credentials` file.

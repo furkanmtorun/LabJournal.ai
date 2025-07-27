@@ -55,4 +55,8 @@ terraform workspace select $ENV
 terraform workspace show
 terraform plan --var-file=$ENV.tfvars
 terraform apply -var-file=$ENV.tfvars
+
+# Destroy
+terraform destroy -var-file=$ENV.tfvars
+cloud-nuke aws --region $REGION
 ```
