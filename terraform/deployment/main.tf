@@ -20,3 +20,8 @@ module "web_connector" {
   web_cloudfront_distribution_arn = module.web_cloudfront.cloudfront_distribution_arn
 }
 
+
+# 2. Database
+module "database" {
+  source = "../modules/database"
+}

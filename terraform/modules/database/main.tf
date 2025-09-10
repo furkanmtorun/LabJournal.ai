@@ -4,7 +4,6 @@ resource "aws_dynamodb_table" "experiments" {
   name         = "experiments"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "id"
-  range_key    = "timestamp"
 
   attribute {
     name = "id"
@@ -22,17 +21,7 @@ resource "aws_dynamodb_table" "experiments" {
   }
 
   attribute {
-    name = "timestamp"
-    type = "S"
-  }
-
-  attribute {
     name = "status"
-    type = "S"
-  }
-
-  attribute {
-    name = "result"
     type = "S"
   }
 
@@ -45,6 +34,12 @@ resource "aws_dynamodb_table" "experiments" {
   global_secondary_index {
     name            = "CategoryIndex"
     hash_key        = "category"
+    projection_type = "ALL" # all attributes from the table are projected into the index
+  }
+
+  global_secondary_index {
+    name            = "StatusIndex"
+    hash_key        = "status"
     projection_type = "ALL" # all attributes from the table are projected into the index
   }
 
