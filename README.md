@@ -23,3 +23,13 @@ TBA!
   npm install --save-dev --save-exact prettier
   npx prettier --write "**/*.{html,css,js}"
   ```
+
+## Rest API
+```bash
+# To run locally
+cd api/
+python3.12 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+sudo chmod +x run.sh && ./run.sh
+```

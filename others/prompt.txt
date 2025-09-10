@@ -1,0 +1,48 @@
+**Create a Premium Scientific Text Editor with Advanced Inline Editing for VC Presentation**
+
+Build a single HTML file (`index.html`) with embedded CSS and JavaScript that creates a professional, VC-presentation-ready scientific text editor with the following specifications:
+
+**Core Functionality:**
+
+1. **Rich Scientific Content**: Substantial scientific text about quantum mechanics with multiple paragraphs, headings (h1, h2, h3), and bullet points
+2. **Sentence-Level Inline Editing**: Each sentence individually clickable for editing with premium hover effects
+3. **Smart Word-Level Diff Highlighting**: LCS algorithm comparing original to final version only (orange for deleted, green for added)
+4. **Three-Section Sidebar**: Meta info, recent changes with user attribution, save controls
+5. **Collapsible Sidebar**: Toggle button with proper icon states (› visible, ‹ hidden)
+
+
+**Technical Requirements:**
+
+- **Save Button Logic**: Disable when no changes, enable only when text modified
+- **Smart Discard Behavior**: Revert to current version, not original when discarding
+- **Intelligent Diff Algorithm**: LCS for accurate word-level diffs without false positives
+- **Edit Input Population**: Populate with current version when re-editing
+- **Original vs Final Tracking**: Only track first original vs final changes
+
+
+**Premium UI/UX Design:**
+
+- **Glass Morphism**: Backdrop blur effects, semi-transparent backgrounds with premium shadows
+- **Color Scheme**: White/grey/black with blue (save), red (discard), orange (deleted), green (added)
+- **Typography**: Inter font system with sophisticated weight hierarchy
+- **Animations**: Cubic-bezier transitions, shimmer effects, hover transforms
+- **Professional Elements**: Gradient overlays, premium shadows, smooth state transitions
+
+
+**Enhanced Sidebar Features:**
+
+1. **Meta Section**: Experiment ID, author photo/name, folder path, sharing dropdown with email invite
+2. **Changes Section**: User attribution with photos, @usernames, timestamps for each change
+3. **Save Section**: Prominent save-all button with premium styling
+4. This sidebar should be fixed, so user should always see while scrolling.
+5. Arrange the sidebar contents and gaps in a way that the we are maximizing the space for recent changes.
+
+**Layout & Interactions:**
+
+- **Responsive Design**: Two-column layout that centers when sidebar hidden
+- **Auto-Show Sidebar**: Automatically reveals sidebar when user starts editing
+- **Premium Hover States**: Sophisticated animations on all interactive elements
+- **Glass Effects**: Backdrop blur, semi-transparent surfaces, premium depth
+
+
+The result should be a polished, enterprise-grade scientific text editor suitable for VC presentations with sophisticated visual design and flawless functionality.
