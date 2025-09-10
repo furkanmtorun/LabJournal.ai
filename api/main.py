@@ -1,5 +1,7 @@
 """API module via FastAPI."""
-from fastapi import FastAPI, HTTPException
+from datetime import datetime
+import uuid
+from fastapi import FastAPI, HTTPException, status
 from botocore.exceptions import ClientError
 from pydantic import BaseModel
 
@@ -8,6 +10,7 @@ _VERSION: str = "0.1.0"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME :str = "experiments"
 _REGION_NAME: str = "eu-central-1"
+_TIME_FORMAT: str = ""
 DB_CLIENT = boto3.client("dynamodb", region_name=_REGION_NAME)
 
 # Models
@@ -108,3 +111,35 @@ async def delete_experiment(experiment_id: str):
             raise HTTPException(status_code=404, detail=f"Experiment {experiment_id} not found.")
         else:
             raise HTTPException(status_code=500, detail=str(e))
+        
+@app.post("/experiments", response_model=ExperimentModel,  status_code=status.HTTP_201_CREATED)
+async def create_experiment(experiment: dict[str, str]) -> ExperimentModel:
+    experiment_id = str(uuid.uuid4())
+    timestamp = datetime.now().strftime("%d.%m.Y %H:%M:%S")
+    status = "Queued"
+    
+    item = {
+        "id": {"S": experiment_id},
+        "name": {"S": experiment.get("name")},
+        "category": {"S": experiment.get("category")},
+        "timestamp": {"S": timestamp},
+        "status": {"S": status},
+        "result": {"S": ""},  # default empty
+    }
+    
+    try:
+        DB_CLIENT.put_item(
+            TableName=_TABLE_NAME,
+            Item=item,
+            ConditionExpression="attribute_not_exists(id)"  # prevent overwriting
+        )
+        return ExperimentModel(
+            id=experiment_id,
+            name=experiment.get("name"),
+            category=experiment.get("category"),
+            timestamp=timestamp,
+            status=status,
+            result=""
+        )
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=str(e))

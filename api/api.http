@@ -21,3 +21,12 @@ Accept: application/json
 ### Delete Single Experiment
 DELETE {{API_ENDPOINT}}/experiments/{{EXPERIMENT_ID}}
 Accept: application/json
+
+### Create New Experiment
+POST {{API_ENDPOINT}}/experiments
+Content-Type: application/json
+
+{
+    "name": "new",
+    "category": "demo"
+}
