@@ -1,0 +1,23 @@
+### TEST API
+
+@API_ENDPOINT=http://localhost:8000
+@EXPERIMENT_ID=c09c281b-0910-4abd-a6b0-9fea9c350694
+
+GET {{API_ENDPOINT}}/
+Accept: application/json
+
+### Health Check
+GET {{API_ENDPOINT}}/health
+Accept: application/json
+
+### Get All Experiments
+GET {{API_ENDPOINT}}/experiments
+Accept: application/json
+
+### Get Single Experiment
+GET {{API_ENDPOINT}}/experiments/{{EXPERIMENT_ID}}
+Accept: application/json
+
+### Delete Single Experiment
+DELETE {{API_ENDPOINT}}/experiments/{{EXPERIMENT_ID}}
+Accept: application/json
