@@ -144,3 +144,6 @@ async def create_experiment(experiment: dict[str, str]) -> ExperimentModel:
         )
     except ClientError as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# Define 'handler' for lambda
+handler = app

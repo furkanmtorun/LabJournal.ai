@@ -31,5 +31,5 @@ cd api/
 python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-sudo chmod +x run.sh && ./run.sh
+uvicorn main:app --reload --port 8000
 ```
