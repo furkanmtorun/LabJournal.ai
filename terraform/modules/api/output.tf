@@ -1,3 +1,3 @@
-output "api_url" {
-  value = aws_apigatewayv2_stage.stage.invoke_url
+output "lambda_function_url" {
+  value = aws_lambda_function_url.url.function_url
 }
