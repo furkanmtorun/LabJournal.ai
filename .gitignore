@@ -1,6 +1,8 @@
+build/
 *.json
 node_modules/
 *.csv
+*.zip
 *.pyc
 .vscode
 .DS_Store
