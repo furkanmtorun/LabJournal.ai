@@ -27,3 +27,8 @@ output "cloudfront_domain_name" {
   description = "The domain name of the CloudFront distribution"
   value       = module.web_cloudfront.cloudfront_domain_name
 }
+
+output "lambda_function_url" {
+  description = "The URL to API Lambda Func hosting FastApi."
+  value = module.api.lambda_function_url
+}
