@@ -10,8 +10,9 @@ _VERSION: str = "0.1.0"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME :str = "experiments"
 _REGION_NAME: str = "eu-central-1"
-_TIME_FORMAT: str = ""
+_TIME_FORMAT: str = "%d.%m.%Y %H:%M:%S"
 DB_CLIENT = boto3.client("dynamodb", region_name=_REGION_NAME)
+
 
 # Models
 class VersionModel(BaseModel):
@@ -115,7 +116,7 @@ async def delete_experiment(experiment_id: str):
 @app.post("/experiments", response_model=ExperimentModel,  status_code=status.HTTP_201_CREATED)
 async def create_experiment(experiment: dict[str, str]) -> ExperimentModel:
     experiment_id = str(uuid.uuid4())
-    timestamp = datetime.now().strftime("%d.%m.Y %H:%M:%S")
+    timestamp = datetime.now().strftime(_TIME_FORMAT)
     status = "Queued"
     
     item = {

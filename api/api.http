@@ -27,6 +27,6 @@ POST {{API_ENDPOINT}}/experiments
 Content-Type: application/json
 
 {
-    "name": "new",
-    "category": "demo"
+    "name": "furki experiment",
+    "category": "rna-seq"
 }

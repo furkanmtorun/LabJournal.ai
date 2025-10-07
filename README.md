@@ -26,7 +26,7 @@ TBA!
 
 ## Rest API
 ```bash
-# To run locally
+# To install and run locally
 cd api/
 python3.12 -m venv venv
 source venv/bin/activate
