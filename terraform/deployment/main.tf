@@ -25,3 +25,10 @@ module "web_connector" {
 module "database" {
   source = "../modules/database"
 }
+
+# 3. App
+module "app" {
+  source = "../modules/app"
+  input_images_bucket_name = var.input_images_bucket_name
+}
+

@@ -11,3 +11,8 @@ variable "aws_region" {
 variable "website_bucket_name" {
   type = string
 }
+
+# S3 for input images
+variable "input_images_bucket_name" {
+  type = string
+}

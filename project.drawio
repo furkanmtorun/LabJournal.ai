@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="xsMkXeDbLDW6kUsXKgYV">
-        <mxGraphModel dx="1099" dy="416" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+        <mxGraphModel dx="1099" dy="717" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -120,6 +120,9 @@
                 </mxCell>
                 <mxCell id="wwbbPI-VW8QuLXLs8vsD-17" value="SQS | Dead Letter: DLQ&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sqs;spacingBottom=0;spacingTop=0;" parent="wUassT3cOZdTJ1mofqDb-1" vertex="1">
                     <mxGeometry x="511.5" y="57.5" width="78" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;URL Rerouting" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.nodejs_performance_platform;" vertex="1" parent="wUassT3cOZdTJ1mofqDb-1">
+                    <mxGeometry x="110" y="222.6" width="24.28" height="27.4" as="geometry"/>
                 </mxCell>
                 <mxCell id="wUassT3cOZdTJ1mofqDb-7" value="Architecture" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=32;" parent="1" vertex="1">
                     <mxGeometry x="220" y="60" width="60" height="30" as="geometry"/>
