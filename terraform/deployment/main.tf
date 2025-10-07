@@ -32,3 +32,9 @@ module "app" {
   input_images_bucket_name = var.input_images_bucket_name
 }
 
+# 4. API
+module "api" {
+  source = "../modules/api"  
+}
+
+
