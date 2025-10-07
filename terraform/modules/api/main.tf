@@ -16,24 +16,22 @@ resource "null_resource" "build_lambda" {
   provisioner "local-exec" {
     command = <<-EOT
       set -e
-      echo "Creating build directory..."
+      echo "Cleaning old build..."
       rm -rf ${local.build_dir}
       mkdir -p ${local.build_dir}
 
       echo "Copying main.py..."
       cp ${local.api_source_dir}/main.py ${local.build_dir}/
 
-      echo "Installing dependencies with Python 3.12..."
-      python3.12 -m venv ${local.build_dir}/venv
-      . ${local.build_dir}/venv/bin/activate
-      pip install --upgrade pip
-      pip install -r ${local.api_source_dir}/requirements.txt -t ${local.build_dir}
-
-      echo "Removing temporary virtual environment..."
-      rm -rf ${local.build_dir}/venv
+      echo "Building dependencies in Lambda-compatible Docker..."
+      docker run --rm -v ${local.build_dir}:/var/task public.ecr.aws/lambda/python:3.12 bash -c "
+        pip install --upgrade pip
+        pip install -r /var/task/requirements.txt -t /var/task
+      "
     EOT
   }
 }
+
 
 # Step 2: Archive the build directory
 data "archive_file" "lambda_zip" {
@@ -114,7 +112,7 @@ resource "null_resource" "cleanup_build" {
     command = <<-EOT
       echo "Cleaning up build folder..."
       rm -rf ${local.build_dir}
-      # rm -f ${local.zip_path} # optional: remove zip if you don't want to keep
+      rm -f ${local.zip_path}
     EOT
   }
 }
