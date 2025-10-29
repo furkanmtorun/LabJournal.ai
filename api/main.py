@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 from pydantic import BaseModel
 
 import boto3
-_VERSION: str = "0.1.0"
+_VERSION: str = "0.1.0dev"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME :str = "experiments"
 _REGION_NAME: str = "eu-central-1"

@@ -21,8 +21,6 @@ resource "null_resource" "build_lambda" {
   provisioner "local-exec" {
     command = <<-EOT
       set -e
-      echo "Cleaning old build..."
-      rm -rf ${local.build_dir}
       mkdir -p ${local.build_dir}
 
       echo "Copying files..."
