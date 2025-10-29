@@ -28,6 +28,7 @@ resource "null_resource" "build_lambda" {
       echo "Copying main.py and requirements.txt..."
       cp ${local.api_source_dir}/main.py ${local.build_dir}/
       cp ${local.api_source_dir}/requirements.txt ${local.build_dir}/
+      cp ${local.api_source_dir}/run.sh ${local.build_dir}/
 
       echo "Building dependencies in Lambda-compatible Docker..."
       docker run --rm -v ${local.build_dir_abs}:/var/task --entrypoint /bin/bash public.ecr.aws/lambda/python:3.12 -c "
