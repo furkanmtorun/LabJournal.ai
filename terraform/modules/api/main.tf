@@ -85,7 +85,7 @@ resource "aws_lambda_function" "fastapi_lambda" {
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   runtime          = "python3.12"
-  handler          = "main.app"
+  handler          = "run.sh"
   memory_size      = 512
   timeout          = 30
   role             = aws_iam_role.lambda_exec.arn
@@ -118,6 +118,29 @@ resource "null_resource" "cleanup_build" {
       # rm -f ${local.zip_path} # optional: remove zip if you want
     EOT
   }
+}
+
+# Step 8: AWS IAM Policies for DynamoDB and Logs
+resource "aws_iam_policy" "dynamodb_access" {
+  name        = "LambdaDynamoDBFullAccess"
+  description = "Allow Lambda to access all DynamoDB tables in region"
+
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = [
+        "dynamodb:*"
+      ]
+      Resource = "arn:aws:dynamodb:eu-central-1:851725270120:table/*"
+    }]
+  })
+}
+
+resource "aws_iam_policy_attachment" "attach_dynamodb_policy" {
+  name       = "AttachDynamoDBAccessToLambdaRole"
+  policy_arn = aws_iam_policy.dynamodb_access.arn
+  roles      = [aws_iam_role.lambda_exec.name]
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
