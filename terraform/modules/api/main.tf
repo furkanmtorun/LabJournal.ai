@@ -3,6 +3,7 @@ locals {
   api_source_dir = "${path.root}/../../api"
   build_dir      = "${path.module}/build"
   zip_path       = "${path.module}/fastapi_lambda.zip"
+  build_dir_abs  = abspath("${path.module}/build")
 
   # Lambda Web Adapter x86_64
   aws_lambda_web_layer_arn = "arn:aws:lambda:eu-central-1:753240598075:layer:LambdaAdapterLayerX86:25"
@@ -29,7 +30,7 @@ resource "null_resource" "build_lambda" {
       cp ${local.api_source_dir}/requirements.txt ${local.build_dir}/
 
       echo "Building dependencies in Lambda-compatible Docker..."
-      docker run --rm -v ${local.build_dir}:/var/task public.ecr.aws/lambda/python:3.12 bash -c "
+      docker run --rm -v ${local.build_dir_abs}:/var/task --entrypoint /bin/bash public.ecr.aws/lambda/python:3.12 -c "
         pip install --upgrade pip
         pip install -r /var/task/requirements.txt -t /var/task
       "
