@@ -21,7 +21,6 @@ class VersionModel(BaseModel):
 class HealthCheckModel(BaseModel):
     status: str
 
-
 class ExperimentBaseModel(BaseModel):
     name: str
     category: str
