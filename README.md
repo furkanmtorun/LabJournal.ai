@@ -1,6 +1,7 @@
 # LabJournal.ai
 
-Alternative names: ILikeLab.ai, LabHere.ai
+- Keep labs notebooks digital effortlessly!
+- Alternative names: ILikeLab.ai, LabHere.ai
 
 # Architecture
 
@@ -16,19 +17,19 @@ TBA!
 - Link all these implementations
 - Handle `# FIX` places
 
-## AWS & Terraform
+## 1. AWS & Terraform
 
 - Install AWS CLI and set your `.aws/credentials` file.
 - Follow [Terraform Deployment Readme](./terraform/deployment/README.md)
 
-## Web app
+## 2. Web app
 
   ```bash
   npm install --save-dev --save-exact prettier
   npx prettier --write "**/*.{html,css,js}"
   ```
 
-## Rest API
+## 3. (Rest) API
 ```bash
 # To install and run locally
 cd api/
