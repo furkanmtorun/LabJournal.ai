@@ -10,7 +10,11 @@ TBA!
 
 ## TODO
 
-- Handle `FIX` places
+- Implement App
+- Implement SQS & Dead Letter
+- Implement API Gateway
+- Link all these implementations
+- Handle `# FIX` places
 
 ## AWS & Terraform
 
