@@ -1,0 +1,1 @@
+"""Test main app (aka. InvokeModel lambda func.)."""

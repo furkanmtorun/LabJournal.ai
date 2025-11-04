@@ -1,0 +1,6 @@
+# app
+boto3==1.39.14
+
+# dev
+black
+isort
