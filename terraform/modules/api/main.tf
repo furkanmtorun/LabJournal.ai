@@ -53,8 +53,8 @@ resource "aws_iam_role" "lambda_exec" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action   = "sts:AssumeRole"
-      Effect   = "Allow"
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
       Principal = { Service = "lambda.amazonaws.com" }
     }]
   })
@@ -62,7 +62,7 @@ resource "aws_iam_role" "lambda_exec" {
 
 # Step 4: IAM policy for Lambda Layer
 resource "aws_iam_policy" "lambda_layer_access" {
-  name   = "AllowLambdaGetLayerVersion"
+  name = "AllowLambdaGetLayerVersion"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -126,11 +126,11 @@ resource "aws_iam_policy" "dynamodb_access" {
   name        = "LambdaDynamoDBFullAccess"
   description = "Allow Lambda to access all DynamoDB tables in region"
 
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect   = "Allow"
-      Action   = [
+      Effect = "Allow"
+      Action = [
         "dynamodb:*"
       ]
       Resource = "arn:aws:dynamodb:eu-central-1:851725270120:table/*"

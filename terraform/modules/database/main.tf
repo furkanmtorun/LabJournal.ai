@@ -55,6 +55,6 @@ resource "aws_dynamodb_table" "experiments" {
   }
 
   tags = {
-    Name        = "dynamodb-table-for-experiments"
+    Name = "dynamodb-table-for-experiments"
   }
 }
