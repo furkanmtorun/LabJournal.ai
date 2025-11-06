@@ -1,3 +1,7 @@
+# Notes
+## 'visibility timeout' governs message invisibility after retrieval to avoid duplicate processing 
+## and allows retry logic through message reappearance after timeout expiry.
+
 # S3 Bucket to store input images
 resource "aws_s3_bucket" "input_images" {
   bucket = var.input_images_bucket_name
@@ -19,10 +23,10 @@ resource "aws_sqs_queue" "submit_experiments" {
   fifo_queue              = false # We pick 'standard queue' over 'FIFO' as we do not care the order.
   sqs_managed_sse_enabled = true
 
-  max_message_size = 2048
+  max_message_size = 262144 # 256 KiB
 
   receive_wait_time_seconds  = 10     # 20 (max) -> "long polling" | 0 (min) -> "short polling"
-  visibility_timeout_seconds = 60     # timeout for Lambda processing
+  visibility_timeout_seconds = 60     # timeout for Lambda processing (should be bigger than Lambda timeout)
   message_retention_seconds  = 345600 # 4 days retention for main queue
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.dead_letters_for_experiments.arn
