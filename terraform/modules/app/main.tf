@@ -25,7 +25,7 @@ resource "aws_s3_bucket" "input_images" {
 # ==============
 ## SQS: Submitting experiments
 resource "aws_sqs_queue" "submit_experiments" {
-  name                       = "sqs-for-submit-experiments"
+  name                       = "queue-for-submit-experiments"
   fifo_queue                 = false # Standard queue is fine since order doesn't matter
   sqs_managed_sse_enabled    = true  # AWS-managed encryption for data security
   delay_seconds              = 0
@@ -48,7 +48,7 @@ resource "aws_sqs_queue" "submit_experiments" {
 
 ## SQS: Dead-letter queue (DLQ) to capture problematic messages
 resource "aws_sqs_queue" "dead_letters_for_experiments" {
-  name                       = "llm-dead-letter-queue"
+  name                       = "dead-letter-queue-for-submit-experiments"
   fifo_queue                 = false
   sqs_managed_sse_enabled    = true    # Enable server-side encryption for compliance and safety
   message_retention_seconds  = 1209600 # 14 days (max retention for DLQ)
@@ -59,6 +59,30 @@ resource "aws_sqs_queue" "dead_letters_for_experiments" {
     Name        = "AWS SQS Dead Letter Queue for LLM Experiments"
     Environment = terraform.workspace
   }
+}
+
+resource "aws_iam_policy" "lambda_sqs_policy" {
+  name = "lambda-sqs-access"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ]
+        Resource = "arn:aws:sqs:eu-central-1:851725270120:sqs-for-submit-experiments"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sqs_policy_attachment" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_sqs_policy.arn
 }
 
 # ==============
@@ -91,12 +115,12 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 ## Zip: Package main.py file into lambda.zip automatically
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_file = "${path.module}/../../app/main.py"
-  output_path = "${path.module}/../../app/lambda.zip"
+  source_file = "${path.root}/../../app/main.py"
+  output_path = "${path.root}/../../app/lambda.zip"
 }
 
 ## Package and deploy Lambda function
-resource "aws_lambda_function" "invoke_model_lambda" {
+resource "aws_lambda_function" "invoke_model" {
   function_name    = "invoke-model-lambda"
   role             = aws_iam_role.lambda_role.arn
   handler          = "main.lambda_handler"

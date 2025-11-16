@@ -30,5 +30,5 @@ output "cloudfront_domain_name" {
 
 output "lambda_function_url" {
   description = "The URL to API Lambda Func hosting FastApi."
-  value = module.api.lambda_function_url
+  value       = module.api.lambda_function_url
 }

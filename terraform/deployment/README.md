@@ -36,8 +36,8 @@ terraform/
 ## 1. Terraform backend prep.
 ```bash
 aws --version
-REGION="eu-central-1"
-BUCKET_NAME="labjournalai-terraform-bucket"
+export REGION="eu-central-1"
+export BUCKET_NAME="labjournalai-terraform-bucket"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --create-bucket-configuration LocationConstraint=$REGION
 ```
 
