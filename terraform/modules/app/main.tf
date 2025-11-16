@@ -1,9 +1,12 @@
 # Notes
-## 'receive_wait_time_seconds' : How long should I wait for new messages before giving up?
-## 'visibility_timeout_seconds': How long should I hide this message from others while it’s being processed?
-## 'visibility_timeout_seconds' should be equal or more than the timeout of consumer
+## -> 'receive_wait_time_seconds' : How long should I wait for new messages before giving up?
+## -> 'visibility_timeout_seconds': How long should I hide this message from others while it’s being processed?
+## -> Time for 'visibility_timeout_seconds' should be equal or more than the timeout of consumer (lambda here).
 
-# S3 Bucket to store input images
+# ==============
+# S3
+# ==============
+## S3 Bucket to store input images
 resource "aws_s3_bucket" "input_images" {
   bucket = var.input_images_bucket_name
 
@@ -17,7 +20,10 @@ resource "aws_s3_bucket" "input_images" {
   }
 }
 
-# SQS: Submitting experiments
+# ==============
+# SQS
+# ==============
+## SQS: Submitting experiments
 resource "aws_sqs_queue" "submit_experiments" {
   name                       = "sqs-for-submit-experiments"
   fifo_queue                 = false # Standard queue is fine since order doesn't matter
@@ -40,7 +46,7 @@ resource "aws_sqs_queue" "submit_experiments" {
   }
 }
 
-# SQS: Dead-letter queue (DLQ) to capture problematic messages
+## SQS: Dead-letter queue (DLQ) to capture problematic messages
 resource "aws_sqs_queue" "dead_letters_for_experiments" {
   name                       = "llm-dead-letter-queue"
   fifo_queue                 = false
@@ -55,7 +61,56 @@ resource "aws_sqs_queue" "dead_letters_for_experiments" {
   }
 }
 
-# 'InvokeLambda' Lambda function to call AWS Bedrock
+# ==============
+# Lambda
+# ==============
+## Role: 'InvokeLambda' Lambda function to call AWS Bedrock
+resource "aws_iam_role" "lambda_role" {
+  name = "invoke-model-lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+## Attachment: Basic execution policy (for CloudWatch logs)
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+## Zip: Package main.py file into lambda.zip automatically
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/../../app/main.py"
+  output_path = "${path.module}/../../app/lambda.zip"
+}
+
+## Package and deploy Lambda function
+resource "aws_lambda_function" "invoke_model_lambda" {
+  function_name    = "invoke-model-lambda"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "main.lambda_handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  timeout          = 30
+  memory_size      = 256
+
+  tags = {
+    Name        = "InvokeModel Lambda"
+    Environment = "${terraform.workspace}"
+  }
+}
 
 # SQS -> Lambda: Triggers 'InvokeModel' lambda (aka. 'app')
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
