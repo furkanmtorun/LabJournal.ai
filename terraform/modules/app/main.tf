@@ -74,7 +74,7 @@ resource "aws_iam_policy" "lambda_sqs_policy" {
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes"
         ]
-        Resource = "arn:aws:sqs:eu-central-1:851725270120:sqs-for-submit-experiments"
+        Resource = "arn:aws:sqs:eu-central-1:851725270120:${aws_sqs_queue.submit_experiments.name}"
       }
     ]
   })
