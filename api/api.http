@@ -3,7 +3,7 @@
 @LOCAL_API_ENDPOINT=http://localhost:8000
 @AWS_API_ENDPOINT=https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws
 @API_ENDPOINT={{AWS_API_ENDPOINT}}
-@EXPERIMENT_ID=51c534ee-dfaf-4123-a4f3-a9cec8f8006d
+@EXPERIMENT_ID=cc5fb48f-1ddc-4eb9-910f-975b9bb9e638
 
 GET {{API_ENDPOINT}}/
 Accept: application/json
@@ -31,4 +31,15 @@ Content-Type: application/json
 {
     "name": "furki experiment",
     "category": "rna-seq"
+}
+
+
+### Update Single Experiment | Status: 'Completed', 'Failed', 'Queued'
+PATCH {{API_ENDPOINT}}/experiments/{{EXPERIMENT_ID}}
+Content-Type: application/json
+
+{
+    "status": "Completed",
+    "result": "test",
+    "error": "No error."
 }

@@ -36,7 +36,7 @@
                 <mxCell id="LyfXkw2sSdYXxBRJxc6R-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;" parent="wUassT3cOZdTJ1mofqDb-1" source="wwbbPI-VW8QuLXLs8vsD-9" target="wwbbPI-VW8QuLXLs8vsD-11" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="7" value="POST request" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="LyfXkw2sSdYXxBRJxc6R-1" vertex="1" connectable="0">
+                <mxCell id="7" value="Submit an experiment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="LyfXkw2sSdYXxBRJxc6R-1" vertex="1" connectable="0">
                     <mxGeometry x="-0.192" y="1" relative="1" as="geometry">
                         <mxPoint as="offset"/>
                     </mxGeometry>
@@ -50,7 +50,7 @@
                 <mxCell id="wwbbPI-VW8QuLXLs8vsD-11" value="Amazon SQS" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;fillColor=#232F3E;dashed=0;verticalLabelPosition=middle;verticalAlign=bottom;align=center;html=1;whiteSpace=wrap;fontSize=10;fontStyle=1;spacing=3;shape=mxgraph.aws4.productIcon;prIcon=mxgraph.aws4.sqs;shadow=0;" parent="wUassT3cOZdTJ1mofqDb-1" vertex="1">
                     <mxGeometry x="511.5" y="285" width="80" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="OAtJr5nKNdIk4SqV7YUa-3" value="&lt;div&gt;&lt;span&gt;GET /experiments&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;GET /experiments/{ID}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;POST /experiments&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;DELETE /experiments/{ID}&lt;span&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" parent="wUassT3cOZdTJ1mofqDb-1" vertex="1">
+                <mxCell id="OAtJr5nKNdIk4SqV7YUa-3" value="&lt;div&gt;&lt;span&gt;GET /experiments&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;GET /experiments/{ID}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;PATCH /experiments/{ID}&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;POST /experiments&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;DELETE /experiments/{ID}&lt;span&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" parent="wUassT3cOZdTJ1mofqDb-1" vertex="1">
                     <mxGeometry x="290" y="440" width="160" height="77" as="geometry"/>
                 </mxCell>
                 <mxCell id="LyfXkw2sSdYXxBRJxc6R-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;targetPerimeterSpacing=9;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="wUassT3cOZdTJ1mofqDb-1" source="wwbbPI-VW8QuLXLs8vsD-11" target="wwbbPI-VW8QuLXLs8vsD-17" edge="1">
@@ -84,15 +84,15 @@
                 <mxCell id="9" style="edgeStyle=none;html=1;entryX=0;entryY=0.653;entryDx=0;entryDy=0;entryPerimeter=0;flowAnimation=1;" parent="wUassT3cOZdTJ1mofqDb-1" source="wwbbPI-VW8QuLXLs8vsD-11" target="4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;flowAnimation=1;" edge="1" parent="wUassT3cOZdTJ1mofqDb-1" source="4" target="wwbbPI-VW8QuLXLs8vsD-9">
+                <mxCell id="12" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;flowAnimation=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="wUassT3cOZdTJ1mofqDb-1" source="4" target="wwbbPI-VW8QuLXLs8vsD-9" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="508" y="220"/>
+                            <mxPoint x="458" y="220"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="3" value="AWS Lambda&amp;nbsp;&lt;div&gt;Web Adapter&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;fontSize=10;" parent="wUassT3cOZdTJ1mofqDb-1" vertex="1">
-                    <mxGeometry x="311" y="340" width="90" height="40" as="geometry"/>
+                    <mxGeometry x="158" y="325" width="90" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="cKOBqcGcV8QS9q_034tq-8" value="Architecture" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=32;" parent="1" vertex="1">
                     <mxGeometry x="220" y="60" width="60" height="30" as="geometry"/>
