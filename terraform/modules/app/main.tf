@@ -136,7 +136,7 @@ resource "aws_lambda_function" "invoke_model" {
   }
 }
 
-# SQS -> Lambda: Triggers 'InvokeModel' lambda (aka. 'app')
+# SQS -> Lambda: Triggering 'InvokeModel' lambda (aka. 'app')
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   event_source_arn = aws_sqs_queue.submit_experiments.arn
   function_name    = aws_lambda_function.invoke_model.arn
@@ -152,5 +152,3 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   function_response_types = ["ReportBatchItemFailures"]
 
 }
-
-
