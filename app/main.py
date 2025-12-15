@@ -1,6 +1,10 @@
 """App entrypoint (aka. InvokeModel Lambda Function).
 
-AWS SQS will feed this lambda to invoke AWS Bedrock LLM model."""
+AWS SQS will feed this lambda to invoke AWS Bedrock LLM model.
+
+Notes:
+- To test 'DLQ', return 'raise Exception(f"DLQ test for {message_body}")'
+"""
 
 import boto3
 import json
