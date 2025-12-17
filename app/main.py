@@ -7,12 +7,12 @@ Notes:
 """
 
 import base64
-import boto3
 import json
 import urllib.error
 import urllib.request
 from urllib.parse import urlencode
 
+import boto3
 
 _VERSION: str = "0.1.1dev"
 _REGION_NAME: str = "eu-central-1"
@@ -24,75 +24,102 @@ API_ENDPOINT: str = "https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-cent
 
 
 template = """
-Date: [Insert Date]
+Date: [YYYY-MM-DD]
+Time: [HH:MM or Time Range]
 
-Time: [Insert Time]
+Experiment Title: [Concise and descriptive title]
 
-Experiment Title: [Insert Title]
+Objective:
+[Clearly state the purpose or hypothesis of the experiment — what is being tested or demonstrated.]
 
-Aim: [Briefly describe what you aim to achieve with this experiment]
+Background / Rationale:
+[Provide a short scientific context or literature basis, if available.]
 
-Materials:
-[List all materials, reagents, and equipment used]
+Materials and Reagents:
+[List every reagent, material, or consumable, including concentrations and catalog numbers if available.]
 
-Protocols:
+Equipment:
+[List all instruments, machines, software, or tools used, including model names if known.]
 
-1. [Protocol Name]
-Materials: [List specific materials for this protocol]
-Procedure:
+Experimental Procedure:
+[Organize by steps, numbered or bulleted. Write in past tense and third person passive voice.]
 
-- Step 1: [Detailed step]
-- Step 2: [Detailed step]
-- Step 3: [Detailed step]
-Observations/Notes: [Any observations or deviations from the protocol]
+Example:
+1. [Describe first major step, including quantities, timings, and conditions (e.g., "The mixture was incubated at 37°C for 30 minutes.")].
+2. [Next step…]
+3. [Continue until experiment completion.]
 
-2. [Protocol Name]
-Materials: [List specific materials for this protocol]
-Procedure:
+Observations:
+[Record visual observations, measurements, or anything unusual (color changes, precipitation, pH, etc.).]
 
-- Step 1: [Detailed step]
-- Step 2: [Detailed step]
-- Step 3: [Detailed step]
-Observations/Notes: [Any observations or deviations from the protocol]
+Results:
+[Summarize raw or processed data, yield, or measurements. You may attach or reference data files or figures here.]
 
-3. [Protocol Name]
-Materials: [List specific materials for this protocol]
-Procedure:
-- Step 1: [Detailed step]
-- Step 2: [Detailed step]
-- Step 3: [Detailed step]
-Observations/Notes: [Any observations or deviations from the protocol]
+Data Analysis:
+[State how data were processed — calculations, statistical analyses, plots, etc.]
 
-Results: [Summarize the results or attach data]
+Discussion:
+[Interpret the results, mention anomalies, compare with expectations, cite literature if needed.]
 
-Discussion: [Interpret the results, discuss any issues or successes]
+Conclusion:
+[Summarize outcomes in 2-3 sentences, including whether the objective was achieved.]
 
-Conclusion: [Summarize the findings and next steps]
+Next Steps / Future Work:
+[Propose any follow-up experiments, optimizations, or validations.]
 
-References: [List any literature or sources referenced]
+References:
+[List all relevant papers, manuals, or standard protocols referenced.]
+
 """
 
 
 def get_result(image_base64) -> tuple[str, str]:
     # Define the request body
     request_body = {
-        "inferenceConfig": {"max_new_tokens": 1000},
+        "inferenceConfig": {"max_new_tokens": 1200},
         "messages": [
+            {
+            "role": "system",
+            "content": [
+                {
+                    "text": """
+                You are a scientific assistant helping digitize laboratory notebook pages.
+                Analyze the image of a handwritten or printed lab notebook page.
+                Extract all relevant experimental details, correct spelling and grammar, and rewrite the content in clear, formal scientific English.
+                Convert the information into structured text following the exact format below.
+                Use full sentences, proper scientific terminology, and preserve all experimental details such as dates, times, quantities, concentrations, and steps.
+                Do not invent missing data — if something is unreadable or missing, write "[unreadable]" or "[missing]".
+
+                Style requirements:
+                - Use complete sentences.
+                - Use third person passive voice (e.g., "The solution was mixed" instead of "I mixed the solution").
+                - Follow standard scientific structure and clarity.
+                - Standardize symbols and units (e.g., µL, °C, g, min).
+                - Do not add commentary outside the template.
+                - Output only the formatted text with no preface, headers, or explanations.
+            """
+                    }
+                ],
+            },
             {
                 "role": "user",
                 "content": [
                     {
                         "image": {
-                            "format": "jpeg",  # Adjust based on your image format
+                            "format": "jpeg",  # Or "png", depending on your source
                             "source": {"bytes": image_base64},
                         }
                     },
                     {
-                        "text": f"""This is a lab journal about the experiment. Convert this photo of the page into the text. 
-                        Fix the grammar, turn them into scientific sentences and fit the content into this template: {template}."""
+                        "text": f"""
+Now, transcribe and structure the laboratory notebook image accordingly.
+Format your output using this template:
+
+{template}
+"""
                     },
                 ],
-            }
+            },
         ],
     }
 
