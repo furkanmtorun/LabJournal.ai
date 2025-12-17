@@ -112,6 +112,65 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+# S3 Policy for Lambda access
+resource "aws_iam_policy" "invoke_model_s3_policy" {
+  name = "invoke-model-s3-policy"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          aws_s3_bucket.input_images.arn,
+          "${aws_s3_bucket.input_images.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+# Attach S3 policy to existing Lambda role
+resource "aws_iam_role_policy_attachment" "invoke_model_s3" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.invoke_model_s3_policy.arn
+}
+
+# Attach basic execution role (logs)
+resource "aws_iam_role_policy_attachment" "invoke_model_basic_execution" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# Bedrock Policy for Lambda (any model access)
+resource "aws_iam_policy" "invoke_model_bedrock_policy" {
+  name = "invoke-model-bedrock-policy"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach Bedrock policy to existing Lambda role
+resource "aws_iam_role_policy_attachment" "invoke_model_bedrock" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.invoke_model_bedrock_policy.arn
+}
+
 ## Zip: Package main.py file into lambda.zip automatically
 data "archive_file" "lambda_zip" {
   type        = "zip"
