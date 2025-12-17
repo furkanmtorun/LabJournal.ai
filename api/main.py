@@ -5,16 +5,17 @@ from datetime import datetime
 
 import boto3
 from botocore.exceptions import ClientError
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, UploadFile, File, Form
 from pydantic import BaseModel
 
-_VERSION: str = "0.1.3dev"
+_VERSION: str = "0.1.4dev"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME: str = "experiments"
 _REGION_NAME: str = "eu-central-1"
 _TIME_FORMAT: str = "%d.%m.%Y %H:%M:%S"
 DB_CLIENT = boto3.client("dynamodb", region_name=_REGION_NAME)
-
+S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
+S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 
 # Models
 class VersionModel(BaseModel):
@@ -38,7 +39,7 @@ class ExperimentModel(ExperimentBaseModel):
 
 
 class ExperimentPatchRequest(BaseModel):
-    status: str  # "Completed" or "Failed"
+    status: str  # "Queued", "Completed" or "Failed"
     result: str
     error: str
 
@@ -124,30 +125,48 @@ async def delete_experiment(experiment_id: str):
 
 
 @app.post("/experiments", response_model=ExperimentModel, status_code=status.HTTP_201_CREATED)
-async def create_experiment(experiment: dict[str, str]) -> ExperimentModel:
+async def create_experiment(
+    name: str = Form(...),
+    category: str = Form(...),
+    image: UploadFile = File(...)
+) -> ExperimentModel:
     experiment_id = str(uuid.uuid4())
     timestamp = datetime.now().strftime(_TIME_FORMAT)
     status = "Queued"
+    
+    if not image.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Only images are allowed")
+    
+    try:
+        S3_CLIENT.upload_fileobj(
+            image.file, 
+            S3_BUCKET_NAME, 
+            experiment_id,
+            ExtraArgs={"ContentType": image.content_type}
+        )
+        await image.close()
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=f"S3 upload failed: {str(e)}")
 
     item = {
         "id": {"S": experiment_id},
-        "name": {"S": experiment.get("name")},
-        "category": {"S": experiment.get("category")},
+        "name": {"S": name},
+        "category": {"S": category},
         "timestamp": {"S": timestamp},
         "status": {"S": status},
-        "result": {"S": ""},  # default empty
+        "result": {"S": ""},  
     }
 
     try:
         DB_CLIENT.put_item(
             TableName=_TABLE_NAME,
             Item=item,
-            ConditionExpression="attribute_not_exists(id)",  # prevent overwriting
+            ConditionExpression="attribute_not_exists(id)",
         )
         return ExperimentModel(
             id=experiment_id,
-            name=experiment.get("name"),
-            category=experiment.get("category"),
+            name=name,
+            category=category,
             timestamp=timestamp,
             status=status,
             result="",
