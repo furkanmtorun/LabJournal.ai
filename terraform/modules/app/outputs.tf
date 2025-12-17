@@ -1,7 +1,7 @@
-output "queue_for_submit_experiments" {
+output "url_queue_for_submit_experiments" {
   value = aws_sqs_queue.submit_experiments.url
 }
 
-output "dlq_for_experiments" {
+output "url_dlq_for_experiments" {
   value = aws_sqs_queue.dead_letters_for_experiments.url
 }

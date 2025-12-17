@@ -32,3 +32,11 @@ output "lambda_function_url" {
   description = "The URL to API Lambda Func hosting FastApi."
   value       = module.api.lambda_function_url
 }
+
+output "queue_for_submit_experiments" {
+  value = module.app.url_queue_for_submit_experiments
+}
+
+output "dlq_for_experiments" {
+  value = module.app.url_dlq_for_experiments
+}

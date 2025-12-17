@@ -7,6 +7,7 @@ import boto3
 from botocore.exceptions import ClientError
 from fastapi import FastAPI, HTTPException, status, UploadFile, File, Form
 from pydantic import BaseModel
+import json
 
 _VERSION: str = "0.1.4dev"
 _TITLE: str = "LabJournal.AI - API"
@@ -16,6 +17,8 @@ _TIME_FORMAT: str = "%d.%m.%Y %H:%M:%S"
 DB_CLIENT = boto3.client("dynamodb", region_name=_REGION_NAME)
 S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
+SQS_CLIENT = boto3.client("sqs", region_name=_REGION_NAME)
+SQS_QUEUE_URL: str = "https://sqs.eu-central-1.amazonaws.com/851725270120/queue-for-submit-experiments"
 
 # Models
 class VersionModel(BaseModel):
@@ -134,9 +137,10 @@ async def create_experiment(
     timestamp = datetime.now().strftime(_TIME_FORMAT)
     status = "Queued"
     
+    
+    # File Upload
     if not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only images are allowed")
-    
     try:
         S3_CLIENT.upload_fileobj(
             image.file, 
@@ -148,6 +152,7 @@ async def create_experiment(
     except ClientError as e:
         raise HTTPException(status_code=500, detail=f"S3 upload failed: {str(e)}")
 
+    # DB Insertion
     item = {
         "id": {"S": experiment_id},
         "name": {"S": name},
@@ -163,18 +168,23 @@ async def create_experiment(
             Item=item,
             ConditionExpression="attribute_not_exists(id)",
         )
-        return ExperimentModel(
-            id=experiment_id,
-            name=name,
-            category=category,
-            timestamp=timestamp,
-            status=status,
-            result="",
-        )
     except ClientError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+    response = SQS_CLIENT.send_message(
+        QueueUrl=SQS_QUEUE_URL,
+        MessageBody=json.dumps({"experiment_id": experiment_id}),
+    )
+    print("message_id:", response["MessageId"])
 
+    return ExperimentModel(
+        id=experiment_id,
+        name=name,
+        category=category,
+        timestamp=timestamp,
+        status=status,
+        result="",
+    )
 # Patch func
 def update_experiment(experiment_id: str, patch: ExperimentPatchRequest) -> None:
     # Build dynamic update expression for result/error + status
