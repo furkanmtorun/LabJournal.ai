@@ -79,29 +79,6 @@ def get_result(image_base64) -> tuple[str, str]:
         "inferenceConfig": {"max_new_tokens": 1200},
         "messages": [
             {
-            "role": "system",
-            "content": [
-                {
-                    "text": """
-                You are a scientific assistant helping digitize laboratory notebook pages.
-                Analyze the image of a handwritten or printed lab notebook page.
-                Extract all relevant experimental details, correct spelling and grammar, and rewrite the content in clear, formal scientific English.
-                Convert the information into structured text following the exact format below.
-                Use full sentences, proper scientific terminology, and preserve all experimental details such as dates, times, quantities, concentrations, and steps.
-                Do not invent missing data — if something is unreadable or missing, write "[unreadable]" or "[missing]".
-
-                Style requirements:
-                - Use complete sentences.
-                - Use third person passive voice (e.g., "The solution was mixed" instead of "I mixed the solution").
-                - Follow standard scientific structure and clarity.
-                - Standardize symbols and units (e.g., µL, °C, g, min).
-                - Do not add commentary outside the template.
-                - Output only the formatted text with no preface, headers, or explanations.
-            """
-                    }
-                ],
-            },
-            {
                 "role": "user",
                 "content": [
                     {
@@ -111,12 +88,26 @@ def get_result(image_base64) -> tuple[str, str]:
                         }
                     },
                     {
-                        "text": f"""
-Now, transcribe and structure the laboratory notebook image accordingly.
-Format your output using this template:
+                    "text": f"""
+    You are a scientific assistant helping digitize laboratory notebook pages.
+    Analyze the image of a handwritten or printed lab notebook page.
+    Extract all relevant experimental details, correct spelling and grammar, and rewrite the content in clear, formal scientific English.
+    Convert the information into structured text following the exact format below.
+    Use full sentences, proper scientific terminology, and preserve all experimental details such as dates, times, quantities, concentrations, and steps.
+    Do not invent missing data — if something is unreadable or missing, write "[unreadable]" or "[missing]".
 
-{template}
-"""
+    Style requirements:
+    - Use complete sentences.
+    - Use third person passive voice (e.g., "The solution was mixed" instead of "I mixed the solution").
+    - Follow standard scientific structure and clarity.
+    - Standardize symbols and units (e.g., µL, °C, g, min).
+    - Do not add commentary outside the template.
+    - Output only the formatted text with no preface, headers, or explanations.
+
+    Now, transcribe and structure the laboratory notebook image accordingly.
+    Format your output using this template:
+    {template}
+    """
                     },
                 ],
             },
@@ -159,7 +150,7 @@ def send_patch_request(experiment_id: str, result: str, error: str) -> dict[str,
         )
 
         with urllib.request.urlopen(req, timeout=30) as response:
-            print(f"PATCH {experiment_id} successful: {response.status}")
+            print(f"PATCH {experiment_id} operation is {status}: {response.status}")
             return {"statusCode": "200", "body": '{"message": "Experiment status updated"}'}
 
     except urllib.error.HTTPError as e:
