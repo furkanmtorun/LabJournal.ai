@@ -1,13 +1,13 @@
 """API module via FastAPI."""
 
+import json
 import uuid
 from datetime import datetime
 
 import boto3
 from botocore.exceptions import ClientError
-from fastapi import FastAPI, HTTPException, status, UploadFile, File, Form
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from pydantic import BaseModel
-import json
 
 _VERSION: str = "0.1.5dev"
 _TITLE: str = "LabJournal.AI - API"
@@ -19,6 +19,7 @@ S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 SQS_CLIENT = boto3.client("sqs", region_name=_REGION_NAME)
 SQS_QUEUE_URL: str = "https://sqs.eu-central-1.amazonaws.com/851725270120/queue-for-submit-experiments"
+
 
 # Models
 class VersionModel(BaseModel):
@@ -129,37 +130,31 @@ async def delete_experiment(experiment_id: str):
 
 @app.post("/experiments", response_model=ExperimentModel, status_code=status.HTTP_201_CREATED)
 async def create_experiment(
-    name: str = Form(...),
-    category: str = Form(...),
-    image: UploadFile = File(...)
+    name: str = Form(...), category: str = Form(...), image: UploadFile = File(...)
 ) -> ExperimentModel:
     experiment_id = str(uuid.uuid4())
     timestamp = datetime.now().strftime(_TIME_FORMAT)
     status = "Queued"
-    
-    
+
     # File Upload
     if not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only images are allowed")
     try:
         S3_CLIENT.upload_fileobj(
-            image.file, 
-            S3_BUCKET_NAME, 
-            experiment_id,
-            ExtraArgs={"ContentType": image.content_type}
+            image.file, S3_BUCKET_NAME, experiment_id, ExtraArgs={"ContentType": image.content_type}
         )
         await image.close()
     except ClientError as e:
         raise HTTPException(status_code=500, detail=f"S3 upload failed: {str(e)}")
 
-    # DB Insertion
+    # DB Insertion
     item = {
         "id": {"S": experiment_id},
         "name": {"S": name},
         "category": {"S": category},
         "timestamp": {"S": timestamp},
         "status": {"S": status},
-        "result": {"S": ""},  
+        "result": {"S": ""},
     }
 
     try:
@@ -185,6 +180,8 @@ async def create_experiment(
         status=status,
         result="",
     )
+
+
 # Patch func
 def update_experiment(experiment_id: str, patch: ExperimentPatchRequest) -> None:
     # Build dynamic update expression for result/error + status
