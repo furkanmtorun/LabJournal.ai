@@ -144,7 +144,7 @@ def send_patch_request(experiment_id: str, result: str, error: str) -> dict[str,
 def lambda_handler(event, context):
     for record in event["Records"]:
         # Extract message body from the record
-        message_body = record["body"]
+        message_body = json.loads(record["body"])
         print(f"Message Body: {message_body}")
         experiment_id = message_body["experiment_id"]
         print(f"{experiment_id=}")
