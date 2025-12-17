@@ -6,14 +6,20 @@ Notes:
 - To test 'DLQ', return 'raise Exception(f"DLQ test for {message_body}")'
 """
 
-import boto3
-import json
 import base64
-_VERSION: str = "0.1.0dev"
+import json
+
+import boto3
+
+_VERSION: str = "0.1.1dev"
 _REGION_NAME: str = "eu-central-1"
 BEDROCK_CLIENT = boto3.client("bedrock-runtime", region_name=_REGION_NAME)
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
+API_ENDPOINT: str = "https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws"
+import urllib.error
+import urllib.request
+from urllib.parse import urlencode
 
 template = """
 Date: [Insert Date]
@@ -65,12 +71,10 @@ References: [List any literature or sources referenced]
 """
 
 
-def get_result(image_base64) -> str:
+def get_result(image_base64) -> tuple[str, str]:
     # Define the request body
     request_body = {
-        "inferenceConfig": {
-            "max_new_tokens": 1000
-        },
+        "inferenceConfig": {"max_new_tokens": 1000},
         "messages": [
             {
                 "role": "user",
@@ -78,56 +82,81 @@ def get_result(image_base64) -> str:
                     {
                         "image": {
                             "format": "jpeg",  # Adjust based on your image format
-                            "source": {
-                                "bytes": image_base64
-                            }
+                            "source": {"bytes": image_base64},
                         }
                     },
                     {
                         "text": f"""This is a lab journal about the experiment. Convert this photo of the page into the text. 
                         Fix the grammar, turn them into scientific sentences and fit the content into this template: {template}."""
-                    }
-                ]
+                    },
+                ],
             }
-        ]
+        ],
     }
-    
-     # Invoke the model using invoke_model
+
+    # Invoke the model using invoke_model
     try:
         response = BEDROCK_CLIENT.invoke_model(
             modelId="amazon.nova-pro-v1:0",
             contentType="application/json",
             accept="application/json",
-            body=json.dumps(request_body)
+            body=json.dumps(request_body),
         )
-        
+
         # Decode the response body
-        response_body = json.loads(response['body'].read().decode('utf-8'))
-        
+        response_body = json.loads(response["body"].read().decode("utf-8"))
+
         # Extract the response text
-        response_text = response_body['output']['message']['content'][0]['text']
-        return response_text
+        response_text = response_body["output"]["message"]["content"][0]["text"]
+        return response_text, ""
 
     except Exception as e:
-        return f"An error occurred: {e}"
+        return "", f"Error: {e}"
+
+
+def send_patch_request(experiment_id: str, result: str, error: str) -> dict[str, str]:
+    status = "Completed" if error == "" else "Failed"
+    payload = {"status": status, "result": result, "error": error}
+
+    url = f"{API_ENDPOINT}/experiments/{experiment_id}"
+
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json", "Content-Length": str(len(data))},
+            method="PATCH",
+        )
+
+        with urllib.request.urlopen(req, timeout=30) as response:
+            print(f"PATCH {experiment_id} successful: {response.status}")
+            return {"statusCode": "200", "body": '{"message": "Experiment status updated"}'}
+
+    except urllib.error.HTTPError as e:
+        print(f"PATCH {experiment_id} HTTP {e.code}: {e.reason}")
+        return {"statusCode": str(e.code), "body": json.dumps({"error": f"HTTP {e.code}: {e.reason}"})}
+    except Exception as e:
+        print(f"PATCH {experiment_id} failed: {str(e)}")
+        return {"statusCode": "500", "body": json.dumps({"error": str(e)})}
+
 
 def lambda_handler(event, context):
-    for record in event['Records']:
+    for record in event["Records"]:
         # Extract message body from the record
-        message_body = record['body']
+        message_body = record["body"]
         print(f"Message Body: {message_body}")
         experiment_id = message_body["experiment_id"]
         print(f"{experiment_id=}")
-        
+
         # Download image
         obj = S3_CLIENT.get_object(Bucket=S3_BUCKET_NAME, Key=experiment_id)
-        image_bytes = obj['Body'].read()
+        image_bytes = obj["Body"].read()
         image_base64 = base64.b64encode(image_bytes).decode("utf-8")
-        
+
         # get model result
-        result = get_result(image_base64)
-        
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Message processed successfully')
-    }
+        result, error = get_result(image_base64)
+        print(f"{result=} \n\n {error=}")
+        # save model result
+        response = send_patch_request(experiment_id, result, error)
+        print(response)
