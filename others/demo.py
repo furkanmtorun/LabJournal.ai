@@ -1,7 +1,6 @@
 import boto3
 import base64
 import json
-from io import BytesIO
 import streamlit as st
 
 template = """

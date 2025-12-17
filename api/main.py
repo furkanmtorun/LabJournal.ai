@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, status, UploadFile, File, Form
 from pydantic import BaseModel
 import json
 
-_VERSION: str = "0.1.4dev"
+_VERSION: str = "0.1.5dev"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME: str = "experiments"
 _REGION_NAME: str = "eu-central-1"
