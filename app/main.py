@@ -7,19 +7,21 @@ Notes:
 """
 
 import base64
-import json
-
 import boto3
+import json
+import urllib.error
+import urllib.request
+from urllib.parse import urlencode
+
 
 _VERSION: str = "0.1.1dev"
 _REGION_NAME: str = "eu-central-1"
+MODEL_NAME = "eu.amazon.nova-pro-v1:0"
 BEDROCK_CLIENT = boto3.client("bedrock-runtime", region_name=_REGION_NAME)
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 API_ENDPOINT: str = "https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws"
-import urllib.error
-import urllib.request
-from urllib.parse import urlencode
+
 
 template = """
 Date: [Insert Date]
@@ -97,7 +99,7 @@ def get_result(image_base64) -> tuple[str, str]:
     # Invoke the model using invoke_model
     try:
         response = BEDROCK_CLIENT.invoke_model(
-            modelId="amazon.nova-pro-v1:0",
+            modelId=MODEL_NAME,
             contentType="application/json",
             accept="application/json",
             body=json.dumps(request_body),
