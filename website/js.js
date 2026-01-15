@@ -41,13 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Search state management
   let currentSearchType = localStorage.getItem("searchType") || "quick";
-  let dataSource = []; // Will be populated by fetchExperiments()
+  let dataSource = [];
   let isDataLoaded = false;
 
   const searchTypeLinks = document.querySelectorAll("[data-search-type]");
   const dropdownTrigger = document.querySelector(".dropdown-trigger span");
 
-  // Set initial dropdown text
   if (dropdownTrigger) {
     dropdownTrigger.textContent = currentSearchType === "quick" ? "Quick Search" : "Detailed Search";
   }
@@ -81,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
           dropdownInstance.close();
         }
         
-        // Re-apply current search if data exists
         if (isDataLoaded && dataSource.length > 0) {
           applySearchFilter();
         }
@@ -119,15 +117,88 @@ document.addEventListener("DOMContentLoaded", function () {
         <td>${entry.category || ''}</td>
         <td>${entry.timestamp || ''}</td>
         <td><span class="chip ${statusColor}">${entry.status || 'Unknown'}</span></td>
-        <td>
-          <a class="btn waves-effect waves-light details-btn" data-id="${entry.id || ''}" href="view/${entry.id || ''}">
-            Details
-            <i class="material-icons right">arrow_forward</i>
+        <td class="actions-cell">
+          <a class="btn waves-effect waves-light details-btn" data-id="${entry.id || ''}" href="view/${entry.id || ''}" title="View Details">
+            <i class="material-icons">arrow_forward</i>
           </a>
+          <button class="btn waves-effect waves-light delete-btn red white-text" 
+                  data-id="${entry.id || ''}" 
+                  title="Delete Experiment">
+            <i class="material-icons">delete</i>
+          </button>
         </td>
       `;
       tableBody.appendChild(row);
     });
+  }
+
+  // Delete event delegation - Proper Materialize toast handling
+  const tableBody = document.getElementById("entries-table");
+  if (tableBody) {
+    tableBody.addEventListener("click", function(e) {
+      if (e.target.closest(".delete-btn")) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const deleteBtn = e.target.closest(".delete-btn");
+        const experimentId = deleteBtn.dataset.id;
+        
+        if (!experimentId) {
+          console.error("No experiment ID found");
+          return;
+        }
+        
+        const experimentName = dataSource.find(e => e.id === experimentId)?.name || experimentId;
+        
+        if (!confirm(`Delete experiment "${experimentName}"? This cannot be undone.`)) {
+          return;
+        }
+        
+        // Call deleteExperimentById
+        if (typeof deleteExperimentById === "function") {
+          deleteExperimentById(experimentId)
+            .then(() => {
+              // Success - dismiss all toasts and show success
+              if (typeof M !== "undefined" && M.Toast) {
+                M.Toast.dismissAll();
+              }
+              if (typeof M !== "undefined" && M.toast) {
+                M.toast({html: 'Experiment deleted successfully!', classes: 'green rounded'});
+              }
+              refreshData();
+            })
+            .catch((err) => {
+              console.error("Delete failed:", err);
+              if (typeof M !== "undefined" && M.Toast) {
+                M.Toast.dismissAll();
+              }
+              if (typeof M !== "undefined" && M.toast) {
+                M.toast({html: `Delete failed: ${err.message || err || 'Unknown error'}`, classes: 'red rounded'});
+              }
+            });
+        } else {
+          console.error("deleteExperimentById function not found in api.js");
+          if (typeof M !== "undefined" && M.toast) {
+            M.toast({html: 'deleteExperimentById not available from api.js', classes: 'red rounded'});
+          }
+        }
+      }
+    });
+  }
+
+  // Refresh data function
+  function refreshData() {
+    if (typeof fetchExperiments === "function") {
+      fetchExperiments()
+        .done(function(data) {
+          dataSource = data;
+          isDataLoaded = true;
+          applySearchFilter();
+        })
+        .fail(function(err) {
+          console.error("Failed to refresh data", err);
+        });
+    }
   }
 
   // Search filter logic
@@ -165,30 +236,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 300));
   }
 
-  // CRITICAL: Load data from fetchExperiments FIRST
+  // Load initial data
   if (typeof fetchExperiments === "function") {
     fetchExperiments()
       .done(function(data) {
         dataSource = data;
         isDataLoaded = true;
-        
-        // Initial population with current search type
         applySearchFilter();
-        
-        if (typeof M !== "undefined" && M.toast) {
-          M.toast({html: `Loaded ${data.length} experiments`, classes: "green rounded"});
-        }
       })
       .fail(function(err) {
         console.error("Failed to load experiments", err);
-        if (typeof M !== "undefined" && M.toast) {
-          M.toast({html: "Failed to load experiments", classes: "red rounded"});
-        }
         populateTable([]);
       });
-  } else {
-    console.error("fetchExperiments function not defined");
-    populateTable([]);
   }
 
   // Form submission
@@ -199,21 +258,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (typeof submitForm === "function") {
         submitForm("#new-entry-form")
-          .done((data) => {
+          .done(() => {
             if (typeof M !== "undefined" && M.toast) {
               M.toast({html: "Entry created successfully!", classes: "green rounded"});
             }
             this.reset();
-            
-            // Refresh data
-            if (typeof fetchExperiments === "function") {
-              fetchExperiments()
-                .done(function(newData) {
-                  dataSource = newData;
-                  isDataLoaded = true;
-                  applySearchFilter(); // Re-apply current search filter
-                });
-            }
+            refreshData();
           })
           .fail((err) => {
             if (typeof M !== "undefined" && M.toast) {
