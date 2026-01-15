@@ -111,7 +111,7 @@ resource "aws_lambda_function_url" "lambda_url" {
     allow_credentials = false
     allow_origins     = ["*"] # can be localhost, domain.com etc.
     allow_headers     = ["*"]
-    allow_methods     = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+    allow_methods     = ["*"]
     expose_headers    = []
     max_age          = 3600
   }
