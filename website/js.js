@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize Materialize components safely
   if (typeof M !== "undefined") {
@@ -37,6 +38,130 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       localStorage.setItem("darkMode", isDarkMode ? "dark" : "light");
     });
+  }
+
+  // *** VIEW PAGE FUNCTIONS ***
+  function isViewPage() {
+    return window.location.pathname.startsWith("/view/");
+  }
+
+  function handleViewPage() {
+    const path = window.location.pathname;
+    const match = path.match(/\/view\/(.+)/);
+    const experimentId = match ? match[1] : null;
+
+    if (!experimentId) {
+      document.getElementById("error-message").style.display = "block";
+      document.getElementById("loading").style.display = "none";
+      return;
+    }
+
+    console.log("Loading experiment:", experimentId);
+
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("entry-container").style.display = "none";
+    document.getElementById("error-message").style.display = "none";
+
+    fetchExperimentById(experimentId)
+      .done(function(experiment) {
+        document.getElementById("loading").style.display = "none";
+        populateExperimentDetails(experiment);
+        document.getElementById("entry-container").style.display = "block";
+      })
+      .fail(function(xhr, status, error) {
+        document.getElementById("loading").style.display = "none";
+        console.error("Failed to load experiment:", error);
+        document.getElementById("error-message").style.display = "block";
+      });
+  }
+
+  function populateExperimentDetails(experiment) {
+    const statusClass = getStatusClass(experiment.status);
+    
+    const html = `
+      <div class="card experiment-card">
+        <div class="card-content">
+          <div class="experiment-header">
+            <h5 class="experiment-title">${experiment.name || 'Unnamed Experiment'}</h5>
+            <div class="experiment-actions">
+              <button class="delete-experiment btn-floating btn-small waves-effect waves-light red" data-id="${experiment.id}" title="Delete">
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="experiment-status right-align">
+            <span class="chip ${statusClass} white-text">${experiment.status || 'Unknown'}</span>
+          </div>
+
+          <ul class="collection experiment-details">
+            <li class="collection-item avatar">
+              <i class="material-icons circle blue">category</i>
+              <span class="title">Category</span>
+              <div class="secondary-content">${experiment.category || 'N/A'}</div>
+            </li>
+            <li class="collection-item avatar">
+              <i class="material-icons circle teal">access_time</i>
+              <span class="title">Timestamp</span>
+              <div class="secondary-content">${experiment.timestamp || 'N/A'}</div>
+            </li>
+            <li class="collection-item avatar">
+              <i class="material-icons circle green">description</i>
+              <span class="title">Result</span>
+              <div class="secondary-content">${experiment.result || 'No results yet'}</div>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="card-action right-align">
+          <a href="./" class="waves-effect waves-light btn blue">← Back to Experiments</a>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById("entry-container").innerHTML = html;
+
+    document.querySelector(".delete-experiment").addEventListener("click", function() {
+      if (!confirm("Delete this experiment? This cannot be undone.")) return;
+      
+      const experimentId = this.dataset.id;
+      if (typeof deleteExperimentById === "function") {
+        if (typeof M !== "undefined" && M.toast) {
+          M.toast({html: 'Deleting...', classes: 'rounded blue', displayLength: 4000});
+        }
+        
+        deleteExperimentById(experimentId)
+          .done(function() {
+            if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
+            if (typeof M !== "undefined" && M.toast) {
+              M.toast({html: 'Deleted successfully!', classes: 'green rounded'});
+            }
+            setTimeout(() => window.location.href = './', 1500);
+          })
+          .fail(function(xhr, status, error) {
+            if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
+            if (typeof M !== "undefined" && M.toast) {
+              M.toast({html: `Delete failed: ${error}`, classes: 'red rounded'});
+            }
+          });
+      }
+    });
+  }
+
+  function getStatusClass(status) {
+    const statusLower = (status || "").toLowerCase();
+    switch (statusLower) {
+      case "completed": return "green";
+      case "failed": return "red";
+      case "pending": case "queued": return "blue";
+      default: return "grey";
+    }
+  }
+
+  // Check if we're on view page first
+  if (isViewPage()) {
+    handleViewPage();
+    return;
   }
 
   // Search state management
