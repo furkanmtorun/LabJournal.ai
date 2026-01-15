@@ -1,48 +1,42 @@
-function apiRequest(
-  baseUrl,
-  endpoint,
-  method,
-  data = {},
-  successCallback,
-  errorCallback,
-) {
-  $.ajax({
-    url: `${baseUrl}/${endpoint}`,
-    type: method.toUpperCase(),
-    data: method.toUpperCase() === "GET" ? null : JSON.stringify(data),
-    contentType: "application/json",
-    success: successCallback,
-    error: errorCallback,
+const API_BASE =
+  "https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws/";
+
+function submitForm(formSelector) {
+  const $form = $(formSelector);
+  if (!$form.length) return Promise.reject("Form not found");
+
+  return $.ajax({
+    url: API_BASE,
+    type: "POST",
+    data: new FormData($form[0]),
+    processData: false,
+    contentType: false,
+    dataType: "json",
   });
 }
 
-// Example Usage:
-const baseUrl = "https://api.sampleapis.com";
+function fetchExperiments() {
+  return $.ajax({
+    url: API_BASE + "experiments",
+    type: "GET",
+    dataType: "json",
+  });
+}
 
-// GET request for "coffee/hot" page
-apiRequest(
-  baseUrl,
-  "coffee/hot",
-  "GET",
-  {},
-  function (response) {
-    console.log("GET Response:", response);
-  },
-  function (error) {
-    console.error("GET Error:", error);
-  },
-);
+function fetchExperimentById(experimentId) {
+  if (!experimentId) return Promise.reject("ID required");
+  return $.ajax({
+    url: API_BASE + "experiments/" + encodeURIComponent(experimentId),
+    type: "GET",
+    dataType: "json",
+  });
+}
 
-// POST request for "new.html" page
-// apiRequest(baseUrl, "new.html", "POST", { name: "Sample" }, function(response) {
-//     console.log("POST Response:", response);
-// }, function(error) {
-//     console.error("POST Error:", error);
-// });
-
-// DELETE request for "view" page
-// apiRequest(baseUrl, "view", "DELETE", {}, function(response) {
-//     console.log("DELETE Response:", response);
-// }, function(error) {
-//     console.error("DELETE Error:", error);
-// });
+function deleteExperimentById(experimentId) {
+  if (!experimentId) return Promise.reject("ID required");
+  return $.ajax({
+    url: API_BASE + "experiments/" + encodeURIComponent(experimentId),
+    type: "DELETE",
+    dataType: "json",
+  });
+}

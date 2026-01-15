@@ -8,7 +8,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-    <link rel="stylesheet" href="/style.css?v=1" />
+    <link rel="stylesheet" href="style.css?v=1" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -68,13 +68,13 @@
             <div class="file-field input-field col s12">
               <div class="btn">
                 <span>File</span>
-                <input type="file" id="file-upload" />
+                <input type="file" id="file-upload" accept=".jpg,.jpeg" />
               </div>
               <div class="file-path-wrapper">
                 <input
                   class="file-path validate"
                   type="text"
-                  placeholder="Upload file"
+                  placeholder="Upload .jpeg or .jpg file"
                 />
               </div>
             </div>
@@ -108,6 +108,7 @@
     <!-- jQuery and Materialize JS via CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="/js.js"></script>
+    <script src="api.js"></script>
+    <script src="js.js"></script>
   </body>
 </html>

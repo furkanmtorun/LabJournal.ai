@@ -199,25 +199,11 @@ document.addEventListener("DOMContentLoaded", function () {
   if (newEntryForm) {
     newEntryForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const category = document.getElementById("category").value;
-      const fileInput = document.getElementById("file-upload");
-      const fileName =
-        fileInput.files.length > 0
-          ? fileInput.files[0].name
-          : "No file selected";
 
-      M.toast({
-        html: `Entry created: ${name} (${category}) - File: ${fileName}`,
-        classes: "rounded",
-        displayLength: 4000,
-      });
-
-      console.log({
-        name,
-        category,
-        file: fileInput.files[0] || null,
-      });
+      // submit form
+      submitForm("#new-entry-form")
+        .done((data) => alert("Success!"))
+        .fail((err) => alert("Error: " + err.message));
 
       this.reset();
     });
