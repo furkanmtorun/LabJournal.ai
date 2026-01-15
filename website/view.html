@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LabJournal.ai</title>
+    <title>LabJournal.ai - Experiment Details</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-    <link rel="stylesheet" href="/style.css?v=1" />
+    <link rel="stylesheet" href="style.css?v=2" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -56,348 +56,47 @@
     <main class="container">
       <h4 class="page-title">Experiment Details</h4>
 
-      <!-- Entry Container -->
-      <div class="entry-container">
-        <!-- Entry Header -->
-        <div class="entry-header">
-          <h2 class="entry-title">PCR Amplification of Target Gene</h2>
-
-          <div class="entry-meta">
-            <div class="entry-meta-item">
-              <span class="entry-meta-label">Date:</span>
-              <span class="entry-meta-value">March 6, 2025</span>
+      <!-- Loading Spinner -->
+      <div id="loading" class="center-align" style="display: none; padding: 2rem;">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
             </div>
-            <div class="entry-meta-item">
-              <span class="entry-meta-label">Time:</span>
-              <span class="entry-meta-value">10:30 AM</span>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
             </div>
           </div>
         </div>
+        <p class="mt-2">Loading experiment...</p>
+      </div>
 
-        <!-- Aim Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Aim</h3>
-          <div class="section-content">
-            <p>
-              To amplify the target gene sequence from the provided DNA sample
-              using Polymerase Chain Reaction (PCR) for subsequent cloning and
-              expression studies.
-            </p>
-          </div>
-        </div>
+      <!-- Error Message -->
+      <div id="error-message" class="card-panel red lighten-4 red-text text-darken-2" style="display: none; border-radius: 8px;">
+        <i class="material-icons left">error_outline</i>
+        Could not load experiment details. <a href="./">Return to Home</a>
+      </div>
 
-        <!-- Materials Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Materials</h3>
-          <div class="section-content">
-            <ul>
-              <li>Thermal cycler (Bio-Rad T100)</li>
-              <li>PCR tubes (0.2 mL)</li>
-              <li>Micropipettes and sterile tips</li>
-              <li>DNA template (100 ng/μL)</li>
-              <li>Forward primer (10 μM): 5'-ATGCTAGCTAGCTAGCTAG-3'</li>
-              <li>Reverse primer (10 μM): 5'-GCATGCATGCATGCATGCAT-3'</li>
-              <li>dNTP mix (10 mM each)</li>
-              <li>Taq DNA polymerase (5 U/μL)</li>
-              <li>10X PCR buffer</li>
-              <li>MgCl₂ (25 mM)</li>
-              <li>Nuclease-free water</li>
-              <li>Ice bucket</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Protocols Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Protocols</h3>
-          <div class="section-content">
-            <!-- Protocol 1 -->
-            <div class="protocol">
-              <h4 class="protocol-title">1. PCR Reaction Setup</h4>
-
-              <div class="protocol-materials">
-                <strong>Materials:</strong> PCR tubes, micropipettes, DNA
-                template, primers, dNTPs, Taq polymerase, PCR buffer, MgCl₂,
-                nuclease-free water
-              </div>
-
-              <div class="protocol-procedure">
-                <strong>Procedure:</strong>
-                <ul class="protocol-steps">
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">1</div>
-                    <div class="protocol-step-content">
-                      Thaw all reagents on ice and mix gently before use.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">2</div>
-                    <div class="protocol-step-content">
-                      Label PCR tubes appropriately for each reaction.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">3</div>
-                    <div class="protocol-step-content">
-                      Prepare the PCR master mix in a sterile microcentrifuge
-                      tube by adding the following components in order: 36.5 μL
-                      nuclease-free water, 5 μL 10X PCR buffer, 3 μL MgCl₂, 1 μL
-                      dNTP mix, 1 μL forward primer, 1 μL reverse primer, 0.5 μL
-                      Taq polymerase.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">4</div>
-                    <div class="protocol-step-content">
-                      Mix the master mix gently by pipetting up and down.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">5</div>
-                    <div class="protocol-step-content">
-                      Aliquot 48 μL of master mix into each labeled PCR tube.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">6</div>
-                    <div class="protocol-step-content">
-                      Add 2 μL of DNA template to each tube and mix gently.
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="protocol-notes">
-                <strong>Observations/Notes:</strong> The master mix appeared
-                clear and colorless. All components were added in the correct
-                order to prevent premature enzyme activity.
-              </div>
-            </div>
-
-            <!-- Protocol 2 -->
-            <div class="protocol">
-              <h4 class="protocol-title">2. PCR Cycling Conditions</h4>
-
-              <div class="protocol-materials">
-                <strong>Materials:</strong> Thermal cycler, prepared PCR tubes
-              </div>
-
-              <div class="protocol-procedure">
-                <strong>Procedure:</strong>
-                <ul class="protocol-steps">
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">1</div>
-                    <div class="protocol-step-content">
-                      Place PCR tubes in the thermal cycler.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">2</div>
-                    <div class="protocol-step-content">
-                      Program the thermal cycler with the following conditions:
-                      <ul>
-                        <li>Initial denaturation: 95°C for 3 minutes</li>
-                        <li>
-                          30 cycles of:
-                          <ul>
-                            <li>Denaturation: 95°C for 30 seconds</li>
-                            <li>Annealing: 58°C for 30 seconds</li>
-                            <li>Extension: 72°C for 1 minute</li>
-                          </ul>
-                        </li>
-                        <li>Final extension: 72°C for 5 minutes</li>
-                        <li>Hold: 4°C indefinitely</li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">3</div>
-                    <div class="protocol-step-content">
-                      Start the PCR program and allow it to complete.
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="protocol-notes">
-                <strong>Observations/Notes:</strong> The thermal cycler was
-                functioning properly. The program ran for approximately 2 hours
-                and 15 minutes.
-              </div>
-            </div>
-
-            <!-- Protocol 3 -->
-            <div class="protocol">
-              <h4 class="protocol-title">3. Gel Electrophoresis Analysis</h4>
-
-              <div class="protocol-materials">
-                <strong>Materials:</strong> Agarose, TAE buffer, ethidium
-                bromide, gel casting tray, electrophoresis chamber, power
-                supply, loading dye, DNA ladder, PCR products
-              </div>
-
-              <div class="protocol-procedure">
-                <strong>Procedure:</strong>
-                <ul class="protocol-steps">
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">1</div>
-                    <div class="protocol-step-content">
-                      Prepare a 1% agarose gel in 1X TAE buffer.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">2</div>
-                    <div class="protocol-step-content">
-                      Add ethidium bromide to a final concentration of 0.5
-                      μg/mL.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">3</div>
-                    <div class="protocol-step-content">
-                      Cast the gel and allow it to solidify.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">4</div>
-                    <div class="protocol-step-content">
-                      Mix 5 μL of each PCR product with 1 μL of 6X loading dye.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">5</div>
-                    <div class="protocol-step-content">
-                      Load samples and DNA ladder into the gel.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">6</div>
-                    <div class="protocol-step-content">
-                      Run the gel at 100V for 45 minutes.
-                    </div>
-                  </li>
-                  <li class="protocol-step">
-                    <div class="protocol-step-number">7</div>
-                    <div class="protocol-step-content">
-                      Visualize the gel under UV light and document the results.
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="protocol-notes">
-                <strong>Observations/Notes:</strong> The gel ran smoothly
-                without any issues. The bands were clearly visible under UV
-                light.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Results Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Results</h3>
-          <div class="section-content">
-            <p>
-              The PCR amplification was successful, yielding a single band of
-              the expected size (approximately 850 bp) for all samples. The
-              negative control showed no amplification, confirming the absence
-              of contamination. The intensity of the bands varied slightly
-              between samples, with sample 2 showing the strongest
-              amplification.
-            </p>
-            <p>
-              Gel image is attached in the lab notebook. The quantification of
-              the PCR products using a spectrophotometer showed concentrations
-              ranging from 25-40 ng/μL.
-            </p>
-          </div>
-        </div>
-
-        <!-- Discussion Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Discussion</h3>
-          <div class="section-content">
-            <p>
-              The successful amplification of the target gene indicates that the
-              PCR conditions were optimized correctly. The annealing temperature
-              of 58°C provided sufficient specificity, as evidenced by the
-              single band observed for each sample. The absence of non-specific
-              bands suggests that the primer design was effective.
-            </p>
-            <p>
-              The variation in band intensity between samples may be attributed
-              to differences in the initial DNA template quality or
-              concentration. Sample 2, which showed the strongest amplification,
-              was extracted more recently than the other samples, suggesting
-              that DNA degradation might affect PCR efficiency.
-            </p>
-            <p>
-              The PCR products obtained are suitable for downstream applications
-              such as cloning and sequencing. However, for applications
-              requiring higher purity, an additional purification step might be
-              necessary to remove residual primers and dNTPs.
-            </p>
-          </div>
-        </div>
-
-        <!-- Conclusion Section -->
-        <div class="entry-section">
-          <h3 class="section-title">Conclusion</h3>
-          <div class="section-content">
-            <p>
-              The PCR protocol successfully amplified the target gene from all
-              DNA samples. The optimized conditions provided good specificity
-              and yield, making the PCR products suitable for subsequent cloning
-              experiments. For future experiments, it would be beneficial to
-              standardize the DNA extraction method to ensure more consistent
-              template quality across samples.
-            </p>
-            <p>
-              Next steps include restriction digestion of the PCR products and
-              ligation into the expression vector, followed by transformation
-              into competent E. coli cells.
-            </p>
-          </div>
-        </div>
-
-        <!-- References Section -->
-        <div class="entry-section">
-          <h3 class="section-title">References</h3>
-          <div class="section-content">
-            <ol>
-              <li>
-                Green, M.R. and Sambrook, J. (2018). Molecular Cloning: A
-                Laboratory Manual (4th ed.). Cold Spring Harbor Laboratory
-                Press.
-              </li>
-              <li>
-                Smith, A.B. et al. (2023). Optimization of PCR conditions for
-                difficult templates. Journal of Molecular Biology, 45(3),
-                234-241.
-              </li>
-              <li>
-                Johnson, K.L. and Davis, R.W. (2022). A comprehensive guide to
-                PCR troubleshooting. BioTechniques, 72(1), 15-28.
-              </li>
-            </ol>
-          </div>
-        </div>
+      <!-- Entry Container - Result will come here -->
+      <div class="entry-container" id="entry-container" style="display: none;">
+        <!-- Dynamic content will be populated by js.js -->
       </div>
     </main>
 
     <footer>
       <div class="container">
         Made and served by
-        <a href="https://furkanmtorun.github.io/" target="_blank"
-          >@FurkanMTorun</a
-        >.
+        <a href="https://furkanmtorun.github.io/" target="_blank">@FurkanMTorun</a>.
       </div>
     </footer>
 
     <!-- jQuery and Materialize JS via CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="/js.js"></script>
+    <script src="api.js"></script>
+    <script src="js.js"></script>
   </body>
 </html>
