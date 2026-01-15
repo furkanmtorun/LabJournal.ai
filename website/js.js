@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Search type selection (from index.html)
+  // Search type selection
   const searchTypeLinks = document.querySelectorAll("[data-search-type]");
   if (searchTypeLinks.length > 0) {
     const dropdownTrigger = document.querySelector(".dropdown-trigger span");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Table population function (from index.html)
+  // Table population function
   function populateTable(data) {
     const tableBody = document.getElementById("entries-table");
     if (!tableBody) return;
@@ -99,74 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Cards population function (from index.html)
-  function populateCards(data) {
-    const cardsContainer = document.getElementById("entries-cards");
-    if (!cardsContainer) return;
-
-    cardsContainer.innerHTML = "";
-    data.forEach((entry) => {
-      let statusColor;
-      switch (entry.status.toLowerCase()) {
-        case "active":
-          statusColor = "light-green white-text";
-          break;
-        case "completed":
-          statusColor = "grey lighten-1 white-text";
-          break;
-        case "pending":
-        case "scheduled":
-          statusColor = "amber lighten-2";
-          break;
-        case "in progress":
-          statusColor = "blue-grey lighten-3";
-          break;
-        default:
-          statusColor = "grey lighten-3";
-      }
-
-      const card = document.createElement("div");
-      card.className = "entry-card";
-      card.innerHTML = `
-              <div class="entry-card-header">
-                  <h3 class="entry-card-title">${entry.name}</h3>
-                  <span class="chip ${statusColor}">${entry.status}</span>
-              </div>
-              <div class="entry-card-field">
-                  <div class="entry-card-label">ID:</div>
-                  <div class="entry-card-value">${entry.id}</div>
-              </div>
-              <div class="entry-card-field">
-                  <div class="entry-card-label">Category:</div>
-                  <div class="entry-card-value">${entry.category}</div>
-              </div>
-              <div class="entry-card-field">
-                  <div class="entry-card-label">Date:</div>
-                  <div class="entry-card-value">${entry.date}</div>
-              </div>
-              <div class="entry-card-actions">
-                  <button class="btn waves-effect details-btn card-details-btn" data-id="${entry.id}">
-                      Details
-                      <i class="material-icons right">arrow_forward</i>
-                  </button>
-              </div>
-          `;
-      cardsContainer.appendChild(card);
-    });
-
-    document.querySelectorAll(".card-details-btn").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        const entry = STATIC_ENTRY_DATA.find((e) => e.id == id);
-        M.toast({
-          html: `Details for: ${entry.name}`,
-          classes: "rounded",
-        });
-      });
-    });
-  }
-
-  // Search functionality (from index.html)
+  // Search functionality
   const searchInput = document.getElementById("search");
   if (searchInput) {
     let currentSearchType = "quick";
@@ -190,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
       populateTable(filteredEntries);
-      populateCards(filteredEntries);
     });
   }
 
@@ -209,11 +141,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Table controls (from index.html)
+  // Table controls
   const tableControls = document.querySelectorAll(".table-controls .btn");
-  if (tableControls.length > 0 && typeof STATIC_ENTRY_DATA !== "undefined") {
-    populateTable(STATIC_ENTRY_DATA);
-    populateCards(STATIC_ENTRY_DATA);
+  if (tableControls.length > 0) {
+    
+    // Fetch data
+    fetchExperiments()
+    .done(function(data) {
+      populateTable(data);
+    })
+    .fail(function(err) {
+      console.error('Failed to load experiments', err);
+    });
 
     tableControls.forEach((btn) => {
       btn.addEventListener("click", function () {
@@ -233,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
           populateTable(sortedEntries);
-          populateCards(sortedEntries);
         } else {
           M.toast({
             html: `${this.title} clicked!`,

@@ -17,9 +17,9 @@ function submitForm(formSelector) {
 
 function fetchExperiments() {
   return $.ajax({
-    url: API_BASE + "experiments",
-    type: "GET",
-    dataType: "json",
+    url: API_BASE + 'experiments',
+    type: 'GET',
+    dataType: 'json'
   });
 }
 
