@@ -63,7 +63,7 @@ resource "aws_iam_role" "lambda_exec" {
 # Step 4: IAM policy for Lambda Layer
 resource "aws_iam_policy" "lambda_layer_access" {
   name = "AllowLambdaGetLayerVersion"
-  policy = jsonencode({
+  policy = jsonencode({ 
     Version = "2012-10-17"
     Statement = [{
       Effect   = "Allow"
@@ -102,10 +102,19 @@ resource "aws_lambda_function" "fastapi_lambda" {
   }
 }
 
-# Step 6: Lambda Function URL
+# Step 6: Lambda Function URL and CORS settings
 resource "aws_lambda_function_url" "lambda_url" {
   function_name      = aws_lambda_function.fastapi_lambda.function_name
   authorization_type = "NONE"
+
+  cors {
+    allow_credentials = false
+    allow_origins     = ["*"] # can be localhost, domain.com etc.
+    allow_headers     = ["*"]
+    allow_methods     = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+    expose_headers    = []
+    max_age          = 3600
+  }
 }
 
 # Step 7: Cleanup build folder after deployment

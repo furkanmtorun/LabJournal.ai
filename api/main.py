@@ -8,8 +8,10 @@ import boto3
 from botocore.exceptions import ClientError
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
-_VERSION: str = "0.1.5dev"
+
+_VERSION: str = "0.1.6"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME: str = "experiments"
 _REGION_NAME: str = "eu-central-1"
@@ -55,6 +57,15 @@ app = FastAPI(
     docs_url="/docs",
 )
 
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],  # Allow all headers)
+)
 
 @app.get("/", response_model=VersionModel)
 def root_version() -> VersionModel:
