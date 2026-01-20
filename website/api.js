@@ -6,11 +6,11 @@ function submitForm(formSelector) {
   if (!$form.length) return Promise.reject("Form not found");
 
   return $.ajax({
-    url: API_BASE,
+    url: API_BASE + 'experiments',
     type: "POST",
     data: new FormData($form[0]),
     processData: false,
-    contentType: false,
+    contentType: false, // fastapi will handle the rest
     dataType: "json",
   });
 }
