@@ -78,45 +78,49 @@ document.addEventListener("DOMContentLoaded", function () {
   function populateExperimentDetails(experiment) {
     const statusClass = getStatusClass(experiment.status);
     
-    const html = `
-      <div class="card experiment-card">
-        <div class="card-content">
-          <div class="experiment-header">
-            <h5 class="experiment-title">${experiment.name || 'Unnamed Experiment'}</h5>
-            <div class="experiment-actions">
-              <button class="delete-experiment btn-floating btn-small waves-effect waves-light red" data-id="${experiment.id}" title="Delete">
-                <i class="material-icons">delete</i>
-              </button>
-            </div>
-          </div>
-          
-          <div class="experiment-status right-align">
-            <span class="chip ${statusClass} white-text">${experiment.status || 'Unknown'}</span>
-          </div>
+    const html = `<div class="entry-container" data-id="${experiment.id}">
+      <!-- Entry Header -->
+      <div class="entry-header">
+        <h2 class="entry-title">
+          ${experiment.name || 'Unnamed Experiment'}
+        </h2>
 
-          <ul class="collection experiment-details">
-            <li class="collection-item avatar">
-              <i class="material-icons circle blue">category</i>
-              <span class="title">Category</span>
-              <div class="secondary-content">${experiment.category || 'N/A'}</div>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle teal">access_time</i>
-              <span class="title">Timestamp</span>
-              <div class="secondary-content">${experiment.timestamp || 'N/A'}</div>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle green">description</i>
-              <span class="title">Result</span>
-              <div class="secondary-content">${experiment.result || 'No results yet'}</div>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="card-action right-align">
-          <a href="./" class="waves-effect waves-light btn blue">← Back to Experiments</a>
+        <div class="entry-meta">
+          <div class="entry-meta-item">
+            <span class="entry-meta-label">Date:</span>
+            <span class="entry-meta-value">
+              ${experiment.date || experiment.timestamp || 'N/A'}
+            </span>
+          </div>
+          <div class="entry-meta-item">
+            <span class="entry-meta-label">Status:</span>
+            <span class="entry-meta-value">
+              <span class="chip ${statusClass} white-text">
+                ${experiment.status || 'Unknown'}
+              </span>
+            </span>
+          </div>
+          <div class="entry-meta-item">
+            <span class="entry-meta-label">Actions:</span>
+            <button
+              class="delete-experiment btn-floating btn-small waves-effect waves-light red"
+              data-id="${experiment.id}"
+              title="Delete"
+            >
+              <i class="material-icons">delete</i>
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Results Section (includes everything) -->
+      <div class="entry-section">
+        <h3 class="section-title">Results</h3>
+        <div class="section-content">
+          ${experiment.result || '<p>No results yet.</p>'}
+        </div>
+      </div>
+    </div>
     `;
     
     document.getElementById("entry-container").innerHTML = html;
