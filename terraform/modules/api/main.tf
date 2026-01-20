@@ -157,3 +157,29 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
+# Step 9: AWS IAM Policy for Lambda to operate on S3 buckets.
+resource "aws_iam_policy" "s3_access_for_lambda" {
+  name        = "LambdaS3Access"
+  description = "Allow Lambda to upload objects to all s3 buckets."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl",
+          "s3:GetObject"
+        ]
+        Resource = "arn:aws:s3:::*/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_s3_access_attachment" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.s3_access_for_lambda.arn
+}
