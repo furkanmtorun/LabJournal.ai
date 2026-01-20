@@ -60,3 +60,10 @@ terraform apply -var-file=$ENV.tfvars
 terraform destroy -var-file=$ENV.tfvars
 cloud-nuke aws --region $REGION
 ```
+
+## 3. FAQ
+
+**If the website on Cloudfront seems outdated, introduce "Invalidations" with a path:**
+```bash
+aws cloudfront create-invalidation --distribution-id "E3FLXN8W9LS922" --paths "/*"
+```
