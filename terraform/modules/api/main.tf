@@ -183,3 +183,26 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_access_attachment" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.s3_access_for_lambda.arn
 }
+
+# Step 10: AWS IAM Policy for Lambda to talk to AWS SQS.
+resource "aws_iam_policy" "sqs_access_for_lambda" {
+  name        = "LambdaSQSSendMessageAccess"
+  description = "Allow Lambda to send messages to all queues in the account."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch"
+      ]
+      Resource = "arn:aws:sqs:*:*:*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sqs_access_attachment" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.sqs_access_for_lambda.arn
+}
