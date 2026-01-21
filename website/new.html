@@ -48,18 +48,19 @@
       <h4 class="page-title">Create New Experiment</h4>
 
       <!-- Form Container -->
+      <!-- Note that API fields must match with `name` attr. here -->
       <div class="form-container">
         <form id="new-entry-form">
           <div class="row">
             <div class="input-field col s12">
-              <input id="name" type="text" class="validate" required />
+              <input name="name" id="name" type="text" class="validate" required />
               <label for="name">Experiment Name</label>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s12">
-              <input id="category" type="text" class="validate" required />
+              <input name="category" id="category" type="text" class="validate" required />
               <label for="category">Experiment Category</label>
             </div>
           </div>
@@ -68,7 +69,7 @@
             <div class="file-field input-field col s12">
               <div class="btn">
                 <span>File</span>
-                <input type="file" id="file-upload" accept=".jpg,.jpeg" />
+                <input name="image" type="file" id="file-upload" accept=".jpg,.jpeg" />
               </div>
               <div class="file-path-wrapper">
                 <input
