@@ -67,3 +67,12 @@ cloud-nuke aws --region $REGION
 ```bash
 aws cloudfront create-invalidation --distribution-id "E3FLXN8W9LS922" --paths "/*"
 ```
+
+**How to avoid billing by OpenSearch Computing Unit?**
+```text
+To stop only the Ingestion Pipeline (Zero-ETL): If you want to keep your search index alive but stop paying for the data sync part:
+
+- Go to the OpenSearch Ingestion console.
+- Select your pipeline and click Stop.
+- While stopped, you are not charged for Ingestion OCUs.
+```
