@@ -66,9 +66,36 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
-# 3. The Sync Lambda Function
+# 3. Lambda app
+resource "null_resource" "lambda_build" {
+  # This triggers a rebuild only if your code or requirements change
+  triggers = {
+    code_hash         = filemd5("${path.module}/index.py")
+    requirements_hash = filemd5("${path.module}/requirements.txt")
+  }
+
+  provisioner "local-exec" {
+    # This command creates a clean 'dist' folder, installs deps, and zips everything
+    command = <<EOT
+      rm -rf ${path.module}/dist
+      mkdir -p ${path.module}/dist
+      cp ${path.module}/index.py ${path.module}/dist/
+      pip install -r ${path.module}/requirements.txt -t ${path.module}/dist/
+      cd ${path.module}/dist && zip -r ../opensearch.zip .
+    EOT
+  }
+}
+
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/dist"
+  output_path = "${path.module}/opensearch.zip"
+  depends_on  = [null_resource.lambda_build]
+}
+
+# 4. The Sync Lambda Function
 resource "aws_lambda_function" "sync_lambda" {
-  filename      = "sync_logic.zip" # You will need to provide this zip
+  filename      = "opensearch.zip"
   function_name = "ddb-to-opensearch-sync"
   role          = aws_iam_role.sync_lambda_role.arn
   handler       = "index.handler"
