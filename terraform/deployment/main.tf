@@ -37,4 +37,10 @@ module "api" {
   source = "../modules/api"
 }
 
+# 5. OpenSearch for Semantic Search
+module "opensearch" {
+  source              = "./modules/opensearch"
+  region              = var.region
+  dynamodb_stream_arn = module.database.experiments_stream_arn
+}
 
