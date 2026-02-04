@@ -16,13 +16,14 @@
 
 ### 2. Web app
 
-  ```bash
-  npm install --save-dev --save-exact prettier
-  npx prettier --write "**/*.{html,css,js}"
-  open index.html
-  ```
+```bash
+npm install --save-dev --save-exact prettier
+npx prettier --write "**/*.{html,css,js}"
+open index.html
+```
 
 ### 3. (REST) API
+
 ```bash
 # To install and run locally
 cd api/
