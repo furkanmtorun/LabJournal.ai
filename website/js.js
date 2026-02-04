@@ -1,9 +1,8 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize Materialize components safely
   if (typeof M !== "undefined") {
     M.AutoInit();
-    
+
     const dropdownElems = document.querySelectorAll(".dropdown-trigger");
     if (dropdownElems.length > 0) {
       M.Dropdown.init(dropdownElems, {
@@ -18,16 +17,21 @@ document.addEventListener("DOMContentLoaded", function () {
   if (modeToggle) {
     const body = document.body;
     const savedMode = localStorage.getItem("darkMode");
-    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
-    const shouldBeDark = savedMode === "dark" || (savedMode === null && prefersDarkMode);
+    const prefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    const shouldBeDark =
+      savedMode === "dark" || (savedMode === null && prefersDarkMode);
     if (shouldBeDark) {
       body.classList.add("dark-mode");
     }
-    
+
     const icon = modeToggle.querySelector("i");
     if (icon) {
-      icon.textContent = body.classList.contains("dark-mode") ? "brightness_7" : "brightness_6";
+      icon.textContent = body.classList.contains("dark-mode")
+        ? "brightness_7"
+        : "brightness_6";
     }
 
     modeToggle.addEventListener("click", function () {
@@ -63,12 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("error-message").style.display = "none";
 
     fetchExperimentById(experimentId)
-      .done(function(experiment) {
+      .done(function (experiment) {
         document.getElementById("loading").style.display = "none";
         populateExperimentDetails(experiment);
         document.getElementById("entry-container").style.display = "block";
       })
-      .fail(function(xhr, status, error) {
+      .fail(function (xhr, status, error) {
         document.getElementById("loading").style.display = "none";
         console.error("Failed to load experiment:", error);
         document.getElementById("error-message").style.display = "block";
@@ -77,26 +81,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function populateExperimentDetails(experiment) {
     const statusClass = getStatusClass(experiment.status);
-    
+
     const html = `<div class="entry-container" data-id="${experiment.id}">
       <!-- Entry Header -->
       <div class="entry-header">
         <h2 class="entry-title">
-          ${experiment.name || 'Unnamed Experiment'}
+          ${experiment.name || "Unnamed Experiment"}
         </h2>
 
         <div class="entry-meta">
           <div class="entry-meta-item">
             <span class="entry-meta-label">Date:</span>
             <span class="entry-meta-value">
-              ${experiment.date || experiment.timestamp || 'N/A'}
+              ${experiment.date || experiment.timestamp || "N/A"}
             </span>
           </div>
           <div class="entry-meta-item">
             <span class="entry-meta-label">Status:</span>
             <span class="entry-meta-value">
               <span class="chip ${statusClass} white-text">
-                ${experiment.status || 'Unknown'}
+                ${experiment.status || "Unknown"}
               </span>
             </span>
           </div>
@@ -117,48 +121,65 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="entry-section">
         <h3 class="section-title">Results</h3>
         <div class="section-content">
-          ${experiment.result || '<p>No results yet.</p>'}
+          ${experiment.result || "<p>No results yet.</p>"}
         </div>
       </div>
     </div>
     `;
-    
+
     document.getElementById("entry-container").innerHTML = html;
 
-    document.querySelector(".delete-experiment").addEventListener("click", function() {
-      if (!confirm("Delete this experiment? This cannot be undone.")) return;
-      
-      const experimentId = this.dataset.id;
-      if (typeof deleteExperimentById === "function") {
-        if (typeof M !== "undefined" && M.toast) {
-          M.toast({html: 'Deleting...', classes: 'rounded blue', displayLength: 4000});
+    document
+      .querySelector(".delete-experiment")
+      .addEventListener("click", function () {
+        if (!confirm("Delete this experiment? This cannot be undone.")) return;
+
+        const experimentId = this.dataset.id;
+        if (typeof deleteExperimentById === "function") {
+          if (typeof M !== "undefined" && M.toast) {
+            M.toast({
+              html: "Deleting...",
+              classes: "rounded blue",
+              displayLength: 4000,
+            });
+          }
+
+          deleteExperimentById(experimentId)
+            .done(function () {
+              if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
+              if (typeof M !== "undefined" && M.toast) {
+                M.toast({
+                  html: "Deleted successfully!",
+                  classes: "green rounded",
+                });
+              }
+              setTimeout(() => (window.location.href = "./"), 1500);
+            })
+            .fail(function (xhr, status, error) {
+              if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
+              if (typeof M !== "undefined" && M.toast) {
+                M.toast({
+                  html: `Delete failed: ${error}`,
+                  classes: "red rounded",
+                });
+              }
+            });
         }
-        
-        deleteExperimentById(experimentId)
-          .done(function() {
-            if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
-            if (typeof M !== "undefined" && M.toast) {
-              M.toast({html: 'Deleted successfully!', classes: 'green rounded'});
-            }
-            setTimeout(() => window.location.href = './', 1500);
-          })
-          .fail(function(xhr, status, error) {
-            if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
-            if (typeof M !== "undefined" && M.toast) {
-              M.toast({html: `Delete failed: ${error}`, classes: 'red rounded'});
-            }
-          });
-      }
-    });
+      });
   }
 
   function getStatusClass(status) {
     const statusLower = (status || "").toLowerCase();
     switch (statusLower) {
-      case "completed": return "green";
-      case "failed": return "red";
-      case "pending": case "queued": return "blue";
-      default: return "grey";
+      case "completed":
+        return "green";
+      case "failed":
+        return "red";
+      case "pending":
+      case "queued":
+        return "blue";
+      default:
+        return "grey";
     }
   }
 
@@ -177,7 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const dropdownTrigger = document.querySelector(".dropdown-trigger span");
 
   if (dropdownTrigger) {
-    dropdownTrigger.textContent = currentSearchType === "quick" ? "Quick Search" : "Detailed Search";
+    dropdownTrigger.textContent =
+      currentSearchType === "quick" ? "Quick Search" : "Detailed Search";
   }
 
   if (searchTypeLinks.length > 0) {
@@ -185,30 +207,36 @@ document.addEventListener("DOMContentLoaded", function () {
       if (link.getAttribute("data-search-type") === currentSearchType) {
         link.classList.add("active");
       }
-      
+
       link.addEventListener("click", function (e) {
         e.preventDefault();
         const searchType = this.getAttribute("data-search-type");
-        
+
         currentSearchType = searchType;
         localStorage.setItem("searchType", searchType);
-        
+
         if (dropdownTrigger) {
-          dropdownTrigger.textContent = searchType === "quick" ? "Quick Search" : "Detailed Search";
+          dropdownTrigger.textContent =
+            searchType === "quick" ? "Quick Search" : "Detailed Search";
         }
-        
-        searchTypeLinks.forEach(l => l.classList.remove("active"));
+
+        searchTypeLinks.forEach((l) => l.classList.remove("active"));
         this.classList.add("active");
-        
+
         if (searchType === "detailed" && typeof M !== "undefined" && M.toast) {
-          M.toast({ html: "Detailed search mode activated", classes: "rounded" });
+          M.toast({
+            html: "Detailed search mode activated",
+            classes: "rounded",
+          });
         }
-        
-        const dropdownInstance = M.Dropdown.getInstance(this.closest('.dropdown-trigger'));
+
+        const dropdownInstance = M.Dropdown.getInstance(
+          this.closest(".dropdown-trigger"),
+        );
         if (dropdownInstance) {
           dropdownInstance.close();
         }
-        
+
         if (isDataLoaded && dataSource.length > 0) {
           applySearchFilter();
         }
@@ -222,11 +250,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!tableBody || !Array.isArray(data)) return;
 
     tableBody.innerHTML = "";
-    
+
     data.forEach((entry) => {
       let statusColor = "grey lighten-2";
       const statusLower = (entry.status || "").toLowerCase();
-      
+
       switch (statusLower) {
         case "completed":
           statusColor = "green white-text";
@@ -242,16 +270,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${entry.name || ''}</td>
-        <td>${entry.category || ''}</td>
-        <td>${entry.timestamp || ''}</td>
-        <td><span class="chip ${statusColor}">${entry.status || 'Unknown'}</span></td>
+        <td>${entry.name || ""}</td>
+        <td>${entry.category || ""}</td>
+        <td>${entry.timestamp || ""}</td>
+        <td><span class="chip ${statusColor}">${entry.status || "Unknown"}</span></td>
         <td class="actions-cell">
-          <a class="btn waves-effect waves-light details-btn" data-id="${entry.id || ''}" href="view/${entry.id || ''}" title="View Details">
+          <a class="btn waves-effect waves-light details-btn" data-id="${entry.id || ""}" href="view/${entry.id || ""}" title="View Details">
             <i class="material-icons">arrow_forward</i>
           </a>
           <button class="btn waves-effect waves-light delete-btn red white-text" 
-                  data-id="${entry.id || ''}" 
+                  data-id="${entry.id || ""}" 
                   title="Delete Experiment">
             <i class="material-icons">delete</i>
           </button>
@@ -264,25 +292,30 @@ document.addEventListener("DOMContentLoaded", function () {
   // Delete event delegation - Proper Materialize toast handling
   const tableBody = document.getElementById("entries-table");
   if (tableBody) {
-    tableBody.addEventListener("click", function(e) {
+    tableBody.addEventListener("click", function (e) {
       if (e.target.closest(".delete-btn")) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const deleteBtn = e.target.closest(".delete-btn");
         const experimentId = deleteBtn.dataset.id;
-        
+
         if (!experimentId) {
           console.error("No experiment ID found");
           return;
         }
-        
-        const experimentName = dataSource.find(e => e.id === experimentId)?.name || experimentId;
-        
-        if (!confirm(`Delete experiment "${experimentName}"? This cannot be undone.`)) {
+
+        const experimentName =
+          dataSource.find((e) => e.id === experimentId)?.name || experimentId;
+
+        if (
+          !confirm(
+            `Delete experiment "${experimentName}"? This cannot be undone.`,
+          )
+        ) {
           return;
         }
-        
+
         // Call deleteExperimentById
         if (typeof deleteExperimentById === "function") {
           deleteExperimentById(experimentId)
@@ -292,7 +325,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 M.Toast.dismissAll();
               }
               if (typeof M !== "undefined" && M.toast) {
-                M.toast({html: 'Experiment deleted successfully!', classes: 'green rounded'});
+                M.toast({
+                  html: "Experiment deleted successfully!",
+                  classes: "green rounded",
+                });
               }
               refreshData();
             })
@@ -302,13 +338,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 M.Toast.dismissAll();
               }
               if (typeof M !== "undefined" && M.toast) {
-                M.toast({html: `Delete failed: ${err.message || err || 'Unknown error'}`, classes: 'red rounded'});
+                M.toast({
+                  html: `Delete failed: ${err.message || err || "Unknown error"}`,
+                  classes: "red rounded",
+                });
               }
             });
         } else {
           console.error("deleteExperimentById function not found in api.js");
           if (typeof M !== "undefined" && M.toast) {
-            M.toast({html: 'deleteExperimentById not available from api.js', classes: 'red rounded'});
+            M.toast({
+              html: "deleteExperimentById not available from api.js",
+              classes: "red rounded",
+            });
           }
         }
       }
@@ -319,61 +361,72 @@ document.addEventListener("DOMContentLoaded", function () {
   function refreshData() {
     if (typeof fetchExperiments === "function") {
       fetchExperiments()
-        .done(function(data) {
+        .done(function (data) {
           dataSource = data;
           isDataLoaded = true;
           applySearchFilter();
         })
-        .fail(function(err) {
+        .fail(function (err) {
           console.error("Failed to refresh data", err);
         });
     }
   }
 
   // Search filter logic
-  function applySearchFilter(searchTerm = '') {
-    const searchValue = (searchTerm || document.getElementById("search")?.value || '').toLowerCase().trim();
-    
+  function applySearchFilter(searchTerm = "") {
+    const searchValue = (
+      searchTerm ||
+      document.getElementById("search")?.value ||
+      ""
+    )
+      .toLowerCase()
+      .trim();
+
     let filteredEntries = [];
     if (searchValue === "") {
       filteredEntries = dataSource;
     } else if (currentSearchType === "quick") {
-      filteredEntries = dataSource.filter((entry) =>
-        (entry.name || "").toLowerCase().includes(searchValue) ||
-        (entry.category || "").toLowerCase().includes(searchValue) ||
-        (entry.status || "").toLowerCase().includes(searchValue)
+      filteredEntries = dataSource.filter(
+        (entry) =>
+          (entry.name || "").toLowerCase().includes(searchValue) ||
+          (entry.category || "").toLowerCase().includes(searchValue) ||
+          (entry.status || "").toLowerCase().includes(searchValue),
       );
     } else {
-      filteredEntries = dataSource.filter((entry) =>
-        (entry.name || "").toLowerCase().includes(searchValue) ||
-        (entry.category || "").toLowerCase().includes(searchValue) ||
-        (entry.timestamp || "").toLowerCase().includes(searchValue) ||
-        (entry.status || "").toLowerCase().includes(searchValue)
+      filteredEntries = dataSource.filter(
+        (entry) =>
+          (entry.name || "").toLowerCase().includes(searchValue) ||
+          (entry.category || "").toLowerCase().includes(searchValue) ||
+          (entry.timestamp || "").toLowerCase().includes(searchValue) ||
+          (entry.status || "").toLowerCase().includes(searchValue),
       );
     }
-    
+
     populateTable(filteredEntries);
   }
 
   // Search input handler
   const searchInput = document.getElementById("search");
   if (searchInput) {
-    searchInput.addEventListener("input", debounce(function () {
-      if (isDataLoaded) {
-        applySearchFilter(this.value);
-      }
-    }, 300));
+    searchInput.addEventListener(
+      "input",
+      debounce(function () {
+        if (isDataLoaded) {
+          applySearchFilter(this.value);
+        }
+      }, 300),
+    );
   }
 
   // Load initial data
   if (typeof fetchExperiments === "function") {
     fetchExperiments()
-      .done(function(data) {
+      .done(function (data) {
         dataSource = data;
         isDataLoaded = true;
         applySearchFilter();
       })
-      .fail(function(err) {
+      .fail(function (err) {
         console.error("Failed to load experiments", err);
         populateTable([]);
       });
@@ -389,14 +442,20 @@ document.addEventListener("DOMContentLoaded", function () {
         submitForm("#new-entry-form")
           .done(() => {
             if (typeof M !== "undefined" && M.toast) {
-              M.toast({html: "Entry created successfully!", classes: "green rounded"});
+              M.toast({
+                html: "Entry created successfully!",
+                classes: "green rounded",
+              });
             }
             this.reset();
             refreshData();
           })
           .fail((err) => {
             if (typeof M !== "undefined" && M.toast) {
-              M.toast({html: `Error: ${err.message || err}`, classes: "red rounded"});
+              M.toast({
+                html: `Error: ${err.message || err}`,
+                classes: "red rounded",
+              });
             }
           });
       }

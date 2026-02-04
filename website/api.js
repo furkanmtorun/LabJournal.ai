@@ -6,7 +6,7 @@ function submitForm(formSelector) {
   if (!$form.length) return Promise.reject("Form not found");
 
   return $.ajax({
-    url: API_BASE + 'experiments',
+    url: API_BASE + "experiments",
     type: "POST",
     data: new FormData($form[0]),
     processData: false,
@@ -17,9 +17,9 @@ function submitForm(formSelector) {
 
 function fetchExperiments() {
   return $.ajax({
-    url: API_BASE + 'experiments',
-    type: 'GET',
-    dataType: 'json'
+    url: API_BASE + "experiments",
+    type: "GET",
+    dataType: "json",
   });
 }
 
