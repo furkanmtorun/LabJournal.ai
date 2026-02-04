@@ -1,5 +1,7 @@
 # LabJournal.ai
 
+[![Auto formatting and linting](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml/badge.svg)](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml)
+
 - Keep labs notebooks digital effortlessly!
 - Alternative names: ILikeLab.ai, LabHere.ai
 
