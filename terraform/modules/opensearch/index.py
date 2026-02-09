@@ -25,7 +25,7 @@ def create_index_if_not_exists():
     if not os_client.indices.exists(index=INDEX_NAME):
         settings = {
             "settings": {
-                "index.knn": True  # Enables Vector Search
+                "index.knn": True
             },
             "mappings": {
                 "properties": {
@@ -35,7 +35,7 @@ def create_index_if_not_exists():
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "nmslib"
+                            "engine": "faiss"
                         }
                     },
                     "text": {"type": "text"}
