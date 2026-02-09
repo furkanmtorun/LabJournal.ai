@@ -107,6 +107,8 @@ def get_result(image_base64) -> tuple[str, str]:
     Now, transcribe and structure the laboratory notebook image accordingly.
     Format your output using this template:
     {template}
+
+    Then, convert the final reply to HTML code so that I can embed into to the page directly.
     """
                     },
                 ],
