@@ -1,5 +1,10 @@
 data "aws_caller_identity" "current" {}
 
+# This automatically gets your current public IP
+data "http" "my_public_ip" {
+  url = "https://ipv4.icanhazip.com"
+}
+
 # 1. Managed (not serverless) OpenSearch Domain
 resource "aws_opensearch_domain" "semantic_search" {
   domain_name    = "experiments-semantic-search"
@@ -19,14 +24,32 @@ resource "aws_opensearch_domain" "semantic_search" {
 
   access_policies = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        AWS = "${aws_iam_role.sync_lambda_role.arn}"
+    Statement = [
+      {
+        # STATEMENT 1: Allow your Lambda (IAM based)
+        Effect = "Allow"
+        Principal = {
+          AWS = "${aws_iam_role.sync_lambda_role.arn}"
+        }
+        Action   = "es:*"
+        Resource = "arn:aws:es:${var.region_name}:${data.aws_caller_identity.current.account_id}:domain/experiments-semantic-search/*"
+      },
+      {
+        # STATEMENT 2: Allow your Browser (IP based)
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action   = "es:*"
+        Resource = "arn:aws:es:${var.region_name}:${data.aws_caller_identity.current.account_id}:domain/experiments-semantic-search/*"
+        Condition = {
+          IpAddress = {
+            # Use the IP we automatically discovered, with /32 suffix
+            "aws:SourceIp" = ["${chomp(data.http.my_public_ip.response_body)}/32"]
+          }
+        }
       }
-      Action   = "es:*"
-      Resource = "arn:aws:es:${var.region_name}:${data.aws_caller_identity.current.account_id}:domain/experiments-semantic-search/*"
-    }]
+    ]
   })
 }
 
