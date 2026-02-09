@@ -69,3 +69,10 @@ cloud-nuke aws --region $REGION
 ```bash
 aws cloudfront create-invalidation --distribution-id "E3FLXN8W9LS922" --paths "/*"
 ```
+
+*If the AWS Bedrock throws error due to quota, [create a Quote/Limit Increase Ticket](https://us-east-1.console.aws.amazon.com/servicequotas/home/services/bedrock/quotas):*
+
+```
+* Cross-region model inference tokens per minute for Amazon Nova Pro
+* Cross-region model inference requests per minute for Amazon Nova Pro
+```
