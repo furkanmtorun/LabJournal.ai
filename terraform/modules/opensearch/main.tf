@@ -6,24 +6,26 @@ resource "aws_opensearch_domain" "semantic_search" {
   engine_version = "OpenSearch_3.3" # latest as of 23rd Jan '26.
 
   cluster_config {
-    instance_type          = "t3.small.search"
+    instance_type          = "t3.small.search" # change this for optimized utilization
     instance_count         = 1
     zone_awareness_enabled = false # turn "true" for high availability across zones
   } 
 
   ebs_options {
     ebs_enabled = true
-    volume_size = 10
+    volume_size = 10 # free tier -> can be 100
     volume_type = "gp3"
   }
 
   access_policies = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Action    = "es:*"
-      Principal = "*"
-      Effect    = "Allow"
-      Resource  = "arn:aws:es:${var.region}:*:domain/*/*"
+      Effect = "Allow"
+      Principal = {
+        AWS = "${aws_iam_role.sync_lambda_role.arn}"
+      }
+      Action   = "es:*"
+      Resource = "arn:aws:es:${var.region_name}:${data.aws_caller_identity.current.account_id}:domain/experiments-semantic-search/*"
     }]
   })
 }
@@ -55,7 +57,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
       {
         Effect   = "Allow"
         Action   = ["bedrock:InvokeModel"]
-        Resource = "arn:aws:bedrock:${var.region}::foundation-model/amazon.titan-embed-text-v1"
+        Resource = "arn:aws:bedrock:${var.region_name}::foundation-model/amazon.titan-embed-text-v1"
       },
       {
         Effect   = "Allow"
@@ -104,7 +106,7 @@ resource "aws_lambda_function" "sync_lambda" {
   environment {
     variables = {
       OS_ENDPOINT = aws_opensearch_domain.semantic_search.endpoint
-      REGION      = var.region
+      REGION      = var.region_name
     }
   }
 }

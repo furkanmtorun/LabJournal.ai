@@ -17,5 +17,6 @@ override.tf
 override.tf.json
 terraform.tfvars
 /api/venv/
+dist/
 __pycache__/
 *.pyc
