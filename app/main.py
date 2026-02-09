@@ -22,61 +22,101 @@ S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 API_ENDPOINT: str = "https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws"
 
+full_html_template = """
+<div class="lab-report">
+  <header>
+    <p><strong>Date:</strong> [YYYY-MM-DD] | <strong>Time:</strong> [HH:MM or Time Range]</p>
+    <h2>Experiment Title: [Concise and descriptive title]</h2>
+  </header>
 
-template = """
-Date: [YYYY-MM-DD]
-Time: [HH:MM or Time Range]
+  <section>
+    <h3>Objective</h3>
+    <p>[Purpose or hypothesis]</p>
+  </section>
 
-Experiment Title: [Concise and descriptive title]
+  <section>
+    <h3>Background / Rationale</h3>
+    <p>[Scientific context]</p>
+  </section>
 
-Objective:
-[Clearly state the purpose or hypothesis of the experiment — what is being tested or demonstrated.]
+  <section>
+    <h3>Materials and Reagents</h3>
+    <ul>
+      <li>[Item with concentration/catalog number]</li>
+    </ul>
+  </section>
 
-Background / Rationale:
-[Provide a short scientific context or literature basis, if available.]
+  <section>
+    <h3>Equipment</h3>
+    <ul>
+      <li>[Instrument/Software name]</li>
+    </ul>
+  </section>
 
-Materials and Reagents:
-[List every reagent, material, or consumable, including concentrations and catalog numbers if available.]
+  <section>
+    <h3>Experimental Procedure</h3>
+    <ol>
+      <li>[Step in third person passive voice]</li>
+    </ol>
+  </section>
 
-Equipment:
-[List all instruments, machines, software, or tools used, including model names if known.]
+  <section>
+    <h3>Observations</h3>
+    <p>[Visuals, measurements, anomalies]</p>
+  </section>
 
-Experimental Procedure:
-[Organize by steps, numbered or bulleted. Write in past tense and third person passive voice.]
+  <section>
+    <h3>Results</h3>
+    <p>[Summarized data or yield]</p>
+  </section>
 
-Example:
-1. [Describe first major step, including quantities, timings, and conditions (e.g., "The mixture was incubated at 37°C for 30 minutes.")].
-2. [Next step…]
-3. [Continue until experiment completion.]
+  <section>
+    <h3>Data Analysis</h3>
+    <p>[Calculations or statistical methods]</p>
+  </section>
 
-Observations:
-[Record visual observations, measurements, or anything unusual (color changes, precipitation, pH, etc.).]
+  <section>
+    <h3>Discussion</h3>
+    <p>[Interpretation and comparison]</p>
+  </section>
 
-Results:
-[Summarize raw or processed data, yield, or measurements. You may attach or reference data files or figures here.]
+  <section>
+    <h3>Conclusion</h3>
+    <p>[2-3 sentence summary]</p>
+  </section>
 
-Data Analysis:
-[State how data were processed — calculations, statistical analyses, plots, etc.]
+  <section>
+    <h3>Next Steps / Future Work</h3>
+    <p>[Follow-up or optimizations]</p>
+  </section>
 
-Discussion:
-[Interpret the results, mention anomalies, compare with expectations, cite literature if needed.]
-
-Conclusion:
-[Summarize outcomes in 2-3 sentences, including whether the objective was achieved.]
-
-Next Steps / Future Work:
-[Propose any follow-up experiments, optimizations, or validations.]
-
-References:
-[List all relevant papers, manuals, or standard protocols referenced.]
-
+  <section>
+    <h3>References</h3>
+    <ul>
+      <li>[Relevant papers or protocols]</li>
+    </ul>
+  </section>
+</div>
 """
 
-
 def get_result(image_base64) -> tuple[str, str]:
-    # Define the request body
+    # ... (rest of your setup)
+    
+    prompt_text = f"""
+    You are a scientific assistant. Analyze the lab notebook image and extract the content into this EXACT HTML structure:
+    {full_html_template}
+
+    Requirements:
+    - Use <ul>/<li> for Materials, Equipment, and References.
+    - Use <ol>/<li> for the Experimental Procedure.
+    - Use third-person passive voice ("The sample was heated").
+    - Standardize units (µL, °C, g, min).
+    - If a section is missing from the image, leave the header but put "[missing]" in the content.
+    - OUTPUT ONLY THE RAW HTML. No markdown code blocks (```html), no preface, no "Here is the result".
+    """
+
     request_body = {
-        "inferenceConfig": {"max_new_tokens": 1200},
+        "inferenceConfig": {"max_new_tokens": 2000}, # Increased for full HTML
         "messages": [
             {
                 "role": "user",
@@ -87,35 +127,11 @@ def get_result(image_base64) -> tuple[str, str]:
                             "source": {"bytes": image_base64},
                         }
                     },
-                    {
-                    "text": f"""
-    You are a scientific assistant helping digitize laboratory notebook pages.
-    Analyze the image of a handwritten or printed lab notebook page.
-    Extract all relevant experimental details, correct spelling and grammar, and rewrite the content in clear, formal scientific English.
-    Convert the information into structured text following the exact format below.
-    Use full sentences, proper scientific terminology, and preserve all experimental details such as dates, times, quantities, concentrations, and steps.
-    Do not invent missing data — if something is unreadable or missing, write "[unreadable]" or "[missing]".
-
-    Style requirements:
-    - Use complete sentences.
-    - Use third person passive voice (e.g., "The solution was mixed" instead of "I mixed the solution").
-    - Follow standard scientific structure and clarity.
-    - Standardize symbols and units (e.g., µL, °C, g, min).
-    - Do not add commentary outside the template.
-    - Output only the formatted text with no preface, headers, or explanations.
-
-    Now, transcribe and structure the laboratory notebook image accordingly.
-    Format your output using this template:
-    {template}
-
-    Then, convert the final reply to HTML code so that I can embed into to the page directly.
-    """
-                    },
+                    {"text": prompt_text}
                 ],
             },
         ],
     }
-
     # Invoke the model using invoke_model
     try:
         response = BEDROCK_CLIENT.invoke_model(
