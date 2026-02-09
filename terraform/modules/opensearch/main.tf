@@ -97,11 +97,20 @@ data "archive_file" "lambda_zip" {
 
 # 4. The Sync Lambda Function
 resource "aws_lambda_function" "sync_lambda" {
-  filename      = "opensearch.zip"
-  function_name = "ddb-to-opensearch-sync"
+  filename      = "${path.module}/opensearch.zip"
+  function_name = "dynamodb-to-opensearch-sync"
   role          = aws_iam_role.sync_lambda_role.arn
   handler       = "index.handler"
   runtime       = "python3.11"
+
+  # Explicitly link the group (Provider version 5.x+)
+  logging_config {
+    log_format = "JSON"
+    log_group  = aws_cloudwatch_log_group.lambda_log_group.name
+  }
+
+  # Ensure the log group is created BEFORE the lambda is created
+  depends_on = [aws_cloudwatch_log_group.lambda_log_group]
 
   environment {
     variables = {
@@ -112,8 +121,34 @@ resource "aws_lambda_function" "sync_lambda" {
 }
 
 # The Trigger: Connects the Stream from your "Database" module to this Lambda
-resource "aws_lambda_event_source_mapping" "ddb_trigger" {
+resource "aws_lambda_event_source_mapping" "dynamodb_to_opensearch_trigger" {
   event_source_arn  = var.dynamodb_stream_arn
   function_name     = aws_lambda_function.sync_lambda.arn
   starting_position = "LATEST"
+}
+
+# CloudWatch
+resource "aws_cloudwatch_log_group" "lambda_log_group" {
+  name              = "/aws/lambda/dynamodb-to-opensearch-sync"
+  retention_in_days = 7
+}
+
+resource "aws_iam_role_policy" "lambda_logging_policy" {
+  name = "lambda-logging-policy"
+  role = aws_iam_role.sync_lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
 }
