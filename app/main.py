@@ -100,8 +100,7 @@ full_html_template = """
 """
 
 def get_result(image_base64) -> tuple[str, str]:
-    # ... (rest of your setup)
-    
+    # Define the request body
     prompt_text = f"""
     You are a scientific assistant. Analyze the lab notebook image and extract the content into this EXACT HTML structure:
     {full_html_template}
@@ -109,30 +108,23 @@ def get_result(image_base64) -> tuple[str, str]:
     Requirements:
     - Use <ul>/<li> for Materials, Equipment, and References.
     - Use <ol>/<li> for the Experimental Procedure.
-    - Use third-person passive voice ("The sample was heated").
-    - Standardize units (µL, °C, g, min).
-    - If a section is missing from the image, leave the header but put "[missing]" in the content.
-    - OUTPUT ONLY THE RAW HTML. No markdown code blocks (```html), no preface, no "Here is the result".
+    - Use third-person passive voice.
+    - OUTPUT ONLY THE RAW HTML. No markdown code blocks, no preface.
     """
 
     request_body = {
-        "inferenceConfig": {"max_new_tokens": 2000}, # Increased for full HTML
+        "inferenceConfig": {"max_new_tokens": 2000},
         "messages": [
             {
                 "role": "user",
                 "content": [
-                    {
-                        "image": {
-                            "format": "jpeg",  # Or "png", depending on your source
-                            "source": {"bytes": image_base64},
-                        }
-                    },
+                    {"image": {"format": "jpeg", "source": {"bytes": image_base64}}},
                     {"text": prompt_text}
                 ],
             },
         ],
     }
-    # Invoke the model using invoke_model
+
     try:
         response = BEDROCK_CLIENT.invoke_model(
             modelId=MODEL_NAME,
@@ -141,12 +133,25 @@ def get_result(image_base64) -> tuple[str, str]:
             body=json.dumps(request_body),
         )
 
-        # Decode the response body
         response_body = json.loads(response["body"].read().decode("utf-8"))
+        raw_text = response_body["output"]["message"]["content"][0]["text"].strip()
 
-        # Extract the response text
-        response_text = response_body["output"]["message"]["content"][0]["text"]
-        return response_text, ""
+        # 1. Remove Markdown code fences if the LLM included them
+        if raw_text.startswith("```"):
+            # Split by backticks and take the content inside
+            # This handles ```html ... ``` and ``` ... ```
+            parts = raw_text.split("```")
+            if len(parts) >= 3:
+                cleaned_html = parts[1]
+                # Remove the "html" language identifier if present at the start
+                if cleaned_html.lower().startswith("html"):
+                    cleaned_html = cleaned_html[4:].strip()
+                raw_text = cleaned_html
+        
+        # 2. Final trim to ensure no stray whitespace
+        result_html = raw_text.strip()
+
+        return result_html, ""
 
     except Exception as e:
         return "", f"Error: {e}"
