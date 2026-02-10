@@ -203,6 +203,14 @@ nav .brand-logo {
   text-align: center;
 }
 
+.page-subtitle {
+  font-weight: 100;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  text-align: center;
+}
+
 .entry-header {
   display: flex;
   justify-content: space-between;
