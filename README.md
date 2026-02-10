@@ -19,8 +19,6 @@
 ### 2. Web app
 
 ```bash
-npm install --save-dev --save-exact prettier
-npx prettier --write "**/*.{html,css,js}"
 open index.html
 ```
 

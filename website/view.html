@@ -1,112 +1,91 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LabJournal.ai - Experiment Details</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link rel="stylesheet" href="/style.css?v=4" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-  </head>
 
-  <body>
-    <!-- Fixed Navbar with Home and New buttons -->
-    <nav>
-      <div class="nav-wrapper">
-        <div class="nav-content">
-          <!-- Left section: Title -->
-          <div class="nav-left">
-            <a href="../" class="brand-logo">LabJournal.ai</a>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LabJournal.ai - Experiment Details</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="/style.css?v=4" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
 
-          <!-- Right section: Home and New buttons, and theme toggle -->
-          <div class="nav-right">
-            <a
-              href="../"
-              class="btn waves-effect waves-light nav-btn"
-              id="home-btn"
-            >
-              <i class="material-icons">home</i>
-              <span>Home</span>
-            </a>
+<body>
+  <!-- Fixed Navbar with Home and New buttons -->
+  <nav>
+    <div class="nav-wrapper">
+      <div class="nav-content">
+        <!-- Left section: Title -->
+        <div class="nav-left">
+          <a href="../" class="brand-logo">LabJournal.ai</a>
+        </div>
 
-            <a
-              href="../new"
-              class="btn waves-effect waves-light nav-btn"
-              id="new-btn"
-            >
-              <i class="material-icons">add</i>
-              <span>New</span>
-            </a>
+        <!-- Right section: Home and New buttons, and theme toggle -->
+        <div class="nav-right">
+          <a href="../" class="btn waves-effect waves-light nav-btn" id="home-btn">
+            <i class="material-icons">home</i>
+            <span>Home</span>
+          </a>
 
-            <div class="mode-toggle" id="mode-toggle">
-              <i class="material-icons">brightness_6</i>
-            </div>
+          <a href="../new" class="btn waves-effect waves-light nav-btn" id="new-btn">
+            <i class="material-icons">add</i>
+            <span>New</span>
+          </a>
+
+          <div class="mode-toggle" id="mode-toggle">
+            <i class="material-icons">brightness_6</i>
           </div>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <main class="container">
-      <h4 class="page-title">Experiment Details</h4>
+  <main class="container">
+    <h4 class="page-title">Experiment Details</h4>
 
-      <!-- Loading Spinner -->
-      <div
-        id="loading"
-        class="center-align"
-        style="display: none; padding: 2rem"
-      >
-        <div class="preloader-wrapper big active">
-          <div class="spinner-layer spinner-blue-only">
-            <div class="circle-clipper left">
-              <div class="circle"></div>
-            </div>
-            <div class="gap-patch">
-              <div class="circle"></div>
-            </div>
-            <div class="circle-clipper right">
-              <div class="circle"></div>
-            </div>
+    <!-- Loading Spinner -->
+    <div id="loading" class="center-align" style="display: none; padding: 2rem">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
           </div>
         </div>
-        <p class="mt-2">Loading experiment...</p>
       </div>
+      <p class="mt-2">Loading experiment...</p>
+    </div>
 
-      <!-- Error Message -->
-      <div
-        id="error-message"
-        class="card-panel red lighten-4 red-text text-darken-2"
-        style="display: none; border-radius: 8px"
-      >
-        <i class="material-icons left">error_outline</i>
-        Could not load experiment details. <a href="../">Return to Home</a>
-      </div>
+    <!-- Error Message -->
+    <div id="error-message" class="card-panel red lighten-4 red-text text-darken-2"
+      style="display: none; border-radius: 8px">
+      <i class="material-icons left">error_outline</i>
+      Could not load experiment details. <a href="../">Return to Home</a>
+    </div>
 
-      <!-- Entry Container - Result will come here -->
-      <div class="entry-container" id="entry-container" style="display: none">
-        <!-- Dynamic content will be populated by js.js -->
-      </div>
-    </main>
+    <!-- Entry Container - Result will come here -->
+    <div class="entry-container" id="entry-container" style="display: none">
+      <!-- Dynamic content will be populated by js.js -->
+    </div>
+  </main>
 
-    <footer>
-      <div class="container">
-        Made and served by
-        <a href="https://furkanmtorun.github.io/" target="_blank"
-          >@FurkanMTorun</a
-        >.
-      </div>
-    </footer>
+  <footer>
+    <div class="container">
+      Made and served by
+      <a href="https://furkanmtorun.github.io/" target="_blank">@FurkanMTorun</a>.
+    </div>
+  </footer>
 
-    <!-- jQuery and Materialize JS via CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="/api.js"></script>
-    <script src="/js.js"></script>
-  </body>
+  <!-- jQuery and Materialize JS via CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/api.js"></script>
+  <script src="/js.js"></script>
+</body>
+
 </html>

@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (dropdownTrigger) {
     dropdownTrigger.textContent =
-      currentSearchType === "quick" ? "Quick Search" : "Detailed Search";
+      currentSearchType === "quick" ? "Quick Search" : "Semantic Search";
   }
 
   if (searchTypeLinks.length > 0) {
@@ -218,15 +218,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (dropdownTrigger) {
           dropdownTrigger.textContent =
-            searchType === "quick" ? "Quick Search" : "Detailed Search";
+            searchType === "quick" ? "Quick Search" : "Semantic Search";
         }
 
         searchTypeLinks.forEach((l) => l.classList.remove("active"));
         this.classList.add("active");
 
-        if (searchType === "detailed" && typeof M !== "undefined" && M.toast) {
+        if (searchType === "semantic" && typeof M !== "undefined" && M.toast) {
           M.toast({
-            html: "Detailed search mode activated",
+            html: "Semantic search mode activated",
             classes: "rounded",
           });
         }

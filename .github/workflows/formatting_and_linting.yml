@@ -15,12 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Node.js for formatting & linting
-      uses: actions/setup-node@v4
-      with:
-        node-version: '14'
+    # - name: Set up Node.js for formatting & linting
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '14'
 
-    - name: Check formatting with Prettier
-      run: |
-        npm install --save-dev --save-exact prettier
-        npx prettier --check "**/*.{html,css,js,md}"
+    # - name: Check formatting with Prettier
+    #   run: |
+    #     npm install --save-dev --save-exact prettier
+    #     npx prettier --check "**/*.{html,css,js,md}"

@@ -1,116 +1,97 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LabJournal.ai</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link rel="stylesheet" href="/style.css?v=2" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-  </head>
 
-  <body>
-    <!-- Fixed Navbar with Search Bar and Create Button -->
-    <nav>
-      <div class="nav-wrapper">
-        <div class="nav-content">
-          <!-- Left section: Title -->
-          <div class="nav-left">
-            <a href="./" class="brand-logo">LabJournal.ai</a>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LabJournal.ai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="/style.css?v=2" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
 
-          <!-- Middle section: Search bar and dropdown -->
-          <div class="nav-middle">
-            <div class="search-options">
-              <div class="search-wrapper">
-                <i class="material-icons">search</i>
-                <input
-                  id="search"
-                  type="text"
-                  placeholder="Search Experiments..."
-                  required
-                />
-              </div>
+<body>
+  <!-- Fixed Navbar with Search Bar and Create Button -->
+  <nav>
+    <div class="nav-wrapper">
+      <div class="nav-content">
+        <!-- Left section: Title -->
+        <div class="nav-left">
+          <a href="./" class="brand-logo">LabJournal.ai</a>
+        </div>
 
-              <!-- Dropdown Trigger -->
-              <a
-                class="dropdown-trigger"
-                href="#"
-                data-target="search-dropdown"
-              >
-                <span>Quick Search</span>
-                <i class="material-icons">arrow_drop_down</i>
-              </a>
-
-              <!-- Dropdown Structure -->
-              <ul id="search-dropdown" class="dropdown-content">
-                <li><a href="#!" data-search-type="quick">Quick Search</a></li>
-                <li>
-                  <a href="#!" data-search-type="detailed">Detailed Search</a>
-                </li>
-              </ul>
+        <!-- Middle section: Search bar and dropdown -->
+        <div class="nav-middle">
+          <div class="search-options">
+            <div class="search-wrapper">
+              <i class="material-icons">search</i>
+              <input id="search" type="text" placeholder="Search Experiments..." required />
             </div>
-          </div>
 
-          <!-- Right section: New button and theme toggle -->
-          <div class="nav-right">
-            <a
-              class="btn waves-effect waves-light create-btn"
-              id="create-btn"
-              href="/new"
-            >
-              <i class="material-icons">add</i>
-              <span>New</span>
+            <!-- Dropdown Trigger -->
+            <a class="dropdown-trigger" href="#" data-target="search-dropdown">
+              <span>Quick Search</span>
+              <i class="material-icons">arrow_drop_down</i>
             </a>
 
-            <div class="mode-toggle" id="mode-toggle">
-              <i class="material-icons">brightness_6</i>
-            </div>
+            <!-- Dropdown Structure -->
+            <ul id="search-dropdown" class="dropdown-content">
+              <li><a href="#!" data-search-type="quick">Quick Search</a></li>
+              <li>
+                <a href="#!" data-search-type="semantic">Semantic Search</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right section: New button and theme toggle -->
+        <div class="nav-right">
+          <a class="btn waves-effect waves-light create-btn" id="create-btn" href="/new">
+            <i class="material-icons">add</i>
+            <span>New</span>
+          </a>
+
+          <div class="mode-toggle" id="mode-toggle">
+            <i class="material-icons">brightness_6</i>
           </div>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <main class="container">
-      <h4 class="page-title">Experiments</h4>
+  <main class="container">
+    <h4 class="page-title">Experiments</h4>
 
-      <div class="table-container desktop-table">
-        <table class="highlight responsive-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="entries-table">
-            <!-- Table content will be populated by JavaScript -->
-          </tbody>
-        </table>
+    <div class="table-container desktop-table">
+      <table class="highlight responsive-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="entries-table">
+          <!-- Table content will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      <div class="container">
+        Made and served by
+        <a href="https://furkanmtorun.github.io/" target="_blank">@FurkanMTorun</a>.
       </div>
+    </footer>
 
-      <footer>
-        <div class="container">
-          Made and served by
-          <a href="https://furkanmtorun.github.io/" target="_blank"
-            >@FurkanMTorun</a
-          >.
-        </div>
-      </footer>
+    <!-- jQuery, Materialize JS via CDN and functionalities. -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/api.js"></script>
+    <script src="/js.js"></script>
+  </main>
+</body>
 
-      <!-- jQuery, Materialize JS via CDN and functionalities. -->
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <script src="/api.js"></script>
-      <script src="/js.js"></script>
-    </main>
-  </body>
 </html>
