@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function populateExperimentDetails(experiment) {
     const statusClass = getStatusClass(experiment.status);
+    const resultHtml = experiment.result || "<p class='no-data'>No results yet.</p>";
 
     const html = `<div class="entry-container" data-id="${experiment.id}">
       <!-- Entry Header -->
@@ -120,8 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
       <!-- Results Section (includes everything) -->
       <div class="entry-section">
         <h3 class="section-title">Results</h3>
-        <div class="section-content">
-          ${experiment.result || "<p>No results yet.</p>"}
+        <div class="section-content lab-report">
+          ${resultHtml}
         </div>
       </div>
     </div>
