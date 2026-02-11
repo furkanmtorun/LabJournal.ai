@@ -40,3 +40,7 @@ output "queue_for_submit_experiments" {
 output "dlq_for_experiments" {
   value = module.app.url_dlq_for_experiments
 }
+
+output "opensearch_endpoint" {
+  value = module.opensearch.opensearch_endpoint
+}

@@ -99,6 +99,7 @@ full_html_template = """
 </div>
 """
 
+
 def get_result(image_base64) -> tuple[str, str]:
     # Define the request body
     prompt_text = f"""
@@ -119,7 +120,7 @@ def get_result(image_base64) -> tuple[str, str]:
                 "role": "user",
                 "content": [
                     {"image": {"format": "jpeg", "source": {"bytes": image_base64}}},
-                    {"text": prompt_text}
+                    {"text": prompt_text},
                 ],
             },
         ],
@@ -147,7 +148,7 @@ def get_result(image_base64) -> tuple[str, str]:
                 if cleaned_html.lower().startswith("html"):
                     cleaned_html = cleaned_html[4:].strip()
                 raw_text = cleaned_html
-        
+
         # 2. Final trim to ensure no stray whitespace
         result_html = raw_text.strip()
 
