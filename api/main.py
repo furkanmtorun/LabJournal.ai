@@ -1,18 +1,22 @@
 """API module via FastAPI."""
 
 import json
+import os
 import uuid
 from datetime import datetime
+from typing import Optional
 
 import boto3
 from botocore.exceptions import ClientError
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
+from opensearchpy import OpenSearch, RequestsHttpConnection
 from pydantic import BaseModel
-
+from requests_aws4auth import AWS4Auth
 
 _VERSION: str = "0.1.6"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME: str = "experiments"
+_OPENSEARCH_INDEX_NAME = "experiments_index"
 _REGION_NAME: str = "eu-central-1"
 _TIME_FORMAT: str = "%d.%m.%Y %H:%M:%S"
 DB_CLIENT = boto3.client("dynamodb", region_name=_REGION_NAME)
@@ -20,6 +24,22 @@ S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 SQS_CLIENT = boto3.client("sqs", region_name=_REGION_NAME)
 SQS_QUEUE_URL: str = "https://sqs.eu-central-1.amazonaws.com/851725270120/queue-for-submit-experiments"
+OPENSEARCH_ENDPOINT: str = (
+    "https://search-experiments-semantic-search-gyse2sjmkn6y64fvux7opuazb4.eu-central-1.es.amazonaws.com"
+)
+BEDROCK_CLIENT = boto3.client("bedrock-runtime", region_name=_REGION_NAME)
+CREDENTIALS = boto3.Session().get_credentials()
+AWS_AUTH = AWS4Auth(
+    CREDENTIALS.access_key, CREDENTIALS.secret_key, _REGION_NAME, "es", session_token=CREDENTIALS.token
+)
+OPENSEARCH_CLIENT = OpenSearch(
+    hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 443}],
+    http_auth=AWS_AUTH,
+    use_ssl=True,
+    verify_certs=True,
+    connection_class=RequestsHttpConnection,
+    pool_maxsize=20,  # to reuse existing TCP connections to OpenSearch across multiple "warm" requests
+)
 
 
 # Models
@@ -47,6 +67,11 @@ class ExperimentPatchRequest(BaseModel):
     status: str  # "Queued", "Completed" or "Failed"
     result: str
     error: str
+
+
+class SemanticSearchRequest(BaseModel):
+    query: str
+    top_k: Optional[int] = 5
 
 
 app = FastAPI(
@@ -266,3 +291,51 @@ async def patch_experiment(experiment_id: str, patch: ExperimentPatchRequest):
         "result": item.get("result", {}).get("S"),
     }
     return ExperimentModel(**experiment_data)
+
+
+@app.post("/search")
+async def semantic_search(request: SemanticSearchRequest):
+    try:
+        # 1. Generate Query Vector (Titan V1 = 1536 dimensions)
+        bedrock_response = BEDROCK_CLIENT.invoke_model(
+            modelId="amazon.titan-embed-text-v1", body=json.dumps({"inputText": request.query})
+        )
+        # Note: read() consumes the stream, only call it once
+        response_body = json.loads(bedrock_response["body"].read())
+        query_vector = response_body.get("embedding")
+
+        # 2. k-NN Search
+        # Best Practice: Wrap in a specific 'search_pipeline' if you use hybrid search later
+        search_body = {
+            "size": request.top_k,
+            "query": {
+                "knn": {
+                    "embedding": {  # This MUST match the field name in your Index Mapping
+                        "vector": query_vector,
+                        "k": request.top_k,
+                    }
+                }
+            },
+        }
+
+        os_response = OPENSEARCH_CLIENT.search(index=_OPENSEARCH_INDEX_NAME, body=search_body)
+
+        # 3. Formatted Response
+        return {
+            "results": [
+                {
+                    "score": hit["_score"],
+                    "content": hit["_source"].get("text_content"),
+                    "metadata": hit["_source"].get("metadata"),
+                }
+                for hit in os_response["hits"]["hits"]
+            ]
+        }
+
+    except Exception as e:
+        # Log the full error to CloudWatch for debugging
+        print(f"CRITICAL: Semantic Search Failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Search service temporarily unavailable",
+        )
