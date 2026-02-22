@@ -184,9 +184,80 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Search page helpers: detect and handle semantic search page
+  function isSearchPage() {
+    return (
+      window.location.pathname.endsWith("/search.html") ||
+      window.location.pathname === "/search.html" ||
+      window.location.pathname === "search.html" ||
+      window.location.pathname === "/search" ||
+      window.location.pathname === "/search/"
+    );
+  }
+
+  function handleSearchPage() {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("query") || "";
+    const searchedTextEl = document.getElementById("searched_text");
+    if (searchedTextEl) {
+      if (query) {
+        searchedTextEl.textContent = `Results for: "${query}"`;
+      } else {
+        searchedTextEl.textContent = "Enter a query to run a semantic search";
+      }
+    }
+
+    if (!query) {
+      populateTable([]);
+      return;
+    }
+
+    if (typeof semanticSearch === "function") {
+      semanticSearch(query, 5)
+        .done(function (data) {
+          // Normalize known response shapes into an array of entries
+          let results = [];
+          if (Array.isArray(data)) {
+            results = data;
+          } else if (data && Array.isArray(data.results)) {
+            results = data.results.map((r) => {
+              const meta = r.metadata || {};
+              const out = Object.assign({}, meta);
+              if (r.content) out.result = r.content;
+              if (typeof r.score !== "undefined") out._score = r.score;
+              return out;
+            });
+          } else if (data && Array.isArray(data.hits)) {
+            results = data.hits;
+          } else if (data && data.hits && Array.isArray(data.hits.hits)) {
+            results = data.hits.hits.map((h) => h._source || h);
+          } else if (data && Array.isArray(data.items)) {
+            results = data.items;
+          } else if (data && typeof data === "object") {
+            results = [data];
+          }
+
+          populateTable(results);
+        })
+        .fail(function (err) {
+          console.error("Semantic search failed:", err);
+          populateTable([]);
+        });
+    } else {
+      console.error("semanticSearch not available");
+      populateTable([]);
+    }
+  }
+
   // Check if we're on view page first
   if (isViewPage()) {
     handleViewPage();
+    return;
+  }
+
+  // Check if we're on the semantic search page
+  if (isSearchPage()) {
+    handleSearchPage();
     return;
   }
 
@@ -247,7 +318,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Table population function
   function populateTable(data) {
-    const tableBody = document.getElementById("entries-table");
+    const tableBody =
+      document.getElementById("entries-table") ||
+      document.getElementById("search-table");
     if (!tableBody || !Array.isArray(data)) return;
 
     tableBody.innerHTML = "";
@@ -270,8 +343,25 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const row = document.createElement("tr");
+      const isSearchTable = tableBody.id === "search-table";
+      const similarityHtml = (function() {
+        const score = (entry._score || entry.score || entry.similarity);
+        if (!isSearchTable || typeof score === 'undefined' || score === null) return "";
+        const n = Number(score);
+        if (Number.isNaN(n)) return "";
+        return `<span class="similarity-score">${n.toFixed(3)}</span>`;
+      })();
+      const deleteBtnHtml = isSearchTable
+        ? ""
+        : `
+          <button class="btn waves-effect waves-light delete-btn red white-text" 
+                  data-id="${entry.id || ""}" 
+                  title="Delete Experiment">
+            <i class="material-icons">delete</i>
+          </button>`;
+
       row.innerHTML = `
-        <td>${entry.name || ""}</td>
+        <td>${entry.name || ""} ${similarityHtml}</td>
         <td>${entry.category || ""}</td>
         <td>${entry.timestamp || ""}</td>
         <td><span class="chip ${statusColor}">${entry.status || "Unknown"}</span></td>
@@ -279,11 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <a class="btn waves-effect waves-light details-btn" data-id="${entry.id || ""}" href="view/${entry.id || ""}" title="View Details">
             <i class="material-icons">arrow_forward</i>
           </a>
-          <button class="btn waves-effect waves-light delete-btn red white-text" 
-                  data-id="${entry.id || ""}" 
-                  title="Delete Experiment">
-            <i class="material-icons">delete</i>
-          </button>
+          ${deleteBtnHtml}
         </td>
       `;
       tableBody.appendChild(row);
@@ -417,6 +503,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }, 300),
     );
+    // If user presses Enter while in semantic mode, forward to search.html
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && currentSearchType === "semantic") {
+          const q = this.value && this.value.trim();
+          if (!q) return;
+          window.location.href = "/search?query=" + encodeURIComponent(q);
+        }
+    });
   }
 
   // Load initial data
