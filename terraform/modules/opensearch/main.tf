@@ -5,6 +5,14 @@ data "http" "my_public_ip" {
   url = "https://ipv4.icanhazip.com"
 }
 
+locals {
+  lambda_name      = "semantic-search-lambda"
+  semantic_source_dir = "${path.root}/../../semantic_search"
+  build_dir        = "${local.semantic_source_dir}/dist"
+  zip_path         = "${local.semantic_source_dir}/semantic_search.zip"
+  build_dir_abs    = abspath("${local.semantic_source_dir}/dist")
+}
+
 # 1. Managed (not serverless) OpenSearch Domain
 resource "aws_opensearch_domain" "semantic_search" {
   domain_name    = "experiments-semantic-search"
@@ -95,32 +103,33 @@ resource "aws_iam_role_policy" "lambda_policy" {
 resource "null_resource" "lambda_build" {
   # This triggers a rebuild only if your code or requirements change
   triggers = {
-    code_hash         = filemd5("${path.module}/main.py")
-    requirements_hash = filemd5("${path.module}/requirements.txt")
+    code_hash         = filemd5("${local.semantic_source_dir}/main.py")
+    requirements_hash = filemd5("${local.semantic_source_dir}/requirements.txt")
   }
 
   provisioner "local-exec" {
     # This command creates a clean 'dist' folder, installs deps, and zips everything
     command = <<EOT
-      rm -rf ${path.module}/dist
-      mkdir -p ${path.module}/dist
-      cp ${path.module}/main.py ${path.module}/dist/
-      pip install -r ${path.module}/requirements.txt -t ${path.module}/dist/
-      cd ${path.module}/dist && zip -r ../semantic_search.zip .
+      set -e
+      rm -rf ${local.build_dir}
+      mkdir -p ${local.build_dir}
+      cp ${local.semantic_source_dir}/main.py ${local.build_dir}/
+      pip install -r ${local.semantic_source_dir}/requirements.txt -t ${local.build_dir}/
+      cd ${local.build_dir} && zip -r "${local.zip_path}" .
     EOT
   }
 }
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/dist"
-  output_path = "${path.module}/semantic_search.zip"
+  source_dir  = "${local.build_dir}"
+  output_path = "${local.zip_path}"
   depends_on  = [null_resource.lambda_build]
 }
 
 # 4. The Sync Lambda Function
 resource "aws_lambda_function" "sync_lambda" {
-  filename      = "${path.module}/semantic_search.zip"
+  filename      = "${local.zip_path}"
   function_name = "dynamodb-to-opensearch-sync"
   role          = aws_iam_role.sync_lambda_role.arn
   handler       = "main.handler"
