@@ -206,3 +206,25 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs_access_attachment" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.sqs_access_for_lambda.arn
 }
+
+# Step 11: AWS IAM Policy for Bedrock
+resource "aws_iam_policy" "bedrock_access_for_lambda" {
+  name        = "LambdaBedrockInvokeModelAccess"
+  description = "Allow Lambda to invoke Titan Embeddings model"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "bedrock:InvokeModel"
+      ]
+      Resource = "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v1"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_bedrock_access_attachment" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.bedrock_access_for_lambda.arn
+}

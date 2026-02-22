@@ -13,7 +13,7 @@ from opensearchpy import OpenSearch, RequestsHttpConnection
 from pydantic import BaseModel
 from requests_aws4auth import AWS4Auth
 
-_VERSION: str = "0.1.6"
+_VERSION: str = "0.1.7"
 _TITLE: str = "LabJournal.AI - API"
 _TABLE_NAME: str = "experiments"
 _OPENSEARCH_INDEX_NAME = "experiments_index"
@@ -24,15 +24,14 @@ S3_BUCKET_NAME: str = "labjournalai-input-images-prod"
 S3_CLIENT = boto3.client("s3", region_name=_REGION_NAME)
 SQS_CLIENT = boto3.client("sqs", region_name=_REGION_NAME)
 SQS_QUEUE_URL: str = "https://sqs.eu-central-1.amazonaws.com/851725270120/queue-for-submit-experiments"
-OPENSEARCH_ENDPOINT: str = (
-    "https://search-experiments-semantic-search-gyse2sjmkn6y64fvux7opuazb4.eu-central-1.es.amazonaws.com"
-)
+OPENSEARCH_ENDPOINT: str =  "search-experiments-semantic-search-gyse2sjmkn6y64fvux7opuazb4.eu-central-1.es.amazonaws.com"
 BEDROCK_CLIENT = boto3.client("bedrock-runtime", region_name=_REGION_NAME)
 CREDENTIALS = boto3.Session().get_credentials()
 AWS_AUTH = AWS4Auth(
     CREDENTIALS.access_key, CREDENTIALS.secret_key, _REGION_NAME, "es", session_token=CREDENTIALS.token
 )
 OPENSEARCH_CLIENT = OpenSearch(
+    # Automaticall adds "https://"
     hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 443}],
     http_auth=AWS_AUTH,
     use_ssl=True,
