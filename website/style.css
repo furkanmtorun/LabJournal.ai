@@ -737,3 +737,20 @@ footer {
     color: var(--button-text);
     background: var(--primary-color);
 }
+
+.similarity-score {
+  background: rgba(92, 107, 192, 0.2);
+  color: var(--accent-color);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--accent-color);
+  min-width: 32px;
+  text-align: center;
+}
+
+.dark-mode .similarity-score {
+  background: rgba(92, 107, 192, 0.3);
+  color: var(--accent-light);
+}
