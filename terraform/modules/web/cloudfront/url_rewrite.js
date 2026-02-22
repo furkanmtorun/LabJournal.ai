@@ -23,6 +23,12 @@ function handler(event) {
     return request;
   }
 
+  // Handle /search route
+  if (uri === "/search" || uri === "/search/") {
+    request.uri = "/search.html";
+    return request;
+  }
+
   // Handle /error route explicitly
   if (uri === "/error") {
     request.uri = "/error.html";
