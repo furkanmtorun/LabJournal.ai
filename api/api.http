@@ -1,4 +1,4 @@
-### TEST API
+### To work with REST API via FastAPI on Lambda + WebAdapter
 
 @LOCAL_API_ENDPOINT=http://localhost:8000
 @AWS_API_ENDPOINT=https://abpa6z6ap46nb5sxdi4trcp3hi0scfza.lambda-url.eu-central-1.on.aws
