@@ -95,7 +95,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 resource "null_resource" "lambda_build" {
   # This triggers a rebuild only if your code or requirements change
   triggers = {
-    code_hash         = filemd5("${path.module}/index.py")
+    code_hash         = filemd5("${path.module}/main.py")
     requirements_hash = filemd5("${path.module}/requirements.txt")
   }
 
@@ -104,7 +104,7 @@ resource "null_resource" "lambda_build" {
     command = <<EOT
       rm -rf ${path.module}/dist
       mkdir -p ${path.module}/dist
-      cp ${path.module}/index.py ${path.module}/dist/
+      cp ${path.module}/main.py ${path.module}/dist/
       pip install -r ${path.module}/requirements.txt -t ${path.module}/dist/
       cd ${path.module}/dist && zip -r ../semantic_search.zip .
     EOT
@@ -123,7 +123,7 @@ resource "aws_lambda_function" "sync_lambda" {
   filename      = "${path.module}/semantic_search.zip"
   function_name = "dynamodb-to-opensearch-sync"
   role          = aws_iam_role.sync_lambda_role.arn
-  handler       = "index.handler"
+  handler       = "main.handler"
   runtime       = "python3.11"
 
   # Explicitly link the group (Provider version 5.x+)
