@@ -43,3 +43,12 @@ Content-Type: application/json
     "result": "test",
     "error": "No error."
 }
+
+### Semantic Search via AWS OpenSearch
+POST {{API_ENDPOINT}}/search
+Content-Type: application/json
+
+{
+    "query": "experiment",
+    "top_k": 3
+}
