@@ -309,7 +309,7 @@ async def semantic_search(request: SemanticSearchRequest):
             "size": request.top_k,
             "query": {
                 "knn": {
-                    "embedding": {  # This MUST match the field name in your Index Mapping
+                    "result_vector": {  # This MUST match the field name in your Index Mapping
                         "vector": query_vector,
                         "k": request.top_k,
                     }
