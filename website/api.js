@@ -40,3 +40,13 @@ function deleteExperimentById(experimentId) {
     dataType: "json",
   });
 }
+
+// Semantic search via AWS OpenSearch
+function semanticSearch(query, top_k = 5) {
+  return $.ajax({
+    url: API_BASE + "search/",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ query: query, top_k: top_k })
+  });
+}
