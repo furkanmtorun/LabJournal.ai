@@ -106,7 +106,7 @@ resource "null_resource" "lambda_build" {
       mkdir -p ${path.module}/dist
       cp ${path.module}/index.py ${path.module}/dist/
       pip install -r ${path.module}/requirements.txt -t ${path.module}/dist/
-      cd ${path.module}/dist && zip -r ../opensearch.zip .
+      cd ${path.module}/dist && zip -r ../semantic_search.zip .
     EOT
   }
 }
@@ -114,13 +114,13 @@ resource "null_resource" "lambda_build" {
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/dist"
-  output_path = "${path.module}/opensearch.zip"
+  output_path = "${path.module}/semantic_search.zip"
   depends_on  = [null_resource.lambda_build]
 }
 
 # 4. The Sync Lambda Function
 resource "aws_lambda_function" "sync_lambda" {
-  filename      = "${path.module}/opensearch.zip"
+  filename      = "${path.module}/semantic_search.zip"
   function_name = "dynamodb-to-opensearch-sync"
   role          = aws_iam_role.sync_lambda_role.arn
   handler       = "index.handler"
