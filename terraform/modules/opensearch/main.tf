@@ -92,7 +92,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
       },
       {
         Effect   = "Allow"
-        Action   = ["es:ESHttpPost", "es:ESHttpPut", "es:ESHttpHead"]
+        Action   = ["es:ESHttpGet", "es:ESHttpPost", "es:ESHttpPut", "es:ESHttpHead", "es:ESHttpDelete"]
         Resource = "${aws_opensearch_domain.semantic_search.arn}/*"
       }
     ]

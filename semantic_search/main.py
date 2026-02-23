@@ -1,6 +1,5 @@
 import json
 import os
-
 import boto3
 from opensearchpy import AWSV4SignerAuth, OpenSearch, RequestsHttpConnection
 
@@ -21,48 +20,35 @@ os_client = OpenSearch(
 
 INDEX_NAME = "experiments_index"
 
-
-def create_index_if_not_exists():
-    """Checks for index and creates it with k-NN (Vector) settings if missing."""
-    if not os_client.indices.exists(index=INDEX_NAME):
-        settings = {
-            "settings": {"index.knn": True},
-            "mappings": {
-                "properties": {
-                    "result_vector": {
-                        "type": "knn_vector",
-                        "dimension": 1536,  # Required for Titan Embeddings
-                        "method": {"name": "hnsw", "space_type": "l2", "engine": "faiss"},
-                    },
-                    "text": {"type": "text"},
-                }
-            },
-        }
-        os_client.indices.create(index=INDEX_NAME, body=settings)
-
-
 def handler(event, context):
-    # Ensure the database is ready for vectors
     create_index_if_not_exists()
 
     for record in event["Records"]:
-        if record["eventName"] in ["INSERT", "MODIFY"]:
+        event_name = record["eventName"]
+        
+        # 1. HANDLE DELETIONS
+        if event_name == "REMOVE":
+            # In a REMOVE event, only 'Keys' are guaranteed to exist
+            doc_id = record["dynamodb"]["Keys"].get("id", {}).get("S")
+            if doc_id:
+                try:
+                    os_client.delete(index=INDEX_NAME, id=doc_id)
+                    print(f"Successfully deleted doc {doc_id} from OpenSearch")
+                except Exception as e:
+                    # Ignore 404s if the document was already gone
+                    print(f"Error deleting doc {doc_id}: {e}")
+
+        # 2. HANDLE UPDATES/INSERTS
+        elif event_name in ["INSERT", "MODIFY"]:
             new_image = record["dynamodb"]["NewImage"]
-            text_to_embed = new_image.get("result", {}).get("S", "")
             doc_id = new_image.get("id", {}).get("S", "")
+            text_to_embed = new_image.get("result", {}).get("S", "")
 
             if not text_to_embed:
                 continue
 
             # Get Embedding from Bedrock
-            body = json.dumps({"inputText": text_to_embed})
-            response = bedrock.invoke_model(
-                body=body,
-                modelId="amazon.titan-embed-text-v1",
-                accept="application/json",
-                contentType="application/json",
-            )
-            embedding = json.loads(response.get("body").read()).get("embedding")
+            embedding = get_embedding(text_to_embed)
 
             # Index the document
             document = {
@@ -72,5 +58,33 @@ def handler(event, context):
             }
 
             os_client.index(index=INDEX_NAME, body=document, id=doc_id)
+            print(f"Successfully indexed doc {doc_id}")
 
     return {"status": "success"}
+
+def get_embedding(text):
+    body = json.dumps({"inputText": text})
+    response = bedrock.invoke_model(
+        body=body,
+        modelId="amazon.titan-embed-text-v1",
+        accept="application/json",
+        contentType="application/json",
+    )
+    return json.loads(response.get("body").read()).get("embedding")
+
+def create_index_if_not_exists():
+    if not os_client.indices.exists(index=INDEX_NAME):
+        settings = {
+            "settings": {"index.knn": True},
+            "mappings": {
+                "properties": {
+                    "result_vector": {
+                        "type": "knn_vector",
+                        "dimension": 1536,
+                        "method": {"name": "hnsw", "space_type": "l2", "engine": "faiss"},
+                    },
+                    "text": {"type": "text"},
+                }
+            },
+        }
+        os_client.indices.create(index=INDEX_NAME, body=settings)
