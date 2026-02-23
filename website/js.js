@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const row = document.createElement("tr");
       const isSearchTable = tableBody.id === "search-table";
-      const similarityHtml = (function() {
+      const similarityHtml = (function () {
         const score = (entry._score || entry.score || entry.similarity);
         if (!isSearchTable || typeof score === 'undefined' || score === null) return "";
         const n = Number(score);
@@ -506,10 +506,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // If user presses Enter while in semantic mode, forward to search.html
     searchInput.addEventListener("keydown", function (e) {
       if (e.key === "Enter" && currentSearchType === "semantic") {
-          const q = this.value && this.value.trim();
-          if (!q) return;
-          window.location.href = "/search?query=" + encodeURIComponent(q);
-        }
+        const q = this.value && this.value.trim();
+        if (!q) return;
+        window.location.href = "/search?query=" + encodeURIComponent(q);
+      }
     });
   }
 
