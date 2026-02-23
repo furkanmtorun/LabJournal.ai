@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   classes: "green rounded",
                 });
               }
-              setTimeout(() => (window.location.href = "./"), 1500);
+              setTimeout(() => (window.location.href = "../"), 1500);
             })
             .fail(function (xhr, status, error) {
               if (typeof M !== "undefined" && M.Toast) M.Toast.dismissAll();
