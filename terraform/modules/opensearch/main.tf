@@ -101,7 +101,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 # 3. Lambda app
 resource "null_resource" "lambda_build" {
-  # This triggers a rebuild only if your code or requirements change
+  # This triggers a rebuild only if your code or requirements change on the files
   triggers = {
     code_hash         = filemd5("${local.semantic_source_dir}/main.py")
     requirements_hash = filemd5("${local.semantic_source_dir}/requirements.txt")

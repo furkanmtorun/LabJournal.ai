@@ -1,3 +1,5 @@
+"""The module sync between DynamoDB and OpenSearch Indexes.
+Triggered by deletion, update and insert actions in DynamoDB by stream feature."""
 import json
 import os
 import boto3
