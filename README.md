@@ -32,17 +32,17 @@ TBA!
 
 
 ## 🏗️ Architecture
-![Architecture](architecture.png)
+![Architecture](./assets/architecture.png)
+
 | Category | Technology | Engineering Implementation |
 | :--- | :--- | :--- |
-| **Infra as Code** | **Terraform** | Modular HCL managing IAM roles, S3 buckets, and event-driven triggers. |
+| **Infra as Code** | **Terraform** | Modular HCL managing AWS Services and event-driven triggers. |
 | **Compute** | **AWS Lambda** | High-performance ETL packaged via **Docker** for environment parity. |
-| **Data Flow** | **SQS + DLQ** | Asynchronous message queuing with Dead Letter Queues to prevent data loss. |
-| **Intelligence** | **AWS Bedrock** | Generative AI (`invoke_model`) for handwriting OCR and semantic embeddings. |
-| **Persistence** | **DynamoDB** | Optimized NoSQL storage using Boto3 (`update_item`) for experiment metadata. |
-| **API Layer** | **FastAPI** | Python 3.10+ backend with strict Pydantic type-hinting and validation. |
-| **Interface** | **JS / jQuery** | Single-page application using **Materialize CSS** for real-
-
+| **Data Flow** | **SQS + DLQ** | Async. message queuing with Dead Letter Queues to prevent data loss. |
+| **Intelligence** | **AWS Bedrock** | Generative AI for handwriting OCR and semantic embeddings. |
+| **Persistence** | **DynamoDB** | Optimized NoSQL storage for experiment metadata. |
+| **API Layer** | **FastAPI** | Python 3.12 backend with strict Pydantic type-hinting and validation. |
+| **Interface** | **JS / jQuery** | Easy, lightweight front-end with **Materialize CSS**.
 <br>
 
 > **💡 Professional Workflow Note:** I utilized Github CoPilot as a force multiplier for non-critical boilerplate such as CSS layouts, UI/UX improvement, tests, etc. to focus 90% of my development efforts on actual work itself.
