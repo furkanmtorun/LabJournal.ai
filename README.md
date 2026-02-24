@@ -27,7 +27,7 @@
 
 ## 🧪 Preview (Demo)
 
-<video controls src="https://github.com/furkanmtorun/LabJournal.ai/blob/main/assets/labjournalai.mp4" title="https://github.com/furkanmtorun/LabJournal.ai/raw/refs/heads/main/assets/labjournalai.mp4"></video>
+  https://github.com/furkanmtorun/LabJournal.ai/blob/main/assets/labjournalai.mp4
 
 
 <br>
