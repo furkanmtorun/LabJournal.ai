@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "static_site" {
 
   viewer_certificate {
     cloudfront_default_certificate = true # Change this if using a custom domain
-    minimum_protocol_version       = "TLSv1.2_2021"
+    minimum_protocol_version       = "TLSv1"
   }
 
   restrictions {
