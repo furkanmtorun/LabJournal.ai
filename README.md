@@ -25,8 +25,10 @@
 
 ---
 
-## 🧪 Demo
-TBA!
+## 🧪 Preview (Demo)
+
+<video controls src="https://github.com/furkanmtorun/LabJournal.ai/blob/main/assets/labjournalai.mp4" title="https://github.com/furkanmtorun/LabJournal.ai/raw/refs/heads/main/assets/labjournalai.mp4"></video>
+
 
 <br>
 
@@ -81,3 +83,16 @@ The frontend is made up by static web pages. Simply serve in any modern browser:
 ```bash
 cd website && python3 -m http.server 8000
 ```
+
+---
+
+<br>
+
+## 👨🏻‍💻 Developer
+- Furkan M. Torun | Data Engineer
+- E-mail: [furkanmtorun[at]gmail[dot]com](mailto:furkanmtorun@gmail.com) 
+- [Website](https://furkanmtorun.github.io) | [LinkedIn](https://www.linkedin.com/in/furkanmtorun) | [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun) | [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
+
+## Contribution
+
+Please do not hesitate to reach out to me using links listed above or creating PR if you have any suggestions or feedback!
