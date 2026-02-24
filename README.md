@@ -34,7 +34,7 @@
 | **API Layer** | **FastAPI** | Python 3.10+ backend with strict Pydantic type-hinting and validation. |
 | **Interface** | **JS / jQuery** | Single-page application using **Materialize CSS** for real-time semantic query parsing. |
 
-> **💡 Professional Workflow Note:** I utilized Github CoPilot as a force multiplier for non-critical boilerplate such as CSS layouts, UI/UX improvement, function refactoring to focus 90% of my development efforts on actual work itself.
+> **💡 Professional Workflow Note:** I utilized Github CoPilot as a force multiplier for non-critical boilerplate such as CSS layouts, UI/UX improvement, smoke tests, etc. to focus 90% of my development efforts on actual work itself.
 
 ---
 
