@@ -15,6 +15,8 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </div>
 
+[![Auto formatting and linting](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml/badge.svg)](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml)
+
 ---
 
 ## 🧪 Demo
@@ -48,12 +50,11 @@ TBA!
 ### **1. Provision Infrastructure**
 
 - Install Terraform, AWS CLI and set the `.aws/credentials`.
-- Appy Terraform
+- Provision Terraform | see [Terraform Deployment Readme](./terraform/deployment/README.md) for the details.
 ```bash
   export ENV="PROD" # "staging"
   terraform apply --var-file=$ENV.tfvars
 ```
-- Follow [Terraform Deployment Readme](./terraform/deployment/README.md) to learn more details.
 
 
 ### **2. Local API Development**
@@ -74,10 +75,3 @@ The frontend is made up by static web pages. Simply serve in any modern browser:
 ```bash
 cd website && python3 -m http.server 8000
 ```
-
----
-
-<br>
-
-## 🛡️ CI/CD
-[![Auto formatting and linting](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml/badge.svg)](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml)
