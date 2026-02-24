@@ -1,0 +1,12 @@
+{
+  "name": "labjournal-website-smoke-tests",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "smoke-test": "node ../website/tests/smoke.test.js"
+  },
+  "devDependencies": {}
+}
