@@ -123,6 +123,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // ensure a global populateTable exists in case search handler runs early
+  if (typeof window.populateTable === "undefined") {
+    window.populateTable = function (data) {
+      const tableBody = document.getElementById("entries-table") || document.getElementById("search-table");
+      if (!tableBody || !Array.isArray(data)) return;
+      tableBody.innerHTML = "";
+    };
+  }
+
   if (isViewPage()) {
     handleViewPage();
     return;
@@ -198,6 +207,8 @@ document.addEventListener("DOMContentLoaded", () => {
       tableBody.appendChild(row);
     });
   };
+  // expose to global so search handler (outside this scope) can call it
+  window.populateTable = populateTable;
 
   // Delete delegation
   const entriesTable = document.getElementById("entries-table");
