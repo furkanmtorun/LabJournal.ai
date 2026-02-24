@@ -39,8 +39,6 @@
 ## 🚀 Deployment & Usage
 
 ### **1. Provision Infrastructure**
-Deploy the entire AWS stack (IAM, S3, Lambda, DynamoDB, SQS) with one command `terraform apply`:
-
 
 - Install Terraform, AWS CLI and set the `.aws/credentials`.
 - Appy Terraform
