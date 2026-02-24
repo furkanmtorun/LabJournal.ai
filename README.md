@@ -68,7 +68,11 @@ uvicorn main:app --reload --port 8000
 ```
 
 ### **3. Frontend Access**
-The frontend is a static web pages. Simply open the entry point `index.html` in any modern browser.
+The frontend is a static web pages. Simply serve the entry point `index.html` in any modern browser:
+```bash
+cd website && python3 -m http.server 8000
+# go to http://localhost:8000
+```
 
 ---
 
