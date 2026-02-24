@@ -85,8 +85,7 @@ nav .brand-logo {
 
 .nav-btn,
 .home-btn,
-.create-btn,
-.details-btn {
+.create-btn {
   background-color: var(--accent-color);
   color: var(--button-text);
   border-radius: 4px;
@@ -116,6 +115,8 @@ nav .brand-logo {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   font-weight: 500;
   letter-spacing: 0.5px;
+  background-color: var(--accent-color);
+  color: var(--button-text);
 }
 
 .details-btn:hover {
