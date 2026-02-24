@@ -1,5 +1,5 @@
 <div>
-  <h1 align="center">LabJournal.ai</h1>
+  <h1 align="center">🧪 LabJournal.ai</h1>
   <p align="center">
    <strong>Keep labs notebooks digital effortlessly!</strong>
    <br>
@@ -23,9 +23,7 @@
 </p>
 
 
----
-
-## 🧪 Preview (Demo)
+## 📺 Demo
 
   https://github.com/user-attachments/assets/a8e52c9c-b0d5-4f7a-b647-1238bc83a7fa
 
@@ -45,9 +43,8 @@
 | **Interface** | **JS / jQuery** | Easy, lightweight front-end with **Materialize CSS**.
 <br>
 
-> **💡 Professional Workflow Note:** I utilized Github CoPilot as a force multiplier for non-critical boilerplate such as CSS layouts, UI/UX improvement, tests, etc. to focus 90% of my development efforts on actual work itself.
+> **💡 Vibe Coding:** Used AI to handle CSS, UI, and testing boilerplate, freeing me up to focus on the core engineering.
 
----
 
 <br>
 
@@ -82,14 +79,14 @@ The frontend is made up by static web pages. Simply serve in any modern browser:
 cd website && python3 -m http.server 8000
 ```
 
----
 
 <br>
 
 ## 👨🏻‍💻 Developer
 - Furkan M. Torun | Data Engineer
 - E-mail: [furkanmtorun[at]gmail[dot]com](mailto:furkanmtorun@gmail.com) 
-- [Website](https://furkanmtorun.github.io) | [LinkedIn](https://www.linkedin.com/in/furkanmtorun) | [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun) | [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
+- [Personal Website](https://furkanmtorun.github.io) | [LinkedIn](https://www.linkedin.com/in/furkanmtorun)
+- [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun) | [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
 
 ## Contribution
 
