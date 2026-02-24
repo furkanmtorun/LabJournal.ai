@@ -82,6 +82,7 @@ nav .brand-logo {
   align-items: center;
 }
 
+
 .nav-btn,
 .home-btn,
 .create-btn,
@@ -91,18 +92,6 @@ nav .brand-logo {
   border-radius: 4px;
   padding: 0 16px;
   transition: all 0.3s ease;
-}
-
-.nav-btn:hover,
-.home-btn:hover,
-.create-btn:hover,
-.details-btn:hover {
-  background-color: var(--accent-hover);
-}
-
-.nav-btn,
-.home-btn,
-.create-btn {
   height: 40px;
   display: flex;
   align-items: center;
@@ -112,15 +101,15 @@ nav .brand-logo {
 
 .nav-btn:hover,
 .home-btn:hover,
-.create-btn:hover {
+.create-btn:hover,
+.details-btn:hover {
+  background-color: var(--accent-hover);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .nav-btn i,
 .home-btn i,
-.create-btn i {
-  margin-right: 8px;
-}
+.create-btn i { margin-right: 8px; }
 
 .details-btn {
   height: 36px;
@@ -699,21 +688,8 @@ footer {
 }
 
 /* Specialized styling for placeholder/missing data */
-.section-content :contains("[missing]"),
-.section-content :contains("[unreadable]") {
-  color: #e57373;
-  /* Soft red for both themes */
-  font-style: italic;
-  font-size: 0.9em;
-  background-color: rgba(229, 115, 115, 0.1);
-  padding: 0 4px;
-  border-radius: 2px;
-}
-
 /* Dark Mode Specific Adjustments (if needed beyond variables) */
-.dark-mode .section-content strong {
-  color: var(--primary-light);
-}
+.dark-mode .section-content strong { color: var(--primary-light); }
 
 /* Clean Header for the Lab Report inside results */
 .lab-report header {
@@ -752,5 +728,5 @@ footer {
 
 .dark-mode .similarity-score {
   background: rgba(92, 107, 192, 0.3);
-  color: var(--accent-light);
+  color: var(--accent-color);
 }
