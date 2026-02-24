@@ -1,13 +1,9 @@
-<style>
-  h1, h2 { border-bottom: none; }
-</style>
-
 <div>
   <h1 align="center">LabJournal.ai</h1>
   <p align="center">
-   <strong>Physical Research → Digital Intelligence.</strong>
+   <strong>Keep labs notebooks digital effortlessly!</strong>
    <br>
-    An end-to-end Data Engineering ecosystem that digitizes handwritten lab notebooks using AWS Bedrock (LLM) and enables semantic search.
+    An end-to-end serverless platform that digitizes handwritten lab notebooks using AWS Bedrock (LLM) and enables semantic search.
   </p>
 </div>
 
@@ -22,7 +18,7 @@
 ---
 
 
-## 🏗️ System Architecture
+## 🏗️ Architecture
 ![Architecture](architecture.png)
 | Category | Technology | Engineering Implementation |
 | :--- | :--- | :--- |
@@ -37,6 +33,8 @@
 > **💡 Professional Workflow Note:** I utilized Github CoPilot as a force multiplier for non-critical boilerplate such as CSS layouts, UI/UX improvement, smoke tests, etc. to focus 90% of my development efforts on actual work itself.
 
 ---
+
+<br>
 
 ## 🚀 Deployment & Usage
 
@@ -68,13 +66,14 @@ uvicorn main:app --reload --port 8000
 ```
 
 ### **3. Frontend Access**
-The frontend is a static web pages. Simply serve the entry point `index.html` in any modern browser:
+The frontend is made up by static web pages. Simply serve in any modern browser:
 ```bash
 cd website && python3 -m http.server 8000
-# go to http://localhost:8000
 ```
 
 ---
 
-## 🛡️ CI/CD & Quality Assurance
+<br>
+
+## 🛡️ CI/CD
 [![Auto formatting and linting](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml/badge.svg)](https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml)
