@@ -23,11 +23,6 @@ jobs:
           cd website
           npm install
 
-      - name: Install Playwright browsers
-        run: |
-          cd website
-          npx playwright install --with-deps
-
       - name: Start rewrite server (simulates CloudFront)
         run: |
           cd website

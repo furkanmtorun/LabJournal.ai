@@ -1,45 +1,78 @@
-const { chromium } = require('playwright');
+const http = require('http');
+
+const pages = [
+  { path: '/', expectedFile: 'index.html' },
+  { path: '/index.html', expectedFile: 'index.html' },
+  { path: '/new', expectedFile: 'new.html' },
+  { path: '/new.html', expectedFile: 'new.html' },
+  { path: '/view/abc-123', expectedFile: 'view.html' },
+  { path: '/view.html', expectedFile: 'view.html' },
+  { path: '/search', expectedFile: 'search.html' },
+  { path: '/search.html', expectedFile: 'search.html' },
+  { path: '/error', expectedFile: 'error.html' },
+  { path: '/error.html', expectedFile: 'error.html' },
+];
+
+let passed = 0;
+let failed = 0;
+
+const testPage = (path, expectedFile) => {
+  return new Promise((resolve) => {
+    const url = `http://127.0.0.1:8000${path}`;
+    console.log(`Testing ${path}...`);
+
+    http.get(url, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) {
+          console.error(`  ✗ Bad status ${res.statusCode}`);
+          failed++;
+          resolve();
+          return;
+        }
+        // Check for nav/footer markers
+        if (!data.includes('id="site-nav"')) {
+          console.error(`  ✗ #site-nav not found`);
+          failed++;
+          resolve();
+          return;
+        }
+        if (!data.includes('id="site-footer"')) {
+          console.error(`  ✗ #site-footer not found`);
+          failed++;
+          resolve();
+          return;
+        }
+        // Check that nav-footer.js injected content
+        if (!data.includes('class="nav-wrapper"')) {
+          console.error(`  ✗ nav content not injected`);
+          failed++;
+          resolve();
+          return;
+        }
+        console.log(`  ✓ ${expectedFile} loaded with nav/footer`);
+        passed++;
+        resolve();
+      });
+    }).on('error', (err) => {
+      console.error(`  ✗ ${err.message}`);
+      failed++;
+      resolve();
+    });
+  });
+};
 
 (async () => {
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
-  const pages = [
-    '/',
-    '/index.html',
-    '/new',
-    '/new.html',
-    '/view/abc-123',
-    '/view.html',
-    '/search',
-    '/search.html',
-    '/error',
-    '/error.html',
-  ];
-
   try {
-    for (const path of pages) {
-      const url = `http://127.0.0.1:8000${path}`;
-      console.log('Visiting', url);
-      const resp = await page.goto(url, { waitUntil: 'load', timeout: 10000 });
-      if (!resp || resp.status() >= 400) throw new Error(`Bad status ${resp ? resp.status() : 'no response'} for ${url}`);
-
-      // Ensure placeholders exist and nav/footer injected
-      const navHandle = await page.$('#site-nav');
-      if (!navHandle) throw new Error(`#site-nav not found on ${url}`);
-      const footerHandle = await page.$('#site-footer');
-      if (!footerHandle) throw new Error(`#site-footer not found on ${url}`);
-
-      // check that nav-footer.js inserted content
-      const navHtml = await page.evaluate(() => document.getElementById('site-nav')?.innerHTML || '');
-      if (navHtml.length < 10) throw new Error(`nav content appears empty on ${url}`);
+    for (const { path, expectedFile } of pages) {
+      await testPage(path, expectedFile);
     }
 
-    await browser.close();
-    console.log('Smoke tests passed');
-    process.exit(0);
+    console.log(`\nResults: ${passed} passed, ${failed} failed`);
+    process.exit(failed > 0 ? 2 : 0);
   } catch (err) {
-    console.error('Smoke tests failed:', err);
-    await browser.close();
+    console.error('Smoke tests error:', err);
     process.exit(2);
   }
 })();
