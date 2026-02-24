@@ -16,12 +16,8 @@ terraform/
 │   │       ├── ...
 │   ├── api/
 │   │   └── ...
-│   ├── app/
-│   │   └── ...
-│   └── common/
-│       ├── vpc/
-│       ├── iam/
-│       └── security_groups/
+│   └── app/
+│       └── ...
 ├── deployment/
 │   ├── main.tf            # imports and connects modules
 │   ├── variables.tf       # shared input variables
@@ -70,9 +66,29 @@ cloud-nuke aws --region $REGION
 aws cloudfront create-invalidation --distribution-id "E3FLXN8W9LS922" --paths "/*"
 ```
 
-*If the AWS Bedrock throws error due to quota, [create a Quote/Limit Increase Ticket](https://us-east-1.console.aws.amazon.com/servicequotas/home/services/bedrock/quotas):*
+**If the AWS Bedrock throws error due to quota, [create a Quote/Limit Increase Ticket](https://us-east-1.console.aws.amazon.com/servicequotas/home/services/bedrock/quotas):**
 
 ```
 * Cross-region model inference tokens per minute for Amazon Nova Pro
 * Cross-region model inference requests per minute for Amazon Nova Pro
+```
+
+
+**If the counts of items in DynamoDB and OpenSearch Index are different, cleanup via Dev Tools in OpenSearch Dashboard on AWS.**
+
+```
+POST /experiments_index/_delete_by_query
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "ids": {
+            "values": ["ID_1", "ID_2", "ID_3", "ID_4", "ID_5", "ID_6"]
+          }
+        }
+      ]
+    }
+  }
+}
 ```
