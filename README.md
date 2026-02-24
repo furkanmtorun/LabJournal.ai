@@ -3,7 +3,7 @@
   <p align="center">
    <strong>Keep labs notebooks digital effortlessly!</strong>
    <br>
-    An end-to-end serverless platform that digitizes handwritten lab notebooks using AWS Bedrock (LLM) and enables semantic search.
+    An end-to-end serverless platform that digitizes handwritten lab notebooks using vision-text LLM and enables semantic search.
   </p>
 </div>
 
@@ -44,11 +44,10 @@ Deploy the entire AWS stack (IAM, S3, Lambda, DynamoDB, SQS) with one command `t
 
 - Install Terraform, AWS CLI and set the `.aws/credentials`.
 - Appy Terraform
-  ```bash
-    export ENV="PROD" # "staging"
-    terraform apply --var-file=$ENV.tfvars
-  ```
-
+```bash
+  export ENV="PROD" # "staging"
+  terraform apply --var-file=$ENV.tfvars
+```
 - Follow [Terraform Deployment Readme](./terraform/deployment/README.md) to learn more details.
 
 
