@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LabJournal.ai</title>
+  <title>LabJournal.ai | Keep labs notebooks digital effortlessly!</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <link rel="stylesheet" href="/style.css?v=1.0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
@@ -12,29 +12,7 @@
 </head>
 
 <body>
-  <!-- Fixed Navbar with Search Bar and Home Button -->
-  <nav>
-    <div class="nav-wrapper">
-      <div class="nav-content">
-        <!-- Left section: Title -->
-        <div class="nav-left">
-          <a href="../" class="brand-logo">LabJournal.ai</a>
-        </div>
-
-        <!-- Right section: Home button and theme toggle -->
-        <div class="nav-right">
-          <a href="../" class="btn waves-effect waves-light home-btn" id="home-btn">
-            <i class="material-icons">home</i>
-            <span>Home</span>
-          </a>
-
-          <div class="mode-toggle" id="mode-toggle">
-            <i class="material-icons">brightness_6</i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <div id="site-nav" data-hide-search="true" data-hide-new="false" data-hide-home="false"></div>
 
   <main class="container">
     <h4 class="page-title">ERROR</h4>
@@ -48,10 +26,12 @@
     </div>
   </footer>
 
+  <script src="/nav-footer.js"></script>
   <!-- jQuery and Materialize JS via CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="/js.js"></script>
+  <div id="site-footer"></div>
 </body>
 
 </html>

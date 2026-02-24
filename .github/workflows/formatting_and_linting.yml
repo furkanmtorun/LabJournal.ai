@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-
     # - name: Set up Node.js for formatting & linting
     #   uses: actions/setup-node@v4
     #   with:
-    #     node-version: '14'
+    #     node-version: '18'
+
+    # - name: Install Prettier
+    #   run: npm install --no-save prettier@2.8.8
 
     # - name: Check formatting with Prettier
-    #   run: |
-    #     npm install --save-dev --save-exact prettier
-    #     npx prettier --check "**/*.{html,css,js,md}"
+    #   run: npx prettier --check "website/**/*.{html,css,js,md}"

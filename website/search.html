@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LabJournal.ai</title>
+  <title>LabJournal.ai | Keep labs notebooks digital effortlessly!</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <link rel="stylesheet" href="/style.css?v=1.0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
@@ -12,34 +12,7 @@
 </head>
 
 <body>
-  <!-- Fixed Navbar with Home and New buttons -->
-  <nav>
-    <div class="nav-wrapper">
-      <div class="nav-content">
-        <!-- Left section: Title -->
-        <div class="nav-left">
-          <a href="../" class="brand-logo">LabJournal.ai</a>
-        </div>
-
-        <!-- Right section: Home and New buttons, and theme toggle -->
-        <div class="nav-right">
-          <a href="../" class="btn waves-effect waves-light nav-btn" id="home-btn">
-            <i class="material-icons">home</i>
-            <span>Home</span>
-          </a>
-
-          <a href="../new" class="btn waves-effect waves-light nav-btn" id="new-btn">
-            <i class="material-icons">add</i>
-            <span>New</span>
-          </a>
-
-          <div class="mode-toggle" id="mode-toggle">
-            <i class="material-icons">brightness_6</i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <div id="site-nav" data-hide-search="true" data-hide-new="false" data-hide-home="true"></div>
 
   <main class="container">
     <h4 class="page-title">Semantic Search</h4>
@@ -70,11 +43,13 @@
       </div>
     </footer>
 
+    <script src="/nav-footer.js"></script>
     <!-- jQuery, Materialize JS via CDN and functionalities. -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/api.js"></script>
     <script src="/js.js"></script>
+    <div id="site-footer"></div>
   </main>
 </body>
 
