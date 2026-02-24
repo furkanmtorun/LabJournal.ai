@@ -27,11 +27,9 @@
 
 ## 🧪 Preview (Demo)
 
-  https://github.com/furkanmtorun/LabJournal.ai/blob/main/assets/labjournalai.mp4
-
+  https://github.com/user-attachments/assets/a8e52c9c-b0d5-4f7a-b647-1238bc83a7fa
 
 <br>
-
 
 ## 🏗️ Architecture
 ![Architecture](./assets/architecture.png)
