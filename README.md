@@ -3,7 +3,7 @@
   <p align="center">
    <strong>Keep labs notebooks digital effortlessly!</strong>
    <br>
-    An end-to-end serverless platform that digitizes handwritten lab notebooks using vision-text LLM and enables semantic search.
+    An end-to-end serverless platform that digitizes handwritten notebooks using vision-text LLM and enables semantic search.
   </p>
 </div>
 
