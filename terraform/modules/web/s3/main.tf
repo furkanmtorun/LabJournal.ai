@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "website" {
   bucket = var.website_bucket_name
 
   lifecycle {
-    prevent_destroy = false # FIX
+    prevent_destroy = true
   }
 
   tags = {
