@@ -55,7 +55,7 @@ terraform apply -var-file=$ENV.tfvars
 
 # Destroy
 terraform destroy -var-file=$ENV.tfvars
-cloud-nuke aws --region $REGION
+cloud-nuke aws --region eu-central-1
 ```
 
 ## 3. FAQ
