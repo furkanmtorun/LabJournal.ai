@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # 1. Keep Terraform providers & modules updated
+  - package-ecosystem: "terraform"
+    directory: "/terraform"
+    schedule:
+      interval: "yearly"
+    groups:
+      terraform-dependencies:
+        patterns:
+          - "*" # Groups all updates into one PR to avoid notification fatigue
+
+  # 2. Keep GitHub Action versions updated
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "yearly"
