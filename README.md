@@ -35,13 +35,13 @@
 
 | Category | Technology | Engineering Implementation |
 | :--- | :--- | :--- |
-| **Infra as Code** | **Terraform** | Modular HCL managing AWS Services and event-driven triggers. |
-| **Compute** | **AWS Lambda** | High-performance ETL packaged via **Docker** for environment parity. |
-| **Data Flow** | **SQS + DLQ** | Async. message queuing with Dead Letter Queues to prevent data loss. |
-| **Intelligence** | **AWS Bedrock** | Generative AI for handwriting OCR and semantic embeddings. |
-| **Persistence** | **DynamoDB** | Optimized NoSQL storage for experiment metadata. |
-| **API Layer** | **FastAPI** | Python 3.12 backend with strict Pydantic type-hinting and validation. |
-| **Interface** | **JS / jQuery** | Easy, lightweight front-end with **Materialize CSS**.
+| **Infra as Code | Terraform | Modular HCL managing AWS Services and event-driven triggers. |
+| **Compute** | AWS Lambda | High-performance ETL packaged via **Docker** for environment parity. |
+| **Data Flow** | SQS + DLQ | Async. message queuing with Dead Letter Queues to prevent data loss. |
+| **Intelligence** | AWS Bedrock | Generative AI for handwriting OCR and semantic embeddings. |
+| **Persistence** | DynamoDB | Optimized NoSQL storage for experiment metadata. |
+| **API Layer** | FastAPI | Python 3.12 backend with strict Pydantic type-hinting and validation. |
+| **Interface** | JS / jQuery | Easy, lightweight front-end with Materialize CSS.
 <br>
 
 > **💡 Vibe Coding:** Used AI to handle CSS, UI, and testing boilerplate, freeing me up to focus on the core engineering.
@@ -79,6 +79,24 @@ The frontend is made up by static web pages. Simply serve in any modern browser:
 ```bash
 cd website && python3 -m http.server 8000
 ```
+
+<br>
+
+## 🎯 Future Enhancements
+
+These are ideas for possible future improvements and are not guaranteed or currently planned.
+
+- **Front-end**
+  - Accessibility: The checks should be performed if a application is easily usable for every potential user.
+  - End-to-end (E2E) Tests: Cross browser & platforms & devices tests can be performed using [Playwright by Microsoft](https://playwright.dev/) or [Cypress](https://www.cypress.io/).
+  - Performance: Metrics for performance, accessibility, SEO, and more can be generated using [Lighthouse by Google](https://developer.chrome.com/docs/lighthouse/overview).
+  - Visual and Edge Case Tests:  Rendering a specific variation of a UI component in isolation by passing in props, mocking data, or faking events can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
+  - Stress and Load Tests: TBA!
+- CI/CD:
+  - Front-end
+- Security:
+- API:
+- Monitoring and Alerting:
 
 
 <br>
