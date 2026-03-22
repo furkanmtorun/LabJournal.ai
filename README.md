@@ -93,9 +93,9 @@ These are potential future improvements and are not guaranteed or part of the cu
   - Visual and Edge Case Tests:  Rendering a specific variation of a UI component can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
   - Stress and Load Tests: Both tests can be performed using [Locust](https://locust.io/).
 - **Security** 
-  - **IAM & Secrets:**
+  - **IAM & Secrets**
     - Add stricter IAM guardrails, automatic security‑finding remediation, and better secrets management using [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
-  - **Authentication on API layer:** There is currently no authentication layer for the API; it can be implemented in several ways or combined:
+  - **Authentication on API layer** There is currently no authentication layer for the API; it can be implemented in several ways or combined:
       - Directly inside FastAPI via [OAuth2](https://fastapi.tiangolo.com/tutorial/security/).
       - Integrating [AWS API Gateway Authorizer](https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization.html).
       - Implementing [JWT (JSON Web Token)](https://www.jwt.io/) for representing claims securely between two parties.
@@ -121,6 +121,8 @@ These are potential future improvements and are not guaranteed or part of the cu
 - [Personal Website](https://furkanmtorun.github.io) | [LinkedIn](https://www.linkedin.com/in/furkanmtorun)
 - [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun) | [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
 
-## Contribution
+<br>
+
+## 💬 Contribution
 
 Please do not hesitate to reach out to me using links listed above or creating PR if you have any suggestions or feedback!
