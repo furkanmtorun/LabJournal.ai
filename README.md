@@ -7,6 +7,21 @@
   </p>
 </div>
 
+<details>
+<summary align="center"><strong>💡 Problem / Motivation and Solution </strong></summary>
+
+> Biologists often can’t use laptops in labs due to biosafety or setup restrictions.
+> 
+> They rely on handwritten notes, which later must be manually digitized or entered into electronic lab notebooks and both are time-consuming and repetitive. 
+> 
+> LabJournal.ai solves this by letting scientists simply snap a photo of their notes.
+> 
+> LabJournal.ai system automatically converts handwriting into **standardized, searchable digital records**.    
+
+</details>
+
+<br>
+
 <div align="center">
   <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS">
   <img src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform">
