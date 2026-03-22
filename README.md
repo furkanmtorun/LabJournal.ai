@@ -93,12 +93,12 @@ These are potential future improvements and are not guaranteed or part of the cu
   - Visual and Edge Case Tests:  Rendering a specific variation of a UI component can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
   - Stress and Load Tests: Both tests can be performed using [Locust](https://locust.io/).
 - **Security** 
-  - Security (IAM & Secrets):
+  **- Security (IAM & Secrets):**
     - Add stricter IAM guardrails, automatic security‑finding remediation, and better secrets management using [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
-  - Authentication (API layer): There is currently no authentication layer for the API; it can be implemented in several ways or combined:
-      - Directly inside FastAPI via [OAuth2](https://fastapi.tiangolo.com/tutorial/security/)
-      - Integrating [AWS API Gateway Authorizer](https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization.html)
-      - Implementing [JWT (JSON Web Token)](https://www.jwt.io/) for representing claims securely between two parties
+  **- Authentication (API layer):** There is currently no authentication layer for the API; it can be implemented in several ways or combined:
+      - Directly inside FastAPI via [OAuth2](https://fastapi.tiangolo.com/tutorial/security/).
+      - Integrating [AWS API Gateway Authorizer](https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization.html).
+      - Implementing [JWT (JSON Web Token)](https://www.jwt.io/) for representing claims securely between two parties.
 - **API**
   - [AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html#api-gateway-overview-features) can be configured in front of the Lambda‑hosted FastAPI to provide security controls (e.g., [AWS WAF](https://aws.amazon.com/waf/)), canary releases, logging, rate limiting, and metrics per endpoint.
 - **Monitoring and Alerting**
