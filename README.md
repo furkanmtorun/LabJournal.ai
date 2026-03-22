@@ -21,6 +21,11 @@
   <a href="https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml">
     <img src="https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/formatting_and_linting.yml/badge.svg" alt="Auto formatting and linting">
   </a>
+
+
+  <a href="https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/dependabot/dependabot-updates">
+    <img src="https://github.com/furkanmtorun/LabJournal.ai/actions/workflows/dependabot/dependabot-updates/badge.svg" alt="Dependabot Updates">
+  </a>
 </p>
 
 
@@ -104,7 +109,7 @@ These are potential future improvements and are not guaranteed or part of the cu
 - **Monitoring and Alerting**
   - Centralized Logging: CloudWatch can be used to aggregate logs from Lambda and other services.
   - Metrics: Key indicators for business, cost, security, and technical aspects should be collected and monitored in a centralized system.
-  - Alerting: [Dependabot](https://github.com/dependabot) can scan for vulnerable dependencies and open pull requests to update them.
+  - Alerting: [Dependabot](https://github.com/dependabot) is enabled for core components and can be scaled to provide automated vulnerability scanning for additional technologies in the future.
 - **AWS**
   - Cost Analysis and Cost-Optimized Scaling: The current architecture is scalable, but it may be adjusted based on cost and alternative technologies or services.
   - Resilience: Multi‑Region support should be provided to the architecture and to reduce downtimes.
@@ -112,7 +117,10 @@ These are potential future improvements and are not guaranteed or part of the cu
 - **CI/CD**
   - All the tools and services related to security scans, tests, checks, and metrics above can be integrated into the CI pipeline before any release.
   - In this setup, deployment is performed locally but this should be done using CD after all CI checks pass.
-
+- **AI / LLM**
+  - PR Reviews: Automated AI-powered pull request reviews can be enabled to streamline the code review process.
+  - LLM Accuracy Checks: An automated evaluation pipeline should be implemented for LLM accuracy testing to replace manual "vibe checks."
+  
 <br>
 
 ## 👨🏻‍💻 Developer
