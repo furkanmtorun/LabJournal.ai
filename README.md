@@ -107,11 +107,11 @@ cd website && python3 -m http.server 8000
 These are potential future improvements and are not guaranteed or part of the current roadmap.
 
 - **Front-end**
-  - Accessibility: Checks should be performed to ensure the application is usable by all potential users.
-  - End-to-end (E2E) and Regression Tests: Cross browser, cross-platform and cross-device tests can be performed using [Playwright by Microsoft](https://playwright.dev/) or [Cypress](https://www.cypress.io/).
-  - Performance: Metrics for performance, accessibility, SEO, and more can be generated using [Lighthouse by Google](https://developer.chrome.com/docs/lighthouse/overview).
-  - Visual and Edge Case Tests:  Rendering a specific variation of a UI component can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
-  - Stress and Load Tests: Both tests can be performed using [Locust](https://locust.io/).
+  - **Accessibility:** Checks should be performed to ensure the application is usable by all potential users.
+  - **End-to-end (E2E) and Regression Tests:** Cross browser, cross-platform and cross-device tests can be performed using [Playwright by Microsoft](https://playwright.dev/) or [Cypress](https://www.cypress.io/).
+  - **Performance:** Metrics for performance, accessibility, SEO, and more can be generated using [Lighthouse by Google](https://developer.chrome.com/docs/lighthouse/overview).
+  - **Visual and Edge Case Tests:** Rendering a specific variation of a UI component can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
+  - **Stress and Load Tests:** Both tests can be performed using [Locust](https://locust.io/).
 - **Security** 
   - **IAM & Secrets**
     - Add stricter IAM guardrails, automatic security‑finding remediation, and better secrets management using [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
@@ -122,27 +122,29 @@ These are potential future improvements and are not guaranteed or part of the cu
 - **API**
   - [AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html#api-gateway-overview-features) can be configured in front of the Lambda‑hosted FastAPI to provide security controls (e.g., [AWS WAF](https://aws.amazon.com/waf/)), canary releases, logging, rate limiting, and metrics per endpoint.
 - **Monitoring and Alerting**
-  - Centralized Logging: CloudWatch can be used to aggregate logs from Lambda and other services.
-  - Metrics: Key indicators for business, cost, security, and technical aspects should be collected and monitored in a centralized system.
-  - Alerting: [Dependabot](https://github.com/dependabot) is enabled for core components and can be scaled to provide automated vulnerability scanning for additional technologies in the future.
+  - **Centralized Logging:** CloudWatch can be used to aggregate logs from Lambda and other services.
+  - **Metrics:** Key indicators for business, cost, security, and technical aspects should be collected and monitored in a centralized system.
+  - **Alerting:** [Dependabot](https://github.com/dependabot) is enabled for core components and can be scaled to provide automated vulnerability scanning for additional technologies in the future.
 - **AWS**
-  - Cost Analysis and Cost-Optimized Scaling: The current architecture is scalable, but it may be adjusted based on cost and alternative technologies or services.
-  - Resilience: Multi‑Region support should be provided to the architecture and to reduce downtimes.
-  - Security & Compliance: In many places, strict restrictions are not enforced; instead, the wildcard `"*"` is used for simplicity in IAM policies.
+  - **Cost Analysis and Cost-Optimized Scaling:** The current architecture is scalable, but it may be adjusted based on cost and alternative technologies or services.
+  - **Resilience:** Multi‑Region support should be provided to the architecture and to reduce downtimes.
+  - **Security & Compliance:** In many places, strict restrictions are not enforced; instead, the wildcard `"*"` is used for simplicity in IAM policies.
 - **CI/CD**
   - All the tools and services related to security scans, tests, checks, and metrics above can be integrated into the CI pipeline before any release.
   - In this setup, deployment is performed locally but this should be done using CD after all CI checks pass.
 - **AI / LLM**
-  - PR Reviews: Automated AI-powered pull request reviews can be enabled to streamline the code review process.
-  - LLM Accuracy Checks: An automated evaluation pipeline should be implemented for LLM accuracy testing to replace manual "vibe checks."
+  - **PR Reviews:** Automated AI-powered pull request reviews can be enabled to streamline the code review process.
+  - **LLM Accuracy Checks:** An automated evaluation pipeline should be implemented for LLM accuracy testing to replace manual "vibe checks."
   
 <br>
 
 ## 👨🏻‍💻 Developer
-- Furkan M. Torun | Data Engineer
+- Furkan M. Torun, Data Engineer
 - E-mail: [furkanmtorun[at]gmail[dot]com](mailto:furkanmtorun@gmail.com) 
-- [Personal Website](https://furkanmtorun.github.io) | [LinkedIn](https://www.linkedin.com/in/furkanmtorun)
-- [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun) | [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
+- [Personal Website](https://furkanmtorun.github.io)
+- [LinkedIn](https://www.linkedin.com/in/furkanmtorun)
+- [X/Twitter @furkanmtorun](https://www.x.com/furkanmtorun)
+- [Google Scholar Profile](https://scholar.google.com/citations?user=d5ZyOZ4AAAAJ) 
 
 <br>
 
