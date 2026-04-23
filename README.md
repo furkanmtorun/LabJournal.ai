@@ -113,7 +113,9 @@ These are potential future improvements and are not guaranteed or part of the cu
   - **Performance:** Metrics for performance, accessibility, SEO, and more can be generated using [Lighthouse by Google](https://developer.chrome.com/docs/lighthouse/overview).
   - **Visual and Edge Case Tests:** Rendering a specific variation of a UI component can be performed using [Storybook](https://storybook.js.org/) and/or [Chromatic](https://www.chromatic.com/).
   - **Stress and Load Tests:** Both tests can be performed using [Locust](https://locust.io/).
-- **Security** 
+- **Security**
+- **Variables**
+  - A `.env` file or config storage system should be used to avoid exposing hard-coded variables, such as SQS URLs and S3 buckets, within the Python codebase.
   - **IAM & Secrets**
     - Add stricter IAM guardrails, automatic security‑finding remediation, and better secrets management using [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
   - **Authentication on API layer** There is currently no authentication layer for the API; it can be implemented in several ways or combined:
