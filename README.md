@@ -55,7 +55,7 @@
 
 | Category | Technology | Engineering Implementation |
 | :--- | :--- | :--- |
-| **Infra as Code | Terraform | Modular HCL managing AWS Services and event-driven triggers. |
+| **Infra as Code** | Terraform | Modular HCL managing AWS Services and event-driven triggers. |
 | **Compute** | AWS Lambda | High-performance ETL packaged via **Docker** for environment parity. |
 | **Data Flow** | SQS + DLQ | Async. message queuing with Dead Letter Queues to prevent data loss. |
 | **Intelligence** | AWS Bedrock | Generative AI for handwriting OCR and semantic embeddings. |
@@ -64,7 +64,8 @@
 | **Interface** | JS / jQuery | Easy, lightweight front-end with Materialize CSS.
 <br>
 
-> **💡 Vibe Coding:** Used AI to handle CSS, UI, and testing boilerplate, freeing me up to focus on the core engineering.
+> [!NOTE]
+> **💡 Vibe Coding:** Used AI (Github CoPilot and Cursor) to handle CSS, UI, and testing boilerplate, freeing me up to focus on the core engineering.
 
 
 <br>
